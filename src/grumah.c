@@ -21,12 +21,14 @@ int main(){
 	curs_set(0);
 	initscr();
 
-	Entities ents;
-	entity_add_position_component(&ents,1,3,5);
-	entity_add_draw_component(&ents,1,0,0,1,'@');
-	entity_add_stats_component(&ents,1,5,3,5,7);
-	printw("\nentity 1 x= %d, y = %d\n",ents.position[1].x, ents.position[1].y);
+	ComponentPosition *c_position;	
+	ComponentDraw *c_draw;
+	ComponentStats *c_stats;	
 
+
+	c_position = malloc(sizeof (c_position) * 10);
+	c_draw = malloc(sizeof (c_position) * 10);
+	c_stats = malloc(sizeof (c_position) * 10);
 
 
 	getch();

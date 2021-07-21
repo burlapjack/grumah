@@ -8,9 +8,6 @@
 #include "../include/component.h"
 #include "../include/entity.h"
 
-#define COUNT_OF(x) ((sizeof(0[x])) / ((size_t)(!(sizeof(x) % sizeof(0[x]))))
-
-
 
 int main(){
 
@@ -21,15 +18,19 @@ int main(){
 	curs_set(0);
 	initscr();
 
-	ComponentPosition *c_position;	
-	ComponentDraw *c_draw;
-	ComponentStats *c_stats;	
 
+	Entity ent;
+	//Initialize Components
+	
+	wrefresh(stdscr);	
+	entity_list_expand_draw(ent.list_draw,0,10);
 
-	c_position = malloc(sizeof (c_position) * 10);
-	c_draw = malloc(sizeof (c_position) * 10);
-	c_stats = malloc(sizeof (c_position) * 10);
+	for(int i=0; i < 9; ++i){
+		printw("\n draw id: %d\n",ent.list_draw[i]);
+	}
 
+	wrefresh(stdscr);	
+	
 
 	getch();
 
@@ -37,3 +38,6 @@ int main(){
 	endwin();
 	return 0;
 }
+
+
+

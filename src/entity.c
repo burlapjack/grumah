@@ -48,3 +48,4 @@ void entity_add_component_stats(ComponentStats c[], int list_size, unsigned int 
 		}
 	}
 }
+

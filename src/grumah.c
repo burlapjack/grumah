@@ -53,6 +53,10 @@ int main(){
 
 	getch();
 
+	//free all dynamically allocated memory
+	free(entity_list_position);
+	free(entity_list_draw);
+	free(entity_list_stats);
 
 	endwin();
 	return 0;

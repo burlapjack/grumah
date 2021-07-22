@@ -19,18 +19,39 @@ int main(){
 	initscr();
 
 
-	Entity ent;
 	//Initialize Components
-	
-	wrefresh(stdscr);	
-	entity_list_expand_draw(ent.list_draw,0,10);
+	ComponentPosition* entity_list_position;
+	ComponentDraw* entity_list_draw;
+	ComponentStats* entity_list_stats;
 
-	for(int i=0; i < 9; ++i){
-		printw("\n draw id: %d\n",ent.list_draw[i]);
+	size_t list_size_position = 20;
+	size_t list_size_draw = 20;
+	size_t list_size_stats = 20;
+
+	unsigned int next_entity_id = 1;
+
+	entity_list_position = malloc(sizeof (*entity_list_position) * list_size_position);	
+	entity_list_draw = malloc(sizeof (*entity_list_draw) * list_size_draw);	
+	entity_list_stats = malloc(sizeof (*entity_list_stats) * list_size_stats);	
+	
+	for (int i = 0; i < 19; ++i) {
+		entity_list_position[i].id = 0;
+		entity_list_draw[i].id = 0;
+		entity_list_stats[i].id = 0;
+	}	
+
+	wrefresh(stdscr);	
+
+	for (int j = 0; j < 19; ++j) {
+		printw(" id = %d\n", entity_list_position[j].id);
+		wrefresh(stdscr);	
 	}
 
-	wrefresh(stdscr);	
-	
+	entity_add_component_position(entity_list_position,20, next_entity_id,10,10);	
+	for (int j = 0; j < 19; ++j) {
+		printw(" id = %d x = %d y = %d\n", entity_list_position[j].id,entity_list_position[j].x,entity_list_position[j].y);
+		wrefresh(stdscr);	
+	}
 
 	getch();
 

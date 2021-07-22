@@ -5,17 +5,9 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-typedef struct {
-	int n_position, n_draw, n_stats;
-	ComponentPosition *list_position;	
-	ComponentDraw *list_draw;
-	ComponentStats *list_stats;	
-} Entity;
 
 
-void entity_list_expand_position(ComponentPosition l[], int list_size_original, int list_size_final);
-void entity_list_expand_draw(ComponentDraw l[], int list_size_original, int list_size_final);
-void entity_list_expand_stats(ComponentStats l[], int list_size_original, int list_size_final);
+void entity_list_expand_draw(ComponentDraw **l, size_t list_size_original, size_t list_size_final);
 
 
 void entity_add_component_position(ComponentPosition *p, int list_size, unsigned int id, int x, int y);

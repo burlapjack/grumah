@@ -6,41 +6,16 @@
 #include "../include/entity.h"
 
 
-void entity_list_expand_position(ComponentPosition *l, int list_size_original, int list_size_final){
-	if (list_size_original == 0) {
-		l = malloc(sizeof (*l) * list_size_final);
-	}
-
-	for(int i = list_size_original; i < list_size_final-1; ++i){
-		l[i].id = 0;
-	}	
-}
-
-void entity_list_expand_draw(ComponentDraw *l, int list_size_original, int list_size_final){
-	if (list_size_original == 0) {
-		l = (ComponentDraw*) calloc(list_size_final,sizeof (ComponentDraw));
-	}
-
-	for(int i = list_size_original; i < list_size_final-1; ++i){
-		l[i].id = 0;
-	}	
-}
-
-void entity_list_expand_stats(ComponentStats *l, int list_size_original, int list_size_final){
-	if (list_size_original == 0) {
-		l = malloc(sizeof (*l) * list_size_final);
-	}
-
-	for(int i = list_size_original; i < list_size_final-1; ++i){
-		l[i].id = 0;
-	}	
-}
-
-
 void entity_add_component_position(ComponentPosition p[],int list_size, unsigned int id, int x, int y){
-		p->id = id;	
-		p->x = x;
-		p->y = y;
+
+	for(int i = 0; i < list_size; ++i){
+		if (p[i].id == 0){
+			p[i].id = id;	
+			p[i].x = x;
+			p[i].y = y;
+			break;
+		}
+	}
 }
 
 void entity_add_component_draw(ComponentDraw d[], int list_size, unsigned int id, int xoff, int yoff, int col, char sym){

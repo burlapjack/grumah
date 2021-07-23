@@ -19,38 +19,34 @@ int main(){
 	initscr();
 
 
-	//Initialize Components
+	//Initialize Entities (arrays of component objects)
 	ComponentPosition* entity_list_position;
 	ComponentDraw* entity_list_draw;
 	ComponentStats* entity_list_stats;
-	
-	size_t list_size_position = 20;
-	size_t list_size_draw = 20;
-	size_t list_size_stats = 20;
+
+	size_t ENTITY_LIST_SIZE_INIT = 5;	
+	size_t entity_list_size_position = ENTITY_LIST_SIZE_INIT;
+	size_t entity_list_size_draw = ENTITY_LIST_SIZE_INIT;
+	size_t entity_list_size_stats = ENTITY_LIST_SIZE_INIT;
 
 	unsigned int next_entity_id = 1;
+	
+	entity_list_position = malloc(sizeof (*entity_list_position) * entity_list_size_position);	
+	entity_list_draw = malloc(sizeof (*entity_list_draw) * entity_list_size_draw);	
+	entity_list_stats = malloc(sizeof (*entity_list_stats) * entity_list_size_stats);	
 
-	entity_list_position = malloc(sizeof (*entity_list_position) * list_size_position);	
-	entity_list_draw = malloc(sizeof (*entity_list_draw) * list_size_draw);	
-	entity_list_stats = malloc(sizeof (*entity_list_stats) * list_size_stats);	
 
-	//Initialize Entities	
-	for (int i = 0; i < 19; ++i) {
-		entity_list_position[i].id = 0;
-		entity_list_draw[i].id = 0;
-		entity_list_stats[i].id = 0;
-	}	
+
 
 	wrefresh(stdscr);	
+//	entity_add_component_position(entity_list_position,20, next_entity_id,10,10);	
 
-	for (int j = 0; j < 19; ++j) {
-		printw(" id = %d\n", entity_list_position[j].id);
+	entity_list_size_double(&entity_list_position,&entity_list_size_position);
+
+	for (int j = 0; j < entity_list_size_position-1; ++j) {
+		printw(" id = %u  x = %d\n", entity_list_position[j].id, entity_list_position[j].x);
 		wrefresh(stdscr);	
 	}
-
-	entity_add_component_position(entity_list_position,20, &next_entity_id,10,10);	
-
-
 	getch();
 
 	//free all dynamically allocated memory

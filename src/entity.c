@@ -8,10 +8,11 @@
 
 
 void entity_list_size_double(ComponentPosition** entity, size_t *list_size){
-	size_t new_size = (*list_size) * 2;
-	*entity = realloc(*entity, sizeof (*entity) * new_size);	
-
-	*list_size = new_size;
+	*entity = realloc(*entity, sizeof (**entity) * (*list_size * 2));	
+	for(int i = (*list_size-1); i < (*list_size * 2 - 1); ++i ){
+		(*entity)[i].id = 0;	
+	}
+	*list_size = *list_size * 2;
 };
 
 

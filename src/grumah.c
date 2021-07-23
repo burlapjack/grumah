@@ -39,11 +39,13 @@ int main(){
 
 
 	wrefresh(stdscr);	
-//	entity_add_component_position(entity_list_position,20, next_entity_id,10,10);	
-
+	for(int i = 0; i < entity_list_size_position; ++i){
+		entity_add_component_position(entity_list_position,20, next_entity_id,i,10);	
+		++next_entity_id;
+	}
 	entity_list_size_double(&entity_list_position,&entity_list_size_position);
 
-	for (int j = 0; j < entity_list_size_position-1; ++j) {
+	for (int j = 0; j < entity_list_size_position; ++j) {
 		printw(" id = %u  x = %d\n", entity_list_position[j].id, entity_list_position[j].x);
 		wrefresh(stdscr);	
 	}

@@ -6,6 +6,9 @@
 #include "../include/component.h"
 #include "../include/entity.h"
 
+// **entity	= component_list_position[0]      *entity = aptr = &component_list_position		entity =  &ptr
+// 
+
 
 void entity_list_size_double(ComponentPosition** entity, size_t *list_size){
 	*entity = realloc(*entity, sizeof (**entity) * (*list_size * 2));	

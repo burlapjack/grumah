@@ -49,6 +49,7 @@ int main(){
 		printw("  id: %u   x: %d  y: %d\n", entity_list_position[j].id, entity_list_position[j].x, entity_list_position[j].x);
 		wrefresh(stdscr);	
 	}
+	
 	getch();
 
 	//free all dynamically allocated memory

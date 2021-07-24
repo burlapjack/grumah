@@ -12,7 +12,6 @@ typedef struct{
 
 typedef struct{
 	int id;
-	int xoffset, yoffset;
 	char symbol;
 	int color;
 }ComponentDraw;
@@ -25,6 +24,12 @@ typedef struct{
 	int agility;
 }ComponentStats;
 
-
+typedef struct{
+	int id;
+	char name[25];
+	char description[100];
+	int value;
+	int weight;
+}ComponentItem;
 
 #endif /*COMPONENT_H*/

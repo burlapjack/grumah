@@ -1,14 +1,11 @@
 //entity.c
-//defines entity-related functions
+//Functions that manipulated entity lists
 //by burlapjack 2021
 
 #include <stdlib.h>
 #include <stdio.h>
 #include "../include/component.h"
 #include "../include/entity.h"
-
-// **entity	= component_list_position[0]      *entity = &component_list_position		entity =  &ptr
-// 
 
 
 void entity_list_size_double_position(ComponentPosition** entity, size_t *list_size){
@@ -77,13 +74,11 @@ void entity_add_component_position(ComponentPosition *c,int list_size, unsigned 
 	}
 }
 
-void entity_add_component_draw(ComponentDraw *c, int list_size, unsigned int id, int xoffset, int yoffset, int color, char symbol){
+void entity_add_component_draw(ComponentDraw *c, int list_size, unsigned int id, int color, char symbol){
 
 	for(int i = 0; i < list_size-1; ++i){
 		if (c[i].id == 0){
 			c[i].id = id;	
-			c[i].xoffset = xoffset;
-			c[i].yoffset = yoffset;
 			c[i].color = color;
 			c[i].symbol = symbol;
 			break;

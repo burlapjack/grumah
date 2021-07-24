@@ -5,7 +5,9 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-void entity_list_size_double(ComponentPosition** entity, size_t *list_size);
+void entity_list_size_double_position(ComponentPosition** entity, size_t *list_size);
+void entity_list_size_double_draw(ComponentDraw** entity, size_t *list_size);
+void entity_list_size_double_stats(ComponentStats** entity, size_t *list_size);
 
 /*------------Component creation -----------*/
  

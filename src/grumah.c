@@ -24,13 +24,13 @@ int main(){
 	ComponentDraw* entity_list_draw;
 	ComponentStats* entity_list_stats;
 
-	size_t ENTITY_LIST_SIZE_INIT = 5;	
-	size_t entity_list_size_position = ENTITY_LIST_SIZE_INIT;
-	size_t entity_list_size_draw = ENTITY_LIST_SIZE_INIT;
-	size_t entity_list_size_stats = ENTITY_LIST_SIZE_INIT;
+	size_t entity_list_size_init = 20;	
+	size_t entity_list_size_position = entity_list_size_init;
+	size_t entity_list_size_draw = entity_list_size_init;
+	size_t entity_list_size_stats = entity_list_size_init;
 
 	unsigned int next_entity_id = 1;
-	
+		
 	entity_list_position = malloc(sizeof (*entity_list_position) * entity_list_size_position);	
 	entity_list_draw = malloc(sizeof (*entity_list_draw) * entity_list_size_draw);	
 	entity_list_stats = malloc(sizeof (*entity_list_stats) * entity_list_size_stats);	
@@ -43,10 +43,10 @@ int main(){
 		entity_add_component_position(entity_list_position,20, next_entity_id,i,10);	
 		++next_entity_id;
 	}
-	entity_list_size_double(&entity_list_position,&entity_list_size_position);
+	entity_list_size_double_position(&entity_list_position,&entity_list_size_position);
 
 	for (int j = 0; j < entity_list_size_position; ++j) {
-		printw(" id = %u  x = %d\n", entity_list_position[j].id, entity_list_position[j].x);
+		printw("  id: %u   x: %d  y: %d\n", entity_list_position[j].id, entity_list_position[j].x, entity_list_position[j].x);
 		wrefresh(stdscr);	
 	}
 	getch();

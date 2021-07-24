@@ -10,7 +10,7 @@
 
 void entity_list_size_double_position(ComponentPosition** entity, size_t *list_size){
 
-	ComponentPosition *temp = realloc(*entity, sizeof (**entity) * (*list_size * 2));
+	ComponentPosition *temp = realloc(*entity, sizeof **entity * (*list_size * 2));
 	//test the reallocation
 	if (temp == NULL) {
 		perror("Failure to reallocate entity_list_position");
@@ -19,8 +19,8 @@ void entity_list_size_double_position(ComponentPosition** entity, size_t *list_s
 
 	*entity = temp;	
 
-	for(int i = (*list_size); i < (*list_size * 2 ); ++i ){
-		(*entity)[i].id = 0;
+	for(size_t i = *list_size; i < (*list_size * 2 ); ++i ){
+		(*entity)[i].id = i;
 	}
 	*list_size = *list_size * 2;
 };
@@ -37,7 +37,7 @@ void entity_list_size_double_draw(ComponentDraw** entity, size_t *list_size){
 
 	*entity = temp;	
 
-	for(int i = (*list_size); i < (*list_size * 2 ); ++i ){
+	for(size_t i = (*list_size); i < (*list_size * 2 ); ++i ){
 		(*entity)[i].id = 0;
 	}
 	*list_size = *list_size * 2;
@@ -54,7 +54,7 @@ void entity_list_size_double_stats(ComponentStats** entity, size_t *list_size){
 
 	*entity = temp;	
 
-	for(int i = (*list_size); i < (*list_size * 2 ); ++i ){
+	for(size_t i = (*list_size); i < (*list_size * 2 ); ++i ){
 		(*entity)[i].id = 0;
 	}
 	*list_size = *list_size * 2;
@@ -62,9 +62,9 @@ void entity_list_size_double_stats(ComponentStats** entity, size_t *list_size){
 
 
 
-void entity_add_component_position(ComponentPosition *c,int list_size, unsigned int id, int x, int y){
+void entity_add_component_position(ComponentPosition *c,size_t list_size, unsigned int id, unsigned int x, unsigned int y){
 
-	for(int i = 0; i < list_size-1; ++i){
+	for(size_t i = 0; i < list_size; ++i){
 		if (c[i].id == 0){
 			c[i].id = id;	
 			c[i].x = x;
@@ -74,9 +74,9 @@ void entity_add_component_position(ComponentPosition *c,int list_size, unsigned 
 	}
 }
 
-void entity_add_component_draw(ComponentDraw *c, int list_size, unsigned int id, int color, char symbol){
+void entity_add_component_draw(ComponentDraw *c, size_t list_size, unsigned int id, unsigned int color, char symbol){
 
-	for(int i = 0; i < list_size-1; ++i){
+	for(size_t i = 0; i < list_size; ++i){
 		if (c[i].id == 0){
 			c[i].id = id;	
 			c[i].color = color;
@@ -86,9 +86,9 @@ void entity_add_component_draw(ComponentDraw *c, int list_size, unsigned int id,
 	}
 }
 
-void entity_add_component_stats(ComponentStats *c, int list_size, unsigned int id, int hp, int str, int per, int agi){
+void entity_add_component_stats(ComponentStats *c, size_t list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi){
 
-	for(int i = 0; i < list_size-1; ++i){
+	for(size_t i = 0; i < list_size; ++i){
 		if (c[i].id == 0){
 			c[i].id = id;	
 			c[i].hp = hp;

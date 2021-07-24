@@ -6,30 +6,31 @@
 #define COMPONENT_H
 
 typedef struct{
-	int id;
-	int x,y;
+	unsigned int id;
+	unsigned int x,y;
 }ComponentPosition;
 
 typedef struct{
-	int id;
+	unsigned int id;
 	char symbol;
-	int color;
+	unsigned int color;
 }ComponentDraw;
 
 typedef struct{
-	int id;
-	int hp;
-	int strength;
-	int perception;
-	int agility;
+	unsigned int id;
+	unsigned int hp;
+	unsigned int strength;
+	unsigned int perception;
+	unsigned int agility;
 }ComponentStats;
 
 typedef struct{
-	int id;
+	unsigned int id;
 	char name[25];
 	char description[100];
-	int value;
-	int weight;
+	unsigned int value;
+	unsigned int weight;
 }ComponentItem;
+
 
 #endif /*COMPONENT_H*/

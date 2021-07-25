@@ -56,8 +56,10 @@ void entity_list_size_double_stats(ComponentStats** entity, size_t *list_size){
 
 void entity_add_component_position(ComponentPosition** c,size_t *list_size, unsigned int id, unsigned int x, unsigned int y){
 	for(size_t i = 0; i < *list_size; ++i){
-		if (i == *list_size && (*c)[i].id != 0) entity_list_size_double_position(c,list_size);
-		if ((*c)[i].id == 0){
+		if (i == *list_size-1 && (*c)[i].id != 0){
+			entity_list_size_double_position(c,list_size);
+		}
+		else if ((*c)[i].id == 0){
 			(*c)[i].id = id;	
 			(*c)[i].x = x;
 			(*c)[i].y = y;
@@ -66,25 +68,31 @@ void entity_add_component_position(ComponentPosition** c,size_t *list_size, unsi
 	}
 }
 
-void entity_add_component_draw(ComponentDraw *c, size_t *list_size, unsigned int id, unsigned int color, char symbol){
+void entity_add_component_draw(ComponentDraw **c, size_t *list_size, unsigned int id, unsigned int color, char symbol){
 	for(size_t i = 0; i < *list_size; ++i){
-		if (c[i].id == 0){
-			c[i].id = id;	
-			c[i].color = color;
-			c[i].symbol = symbol;
+		if (i == *list_size-1 && (*c)[i].id != 0){
+			entity_list_size_double_draw(c,list_size);
+		}
+		else if ((*c)[i].id == 0){
+			(*c)[i].id = id;	
+			(*c)[i].color = color;
+			(*c)[i].symbol = symbol;
 			break;
 		}
 	}
 }
 
-void entity_add_component_stats(ComponentStats *c, size_t *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi){
+void entity_add_component_stats(ComponentStats **c, size_t *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi){
 	for(size_t i = 0; i < *list_size; ++i){
-		if (c[i].id == 0){
-			c[i].id = id;	
-			c[i].hp = hp;
-			c[i].strength = str;
-			c[i].perception = per;
-			c[i].agility = agi;
+		if (i == *list_size-1 && (*c)[i].id != 0){
+			entity_list_size_double_stats(c,list_size);
+		}
+		if ((*c)[i].id == 0){
+			(*c)[i].id = id;	
+			(*c)[i].hp = hp;
+			(*c)[i].strength = str;
+			(*c)[i].perception = per;
+			(*c)[i].agility = agi;
 			break;
 		}
 	}

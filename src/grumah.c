@@ -44,7 +44,7 @@ int main(){
 		next_entity_id += 1;
 	}
 
-	entity_list_size_double_position(&entity_list_position,&entity_list_size_position);
+	//entity_list_size_double_position(&entity_list_position,&entity_list_size_position);
 
 	for (size_t j = 0; j < entity_list_size_position; ++j) {
 		printw("  id: %2u   x: %2u  y: %2u\n", entity_list_position[j].id, entity_list_position[j].x, entity_list_position[j].y);

@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "../include/component.h"
 #include "../include/entity.h"
+#include "../include/system.h"
 
 /*----Increase the size of an Entity list -----*/
 

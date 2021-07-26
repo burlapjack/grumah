@@ -8,15 +8,27 @@
 #include "../include/component.h"
 #include "../include/entity.h"
 
-
 int main(){
 
-	//initialize ncurses
+	/* initialize ncurses */
 	
-	cbreak();
-	keypad(stdscr,TRUE);
-	curs_set(0);
+	WINDOW *w;
+	unsigned int startx, starty, width, height;
 	initscr();
+	cbreak();
+	noecho();
+	height = 25;
+	width = 70;
+
+	/* Window centering calculation */
+	if(LINES < height) starty = 0; else starty = (LINES - height) / 2;  
+	if(COLS <  width) startx = 0; else startx = (COLS - width) / 2; 
+
+
+	w = newwin(height,width,starty,startx);
+	box(w, 0, 0);	
+	keypad(w,TRUE);
+	curs_set(0);
 
 
 	//Initialize Entities (arrays of component objects)
@@ -38,7 +50,7 @@ int main(){
 
 
 
-	wrefresh(stdscr);	
+	wrefresh(w);	
 	for(size_t i = 0; i < 10; ++i){
 		entity_add_component_position(&entity_list_position,&entity_list_size_position, next_entity_id,i,10);	
 		next_entity_id += 1;
@@ -47,18 +59,21 @@ int main(){
 	//entity_list_size_double_position(&entity_list_position,&entity_list_size_position);
 
 	for (size_t j = 0; j < entity_list_size_position; ++j) {
-		printw("  id: %2u   x: %2u  y: %2u\n", entity_list_position[j].id, entity_list_position[j].x, entity_list_position[j].y);
-		wrefresh(stdscr);	
+		mvwprintw(w, j+2,5,"  id: %2u   x: %2u  y: %2u", entity_list_position[j].id, entity_list_position[j].x, entity_list_position[j].y);
 	}
 	
-	getch();
+	wrefresh(w);	
+	
 
+	wgetch(w);
+	
 	//free all dynamically allocated memory
 	free(entity_list_position);
 	free(entity_list_draw);
 	free(entity_list_stats);
-
+	delwin(w);
 	endwin();
+
 	return 0;
 }
 

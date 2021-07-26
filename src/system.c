@@ -9,4 +9,5 @@
 #include <ncurses.h>
 
 
-
+void system_draw_menu(){}
+void system_draw_level(){}

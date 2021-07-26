@@ -29,7 +29,9 @@ typedef struct {
 	unsigned int key;
 }ComponentInput;
 
-
+typedef struct {
+	unsigned int id;
+}ComponentTrigger;
 
 
 

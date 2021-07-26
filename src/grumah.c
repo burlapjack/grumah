@@ -12,7 +12,7 @@ int main(){
 
 	/* initialize ncurses */
 	
-	WINDOW *w;
+	WINDOW *win_main;
 	unsigned int startx, starty, width, height;
 	initscr();
 	cbreak();
@@ -25,9 +25,9 @@ int main(){
 	if(COLS <  width) startx = 0; else startx = (COLS - width) / 2; 
 
 
-	w = newwin(height,width,starty,startx);
-	box(w, 0, 0);	
-	keypad(w,TRUE);
+	win_main = newwin(height,width,starty,startx);
+	box(win_main, 0, 0);	
+	keypad(win_main,TRUE);
 	curs_set(0);
 
 
@@ -50,28 +50,27 @@ int main(){
 
 
 
-	wrefresh(w);	
+	wrefresh(win_main);	
 	for(size_t i = 0; i < 10; ++i){
 		entity_add_component_position(&entity_list_position,&entity_list_size_position, next_entity_id,i,10);	
 		next_entity_id += 1;
 	}
 
-	//entity_list_size_double_position(&entity_list_position,&entity_list_size_position);
 
 	for (size_t j = 0; j < entity_list_size_position; ++j) {
-		mvwprintw(w, j+2,5,"  id: %2u   x: %2u  y: %2u", entity_list_position[j].id, entity_list_position[j].x, entity_list_position[j].y);
+		mvwprintw(win_main, j+2,5,"  id: %2u   x: %2u  y: %2u", entity_list_position[j].id, entity_list_position[j].x, entity_list_position[j].y);
 	}
 	
-	wrefresh(w);	
+	wrefresh(win_main);	
 	
 
-	wgetch(w);
+	wgetch(win_main);
 	
 	//free all dynamically allocated memory
 	free(entity_list_position);
 	free(entity_list_draw);
 	free(entity_list_stats);
-	delwin(w);
+	delwin(win_main);
 	endwin();
 
 	return 0;

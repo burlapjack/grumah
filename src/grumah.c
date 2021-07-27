@@ -35,7 +35,6 @@ int main(){
 	ComponentPosition* entity_list_position;
 	ComponentDraw* entity_list_draw;
 	ComponentStats* entity_list_stats;
-	ComponentMenu* entity_list_menu;
 
 	size_t entity_list_size_init = 20;	
 	size_t entity_list_size_position = entity_list_size_init;
@@ -48,7 +47,6 @@ int main(){
 	entity_list_position = malloc(sizeof (*entity_list_position) * entity_list_size_position);	
 	entity_list_draw = malloc(sizeof (*entity_list_draw) * entity_list_size_draw);	
 	entity_list_stats = malloc(sizeof (*entity_list_stats) * entity_list_size_stats);	
-	entity_list_menu = malloc(sizeof (*entity_list_menu) * entity_list_size_menu);	
 
 
 
@@ -62,7 +60,6 @@ int main(){
 	free(entity_list_position);
 	free(entity_list_draw);
 	free(entity_list_stats);
-	free(entity_list_menu);
 	delwin(win_main);
 	endwin();
 

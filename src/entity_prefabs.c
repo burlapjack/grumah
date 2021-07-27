@@ -16,6 +16,3 @@ void entity_prefab_create_player(unsigned int id, int x, int y, ComponentPositio
 }
 
 
-
-
-

@@ -3,7 +3,7 @@
 //by burlapjack 2021
 
 #include <stdlib.h>
-#include <stdio.h>
+#include <ncurses.h>
 #include "../include/component.h"
 #include "../include/entity.h"
 #include "../include/system.h"
@@ -54,6 +54,8 @@ void entity_list_size_double_stats(ComponentStats** entity, size_t *list_size){
 	}
 	*list_size = *list_size * 2;
 }
+
+
 
 void entity_add_component_position(ComponentPosition** c,size_t *list_size, unsigned int id, unsigned int x, unsigned int y){
 	for(size_t i = 0; i < *list_size; ++i){

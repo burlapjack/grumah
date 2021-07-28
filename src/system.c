@@ -31,6 +31,12 @@ void system_input(WINDOW *win){
 
 }
 
+void system_draw_menu(ComponentMenu* c){
+	
+}
+
+	
+
 
 
 

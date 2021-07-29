@@ -25,10 +25,10 @@ int main(){
 	if(LINES < height) starty = 0; else starty = (LINES - height) / 2;  
 	if(COLS <  width) startx = 0; else startx = (COLS - width) / 2; 
 
-
 	win_main = newwin(height,width,starty,startx);
 	box(win_main, 0, 0);	
 	keypad(win_main,TRUE);
+	nodelay(win_main, TRUE);
 	curs_set(0);
 
 
@@ -48,7 +48,8 @@ int main(){
 	entity_list_draw = malloc(sizeof (*entity_list_draw) * entity_list_size_draw);	
 	entity_list_stats = malloc(sizeof (*entity_list_stats) * entity_list_size_stats);	
 
-	/* UI initialization */
+	
+	/* Main menu/title screen initialization */
 	UiMenu *menu_start = malloc(sizeof (*menu_start));
 	menu_start->x = 5;
 	menu_start->y = 5;
@@ -59,15 +60,15 @@ int main(){
 	/* game loop */
 
 	int ch;
-	while(1){
-		ui_start_menu_draw(win_main, menu_start, ch);
+	int game_loop_run = 1;		
+
+	while(game_loop_run == 1){
+		ui_start_menu_draw(win_main, menu_start, ch, &game_loop_run);
+		mvwprintw(win_main,1,1,"game_loop_run = %d",game_loop_run);
+		wrefresh(win_main);
 		ch = wgetch(win_main);	
-		if (ch == KEY_F(1)) break;
+		if (ch == KEY_ENTER) game_loop_run = 0;
 	}
-
-
-
-
 
 
 

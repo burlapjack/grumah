@@ -56,6 +56,8 @@ void entity_list_size_double_stats(ComponentStats** entity, size_t *list_size){
 }
 
 
+/* Add Component to entity list */
+
 void entity_add_component_position(ComponentPosition** c,size_t *list_size, unsigned int id, unsigned int x, unsigned int y){
 	for(size_t i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*c)[i].id != 0){

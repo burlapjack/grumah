@@ -10,24 +10,34 @@
 
 void ui_start_menu_draw(WINDOW *w, UiMenu *m, int input){
 
+	
+	mvwprintw(w, m->y, m->x, "Grumah"); 
+
 	switch(input){
-		case KEY_LEFT:
-		case KEY_RIGHT:
-			if (m->highlighted == 0) m->highlighted = 1;
-			else if (m->highlighted == 1) m->highlighted = 0;
+		case KEY_DOWN:
+			if (m->highlighted == 0) {
+				m->highlighted = 1;
+				wrefresh(w);
+			};
+			break;
+		case KEY_UP:
+			if (m->highlighted == 1){
+			   	m->highlighted = 0;
+				wrefresh(w);
+			};
 			break;	
 	}
 	if (m->highlighted == 0){
-		attron(A_REVERSE);
-		mvwprintw(w, m->x, m->y, "Start New Game"); 
-		attroff(A_REVERSE);
-		mvwprintw(w, m->x, m->y+1, "Exit");
+		wattron(w, A_REVERSE);
+		mvwprintw(w, m->y+2, m->x, "Start New Game"); 
+		wattroff(w, A_REVERSE);
+		mvwprintw(w, m->y+3, m->x, "Exit");
 	} 
 	else {
-		mvwprintw(w, m->x, m->y, "Start New Game"); 
-		attron(A_REVERSE);
-		mvwprintw(w, m->x, m->y+1, "Exit");
-		attroff(A_REVERSE);
+		mvwprintw(w, m->y+2, m->x, "Start New Game"); 
+		wattron(w, A_REVERSE);
+		mvwprintw(w, m->y+3, m->x, "Exit");
+		wattroff(w, A_REVERSE);
 	}
 
 }

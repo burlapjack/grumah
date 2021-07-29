@@ -8,6 +8,7 @@
 #include "../include/component.h"
 #include "../include/entity.h"
 #include "../include/system.h"
+#include "../include/ui.h"
 
 int main(){
 	/* initialize ncurses */
@@ -35,24 +36,39 @@ int main(){
 	ComponentPosition* entity_list_position;
 	ComponentDraw* entity_list_draw;
 	ComponentStats* entity_list_stats;
-	ComponentMenu* entity_list_menu;
 
 	size_t entity_list_size_init = 20;	
 	size_t entity_list_size_position = entity_list_size_init;
 	size_t entity_list_size_draw = entity_list_size_init;
 	size_t entity_list_size_stats = entity_list_size_init;
-	size_t entity_list_size_menu = entity_list_size_init;	
 
-	unsigned int next_entity_id = 1;
+//	unsigned int next_entity_id = 1;
 		
 	entity_list_position = malloc(sizeof (*entity_list_position) * entity_list_size_position);	
 	entity_list_draw = malloc(sizeof (*entity_list_draw) * entity_list_size_draw);	
 	entity_list_stats = malloc(sizeof (*entity_list_stats) * entity_list_size_stats);	
-	entity_list_menu= malloc(sizeof (*entity_list_menu) * entity_list_size_menu);	
+
+	/* UI initialization */
+	UiMenu *menu_start = malloc(sizeof (*menu_start));
+	menu_start->x = 5;
+	menu_start->y = 5;
+	menu_start->options_length = 2;
+	menu_start->highlighted = 0;
+
+
+	/* game loop */
+
+	int ch;
+	while(1){
+		ui_start_menu_draw(win_main, menu_start, ch);
+		ch = wgetch(win_main);	
+		if (ch == KEY_F(1)) break;
+	}
 
 
 
-	system_input(win_main);
+
+
 
 
 	//free all dynamically allocated memory

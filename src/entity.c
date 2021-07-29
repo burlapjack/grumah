@@ -56,24 +56,6 @@ void entity_list_size_double_stats(ComponentStats** entity, size_t *list_size){
 }
 
 
-
-void entity_list_size_double_menu(ComponentMenu** entity, size_t *list_size){
-	//test the reallocation
-	ComponentMenu*temp = realloc(*entity, sizeof **entity * (*list_size * 2));
-	if (temp == NULL) {
-		perror("Failure to reallocate entity_list_menu");
-		exit(EXIT_FAILURE);
-	}	
-	*entity = temp;	
-
-	for(size_t i = *list_size; i < (*list_size * 2 ); ++i ){
-		(*entity)[i].id = 0;
-	}
-	*list_size = *list_size * 2;
-}
-
-
-
 void entity_add_component_position(ComponentPosition** c,size_t *list_size, unsigned int id, unsigned int x, unsigned int y){
 	for(size_t i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*c)[i].id != 0){

@@ -118,14 +118,4 @@ void entity_add_component_stats(ComponentStats **c, size_t *list_size, unsigned 
 	}
 }
 
-void entity_add_component_menu(ComponentMenu**c, size_t *list_size, unsigned int id, unsigned int x, unsigned int y, unsigned int width, unsigned int height,char *options[], unsigned int options_length, unsigned int highlighted ){
-	for(size_t i = 0; i < *list_size; ++i){
-		if (i == *list_size-1 && (*c)[i].id != 0){
-			entity_list_size_double_menu(c,list_size);
-		} 
-		if ((*c)[i].id == 0){
-			(*c)[i].id = id;	
-			break;
-		}
-	}
-}
+

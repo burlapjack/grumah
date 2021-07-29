@@ -4,32 +4,35 @@
  */
 
 #include <ncurses.h>
+#include <stdarg.h>
 #include "../include/component.h"
 #include "../include/ui.h"
 
-char *ui_menu_main[] = {"New Game", "Exit"};
-char *ui_menu_character_create[] = {"Name","Class","Race"};
+void ui_start_menu_draw(WINDOW *w, UiMenu *m, int input){
 
-
-
-void ui_menu_main_draw(WINDOW *w, int key_pressed, char *option_list, unsigned int *option_highlighted){
-
-	switch(key_pressed){
-		case KEY_UP:
-		case KEY_DOWN:
-			if (*option_highlighted == 0) *option_highlighted = 1;
-			else if (*option_highlighted == 1) *option_highlighted = 0;
-			break;
-		case KEY_ENTER:
-			if(*option_highlighted == 0){
-				
-			}
-			else if( *option_highlighted == 1){
-
-			}
+	switch(input){
+		case KEY_LEFT:
+		case KEY_RIGHT:
+			if (m->highlighted == 0) m->highlighted = 1;
+			else if (m->highlighted == 1) m->highlighted = 0;
+			break;	
 	}
-	
-};
+	if (m->highlighted == 0){
+		attron(A_REVERSE);
+		mvwprintw(w, m->x, m->y, "Start New Game"); 
+		attroff(A_REVERSE);
+		mvwprintw(w, m->x, m->y+1, "Exit");
+	} 
+	else {
+		mvwprintw(w, m->x, m->y, "Start New Game"); 
+		attron(A_REVERSE);
+		mvwprintw(w, m->x, m->y+1, "Exit");
+		attroff(A_REVERSE);
+	}
+
+}
+
+
 
 
 

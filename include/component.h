@@ -29,14 +29,6 @@ typedef struct {
 	unsigned int key_pushed;
 }ComponentInput;
 
-typedef struct{
-	unsigned int id;
-	unsigned int x,y;
-	unsigned int width, height;
-	char *options[20];
-	unsigned int options_length; 
-	unsigned int highlighted;
-} ComponentMenu;
 
 
 #endif /*COMPONENT_H*/

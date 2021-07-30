@@ -86,6 +86,6 @@ void ui_menu_draw_title(WINDOW *w, UiMenu *m, int *input, int *game_loop_run){
 
 
 
-void ui_draw_menu_character_create(WINDOW *w, UiMenu *m, int *input, int *game_loop_run){
-
+void ui_draw_menu_character_creation(WINDOW *w, UiMenu *m, int *input, int *game_loop_run){
+	
 }

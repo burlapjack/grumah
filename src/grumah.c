@@ -12,7 +12,8 @@
 
 int main(){
 	/* initialize ncurses */
-	
+
+
 	unsigned int startx, starty, width, height;
 	initscr();
 	WINDOW *win_main;
@@ -57,7 +58,6 @@ int main(){
 	/* Character Creation screen menu initialization */
 	UiMenu menu_char_create = ui_menu_create_char_creation(3,3);
 	
-
 	/* game loop */
 
 	int ch;

@@ -52,12 +52,11 @@ int main(){
 	
 
 	/* Main menu/title screen initialization */
-	UiMenu *menu_start = malloc(sizeof (*menu_start));
-	menu_start->x = 9;
-	menu_start->y = 2;
-	menu_start->options_length = 2;
-	menu_start->highlighted = 0;
+	UiMenu menu_start = ui_menu_create_title(9,2);
 
+	/* Character Creation screen menu initialization */
+	UiMenu menu_char_create = ui_menu_create_char_creation(3,3);
+	
 
 	/* game loop */
 
@@ -66,7 +65,7 @@ int main(){
 
 	while(game_loop_run == 1){
 		ch = wgetch(win_main);
-		ui_start_menu_draw(win_main, menu_start, &ch, &game_loop_run);
+		ui_menu_draw_title(win_main, &menu_start, &ch, &game_loop_run);
 		wrefresh(win_main);
 	}
 

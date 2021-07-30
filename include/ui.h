@@ -9,6 +9,10 @@ typedef struct{
 	unsigned int highlighted;
 }UiMenu;
 
-void ui_start_menu_draw(WINDOW *w, UiMenu *m, int *input, int *game_loop_run);
+UiMenu ui_menu_create_title(unsigned int x, unsigned int y);
+UiMenu ui_menu_create_char_creation(unsigned int x, unsigned int y);
+
+void ui_menu_draw_title(WINDOW *w, UiMenu *m, int *input, int *game_loop_run);
+void ui_menu_draw_char_creation(WINDOW *w, UiMenu *m, int *input, int *game_loop_run);
 
 #endif /* UI_H */

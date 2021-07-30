@@ -7,23 +7,27 @@
 #include <stdarg.h>
 #include "../include/component.h"
 #include "../include/ui.h"
-/*
-     ####  #                                          ##
-   ##    ###                                         ###
-  ##      ##                                          ##
-  #        #                                          ##  
- ##            ## ## ###  ###   ## ###  ###    ####   ## ###
- ##     ##### #### #  ##   ##  ####  ###  ##  ##  ##  ###  ##
- ##       ##   ##     ##   ##   ##   ##   ##  ##  ##  ##   ##
- ##       ##   ##     ##   ##   ##   ##   ##     ###  ##   ##
- ###      ##   ##     ##   ##   ##   ##   ##   ## ##  ##   ##
-  ##      ##   ##     ##   ##   ##   ##   ##  ##  ##  ##   ##
-   ###    ##   ##     ##  ####  ##   ##   ##  ##  ##  ##   ##
-     ######   ####     ### ##  #### #### #### ###### #### ####
 
-*/
-void ui_start_menu_draw(WINDOW *w, UiMenu *m, int *input, int *game_loop_run){
-	
+UiMenu ui_menu_create_title(unsigned int x, unsigned int y){
+
+	UiMenu m;	
+	m.x = x;
+	m.y = y;
+	m.options_length = 2;
+	m.highlighted = 0;
+	return m;
+}
+
+UiMenu ui_menu_create_char_creation(unsigned int x, unsigned int y){
+	UiMenu m;
+	m.x = x;
+	m.y = y;
+	m.options_length = 10;
+	m.highlighted = 0;
+	return m;
+}
+
+void ui_menu_draw_title(WINDOW *w, UiMenu *m, int *input, int *game_loop_run){
 
 	/* menu logic */
 	switch(*input){
@@ -47,9 +51,8 @@ void ui_start_menu_draw(WINDOW *w, UiMenu *m, int *input, int *game_loop_run){
 			}
 			break;
 	}
-
+	
 	/* Draw the menu */
-
 	mvwprintw(w,   m->y, m->x,  "    ####  #                                          ##");
 	mvwprintw(w,   m->y+1, m->x,"  ##    ###                                         ###");
 	mvwprintw(w,   m->y+2, m->x," ##      ##                                          ##");
@@ -83,5 +86,6 @@ void ui_start_menu_draw(WINDOW *w, UiMenu *m, int *input, int *game_loop_run){
 
 
 
+void ui_draw_menu_character_create(WINDOW *w, UiMenu *m, int *input, int *game_loop_run){
 
-
+}

@@ -9,6 +9,6 @@ typedef struct{
 	unsigned int highlighted;
 }UiMenu;
 
-void ui_start_menu_draw(WINDOW *w, UiMenu *m, int input, int *game_loop_run);
+void ui_start_menu_draw(WINDOW *w, UiMenu *m, int *input, int *game_loop_run);
 
 #endif /* UI_H */

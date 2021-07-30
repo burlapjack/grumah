@@ -25,6 +25,7 @@ int main(){
 	if(LINES < height) starty = 0; else starty = (LINES - height) / 2;  
 	if(COLS <  width) startx = 0; else startx = (COLS - width) / 2; 
 
+	/* ncurses main_window */
 	win_main = newwin(height,width,starty,startx);
 	box(win_main, 0, 0);	
 	keypad(win_main,TRUE);
@@ -32,27 +33,28 @@ int main(){
 	curs_set(0);
 
 
-	//Initialize Entities (arrays of component objects)
+	/* Entities */
+	unsigned int next_entity_id = 1;
+
+	//Initialize Entity lists (arrays of component objects)
 	ComponentPosition* entity_list_position;
 	ComponentDraw* entity_list_draw;
 	ComponentStats* entity_list_stats;
-
+	
 	size_t entity_list_size_init = 20;	
 	size_t entity_list_size_position = entity_list_size_init;
 	size_t entity_list_size_draw = entity_list_size_init;
 	size_t entity_list_size_stats = entity_list_size_init;
-
-//	unsigned int next_entity_id = 1;
 		
 	entity_list_position = malloc(sizeof (*entity_list_position) * entity_list_size_position);	
 	entity_list_draw = malloc(sizeof (*entity_list_draw) * entity_list_size_draw);	
 	entity_list_stats = malloc(sizeof (*entity_list_stats) * entity_list_size_stats);	
-
 	
+
 	/* Main menu/title screen initialization */
 	UiMenu *menu_start = malloc(sizeof (*menu_start));
-	menu_start->x = 5;
-	menu_start->y = 5;
+	menu_start->x = 9;
+	menu_start->y = 2;
 	menu_start->options_length = 2;
 	menu_start->highlighted = 0;
 
@@ -63,14 +65,10 @@ int main(){
 	int game_loop_run = 1;		
 
 	while(game_loop_run == 1){
-		ui_start_menu_draw(win_main, menu_start, ch, &game_loop_run);
-		mvwprintw(win_main,1,1,"game_loop_run = %d",game_loop_run);
+		ch = wgetch(win_main);
+		ui_start_menu_draw(win_main, menu_start, &ch, &game_loop_run);
 		wrefresh(win_main);
-		ch = wgetch(win_main);	
-		if (ch == KEY_ENTER) game_loop_run = 0;
 	}
-
-
 
 	//free all dynamically allocated memory
 	free(entity_list_position);
@@ -79,5 +77,5 @@ int main(){
 	delwin(win_main);
 	endwin();
 
-	return 0;
+	return EXIT_SUCCESS;
 }

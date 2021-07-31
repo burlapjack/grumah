@@ -9,15 +9,17 @@
 #include "../include/entity.h"
 #include "../include/system.h"
 #include "../include/ui.h"
+#include <locale.h>
 
 int main(){
 	/* initialize ncurses */
 
-
+	setlocale(LC_ALL, "");
 	unsigned int startx, starty, width, height;
 	initscr();
 	WINDOW *win_main;
 	cbreak();
+	
 	noecho();
 	height = 24;
 	width = 80;

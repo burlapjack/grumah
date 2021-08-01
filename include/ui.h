@@ -14,7 +14,7 @@ UiMenu ui_menu_create_title(unsigned int x, unsigned int y);
 UiMenu ui_menu_create_char_creation(unsigned int x, unsigned int y);
 
 
-void ui_menu_draw_title(WINDOW *w, UiMenu *m, int *input, int *game_loop_run);
-void ui_menu_draw_char_creation(WINDOW *w, UiMenu *m, int *input, int *game_loop_run);
+void ui_menu_draw_title(WINDOW *w, UiMenu *m, int *input, unsigned int *game_loop_run, unsigned int *game_state);
+void ui_menu_draw_character_creation(WINDOW *w, UiMenu *m, int *input, unsigned int *game_loop_run, unsigned int *game_state);
 
 #endif /* UI_H */

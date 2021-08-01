@@ -63,13 +63,29 @@ int main(){
 	/* game loop */
 
 	int ch;
-	int game_loop_run = 1;		
+	unsigned int game_loop_run = 1;		
+	unsigned int game_state = 0;		
 
 	while(game_loop_run == 1){
 		ch = wgetch(win_main);
-		ui_menu_draw_title(win_main, &menu_start, &ch, &game_loop_run);
+
+		switch(game_state){
+			case 0:
+				ui_menu_draw_title(win_main, &menu_start, &ch, &game_loop_run, &game_state);
+				break;
+			case 1:
+				ui_menu_draw_character_creation(win_main, &menu_char_create, &ch, &game_loop_run, &game_state);
+				break;
+			case 2:
+				break;
+			default:
+				break;
+		}
+
+		 
 		wrefresh(win_main);
 	}
+
 
 	//free all dynamically allocated memory
 	free(entity_list_position);

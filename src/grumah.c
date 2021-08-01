@@ -71,10 +71,10 @@ int main(){
 
 		switch(game_state){
 			case 0:
-				ui_menu_draw_title(win_main, &menu_start, &ch, &game_loop_run, &game_state);
+				ui_menu_draw(win_main, &menu_start, &ch, &game_loop_run, &game_state);
 				break;
 			case 1:
-				ui_menu_draw_character_creation(win_main, &menu_char_create, &ch, &game_loop_run, &game_state);
+				ui_menu_draw(win_main, &menu_char_create, &ch, &game_loop_run, &game_state);
 				break;
 			case 2:
 				break;

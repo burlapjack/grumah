@@ -1,10 +1,10 @@
 /* ui.c
  * by burlapjack 2021
  * user interface configurations
- */
-
+ */ 
 #include <ncurses.h>
 #include <stdarg.h>
+#include <string.h>
 #include "../include/component.h"
 #include "../include/ui.h"
 
@@ -32,23 +32,47 @@ UiMenu ui_menu_create_title(unsigned int x, unsigned int y){
 	m.y = y;
 	m.options_length = 2;
 	m.highlighted = 0;
+	strcpy(m.options[0].name,"New Game");
+	strcpy(m.options[1].name,"Exit");
+	m.options[0].x = x + 24;
+	m.options[0].y = y + 14;
+	m.options[1].x = x+26;
+	m.options[1].y = y+15;
 	return m;
 }
 
 UiMenu ui_menu_create_char_creation(unsigned int x, unsigned int y){
+
 	UiMenu m;
 	m.x = x;
 	m.y = y;
-	m.options_length = 10;
 	m.highlighted = 0;
+	m.options_length = 5;
+	strcpy(m.options[0].name,"Create Your Character");
+	strcpy(m.options[1].name,"What is your name?");
+	strcpy(m.options[2].name,"Choose your race.");
+	strcpy(m.options[3].name,"Choose your class.");
+	strcpy(m.options[4].name,"Choose your sex.");
+
+	m.options[0].x = x + 1;
+	m.options[0].y = y;
+	m.options[1].x = x + 1;
+	m.options[1].y = y + 3;
+	m.options[2].x = x + 1;
+	m.options[2].y = y + 4;
+	m.options[3].x = x + 1;
+	m.options[3].y = y + 5;
+	m.options[4].x = x + 1;
+	m.options[4].y = y + 6;
 	return m;
 }
 
 
 void ui_menu_draw(WINDOW *w, UiMenu *m, int *input, unsigned int *game_loop_run, unsigned int *game_state){
 
-
+	/* --------------GAMESTATE 0: TITLE SCREEN--------------------------------------*/	
 	if(*game_state == 0){
+
 	/* Title Screen Graphic */
 		wattron(w,A_ALTCHARSET); 
 		for(int i = 0; i < 12; ++i){
@@ -69,33 +93,18 @@ void ui_menu_draw(WINDOW *w, UiMenu *m, int *input, unsigned int *game_loop_run,
 			}
 		}
 		wattroff(w,A_ALTCHARSET); 
-
-		/* Draw Title Screen Menu */
-		if (m->highlighted == 0){
-			wattron(w, A_REVERSE);
-			mvwprintw(w, m->y+14, m->x+24, "Start New Game"); 
-			wattroff(w, A_REVERSE);
-			mvwprintw(w, m->y+15, m->x+29, "Exit");
-		} 
-		else {
-			mvwprintw(w, m->y+14, m->x+24, "Start New Game"); 
-			wattron(w, A_REVERSE);
-			mvwprintw(w, m->y+15, m->x+29, "Exit");
-			wattroff(w, A_REVERSE);
-		}
 		mvwprintw(w, m->y+20, m->x+7, "Use arrow keys to navigate and spacebar to select"); 
 	}
-	/* Character creation Screen */
-	else if(*game_state == 1){
-		mvwprintw(w, m->y, m->x+1, "Create your character.");
-		mvwprintw(w, m->y+3, m->x+1, "What is your name?");
-		mvwprintw(w, m->y+4, m->x+1, "Choose your race.");
-		mvwprintw(w, m->y+5, m->x+1, "Choose your sex.");
-		mvwprintw(w, m->y+6, m->x+1, "Choose your class.");
+
+
+	for(size_t i = 0; i < m->options_length; i++){
+		if(m->highlighted == i) {wattron(w, A_REVERSE);}	
+		mvwprintw(w, m->options[i].y, m->options[i].x, m->options[i].name);
+		wattroff(w, A_REVERSE);
 	}
 
 	
-	/* menu logic */
+	/*------------------MENU LOGIC----------------------------------------------------*/
 
 	switch(*input){
 		case KEY_DOWN:

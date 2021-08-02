@@ -3,12 +3,23 @@
 
 const char UI_TITLE[12][61];
 
+
+typedef struct{
+	char name[32];
+	unsigned int x,y;
+}UiMenuOption;
+
+
 typedef struct{
 	unsigned int x,y;
 	unsigned int width, height;
 	unsigned int options_length; 
 	unsigned int highlighted;
+	UiMenuOption options[30];
 }UiMenu;
+
+
+
 
 UiMenu ui_menu_create_title(unsigned int x, unsigned int y);
 UiMenu ui_menu_create_char_creation(unsigned int x, unsigned int y);

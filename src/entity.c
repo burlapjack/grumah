@@ -126,8 +126,8 @@ void entity_add_component_menu_option(ComponentMenuOption **entity_list, size_t 
 		if (i == *list_size-1 && (*entity_list)[i].id != 0){
 			entity_list_size_double_menu_option(entity_list,list_size);
 		}
-		if ((*entity_list)[i].id == 0){
-			(*entity_list)[i].id = id;
+		if ((*entity_list[i]).id == 0){
+			(*entity_list[i]).id = id;
 			strcpy((*entity_list)[i].name, name ); /* check if this is right! */
 			(*entity_list)[i].game_state = game_state;	
 			(*entity_list)[i].child_menu_id = child_menu_id;	

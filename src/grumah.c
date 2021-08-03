@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <stdint.h>
+#include <string.h>
 #include "../include/component.h"
 #include "../include/entity.h"
 #include "../include/system.h"
@@ -43,23 +44,24 @@ int main(){
 	ComponentPosition* entity_list_position;
 	ComponentDraw* entity_list_draw;
 	ComponentStats* entity_list_stats;
+	ComponentMenuOption* entity_list_menu_option;
 	
 	size_t entity_list_size_init = 20;	
+
 	size_t entity_list_size_position = entity_list_size_init;
-	size_t entity_list_size_draw = entity_list_size_init;
-	size_t entity_list_size_stats = entity_list_size_init;
+//	size_t entity_list_size_draw = entity_list_size_init;
+//	size_t entity_list_size_stats = entity_list_size_init;
+	size_t entity_list_size_menu_option = entity_list_size_init;
 		
 	entity_list_position = malloc(sizeof (*entity_list_position) * entity_list_size_position);	
-	entity_list_draw = malloc(sizeof (*entity_list_draw) * entity_list_size_draw);	
-	entity_list_stats = malloc(sizeof (*entity_list_stats) * entity_list_size_stats);	
+//	entity_list_draw = malloc(sizeof (*entity_list_draw) * entity_list_size_draw);	
+//	entity_list_stats = malloc(sizeof (*entity_list_stats) * entity_list_size_stats);	
+	entity_list_menu_option = malloc(sizeof (*entity_list_menu_option) * entity_list_size_menu_option);	
 	
 
-	/* Main menu/title screen initialization */
-	UiMenu menu_start = ui_menu_create_title(9,2);
+	entity_add_component_menu_option(&entity_list_menu_option, &entity_list_size_menu_option, next_entity_id, "Option Name",1 ,0,0);
+	entity_add_component_position(&entity_list_position, &entity_list_size_position, next_entity_id, 2, 2);
 
-	/* Character Creation screen menu initialization */
-	UiMenu menu_char_create = ui_menu_create_char_creation(3,3);
-	
 	/* game loop */
 
 	int ch;
@@ -71,18 +73,16 @@ int main(){
 
 		switch(game_state){
 			case 0:
-				ui_menu_draw(win_main, &menu_start, &ch, &game_loop_run, &game_state);
+			//	ui_menu_draw(win_main, &menu_start, &ch, &game_loop_run, &game_state);
 				break;
 			case 1:
-				ui_menu_draw(win_main, &menu_char_create, &ch, &game_loop_run, &game_state);
+			//	ui_menu_draw(win_main, &menu_char_create, &ch, &game_loop_run, &game_state);
 				break;
 			case 2:
 				break;
 			default:
 				break;
 		}
-
-		 
 		wrefresh(win_main);
 	}
 
@@ -91,6 +91,7 @@ int main(){
 	free(entity_list_position);
 	free(entity_list_draw);
 	free(entity_list_stats);
+	free(entity_list_menu_option);
 	delwin(win_main);
 	endwin();
 

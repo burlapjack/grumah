@@ -32,7 +32,9 @@ void system_input(WINDOW *win){
 }
 
 
-	
+void system_menu(){
+
+}	
 
 
 

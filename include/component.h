@@ -24,11 +24,16 @@ typedef struct{
 	unsigned int agility;
 }ComponentStats;
 
+typedef struct{
+	unsigned int id;
+	unsigned int game_state;
+	unsigned int child_menu_id;
+	char name[32];
+	unsigned int highlighted;
+}ComponentMenuOption;
+
 typedef struct {
 	unsigned int id;
 	unsigned int key_pushed;
 }ComponentInput;
-
-
-
 #endif /*COMPONENT_H*/

@@ -5,17 +5,19 @@ const char UI_TITLE[12][61];
 
 
 typedef struct{
+	unsigned int id;
 	char name[32];
 	unsigned int x,y;
 }UiMenuOption;
 
 
 typedef struct{
+	unsigned int id;
 	unsigned int x,y;
 	unsigned int width, height;
 	unsigned int options_length; 
 	unsigned int highlighted;
-	UiMenuOption options[30];
+	UiMenuOption options[32];
 }UiMenu;
 
 

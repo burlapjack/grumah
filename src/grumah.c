@@ -58,14 +58,15 @@ int main(){
 	entity_list_menu_option = malloc(sizeof (*entity_list_menu_option) * entity_list_size_menu_option);	
 	
 
-	entity_add_component_menu_option(&entity_list_menu_option, &entity_list_size_menu_option, next_entity_id, "Option 1",1 ,0,1);
+	entity_add_component_menu_option(&entity_list_menu_option, &entity_list_size_menu_option, next_entity_id, "Option 1",1,1,1);
 	entity_add_component_position(&entity_list_position, &entity_list_size_position, next_entity_id, 10, 5);
 
+	mvwprintw(win_main,4,3,"x: %u y: %u", entity_list_position[0].x, entity_list_position[0].y);
 	/* game loop */
 
 	int ch;
 	unsigned int game_loop_run = 1;		
-	unsigned int game_state = 0;		
+	unsigned int game_state = 1;		
 
 	while(game_loop_run == 1){
 		//ch = wgetch(win_main);

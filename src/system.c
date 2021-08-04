@@ -37,11 +37,8 @@ void system_menu(WINDOW *w, ComponentMenuOption *menu_list, size_t menu_list_len
 	unsigned int target_id;
 	/* search menu entities for matching game_state */
 	for(size_t i = 0; i < menu_list_length; i++){
-
 		if( menu_list[i].game_state == *game_state){
-
 			target_id = menu_list[i].id;
-			mvwprintw(w,3,3,"target id = %u" , target_id);
 			/* once a match is found, look for corresponding position */
 			for(size_t j = 0; j < position_list_length; j++){
 				if(position_list[j].id == target_id){

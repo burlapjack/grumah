@@ -58,13 +58,9 @@ int main(){
 //	entity_list_stats = malloc(sizeof (*entity_list_stats) * entity_list_size_stats);	
 	entity_list_menu_option = malloc(sizeof (*entity_list_menu_option) * entity_list_size_menu_option);	
 	
-
-//	entity_add_component_menu_option(&entity_list_menu_option, &entity_list_size_menu_option, next_entity_id, "Option 1",1,1,1);
-//	entity_add_component_position(&entity_list_position, &entity_list_size_position, next_entity_id, 10, 5);
-
 	entity_prefab_create_title_menu(&next_entity_id, &entity_list_menu_option, &entity_list_size_menu_option, &entity_list_position, &entity_list_size_position);
-	/* game loop */
 
+	/* game loop */
 //	int ch;
 	unsigned int game_loop_run = 1;		
 	unsigned int game_state = 1;		

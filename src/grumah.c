@@ -16,21 +16,21 @@ int main(){
 	/* initialize ncurses */
 
 	setlocale(LC_ALL, "");
-	unsigned int startx, starty, width, height;
+	unsigned int startx, starty, win_width, win_height;
 	initscr();
 	WINDOW *win_main;
 	cbreak();
 	
 	noecho();
-	height = 24;
-	width = 80;
+	win_height = 24;
+	win_width = 80;
 
 	/* Window centering calculation */
-	if(LINES < height) starty = 0; else starty = (LINES - height) / 2;  
-	if(COLS <  width) startx = 0; else startx = (COLS - width) / 2; 
+	if(LINES < win_height) starty = 0; else starty = (LINES - win_height) / 2;  
+	if(COLS <  win_width) startx = 0; else startx = (COLS - win_width) / 2; 
 
 	/* ncurses main_window */
-	win_main = newwin(height,width,starty,startx);
+	win_main = newwin(win_height,win_width,starty,startx);
 	box(win_main, 0, 0);	
 	keypad(win_main,TRUE);
 	nodelay(win_main, TRUE);

@@ -1,5 +1,6 @@
 # grumah
 
-Grumah is a text-base roguelike engine written in C.   
-The goal of the project is to create a simple-to-use ECS model
-and a dynamic memory allocation scheme designed to reduce cache misses.
+Grumah is a text-base roguelike engine written in C.
+The highly unqualified writer would like to remind you 
+that this software is still in development, and does 
+not produce what you would call "results" quite yet.

@@ -45,8 +45,7 @@ void system_menu(WINDOW *w, ComponentMenuOption *menu_list, size_t menu_list_len
 			/* once a match is found, look for corresponding position */
 			for(size_t j = 0; j < position_list_length; j++){
 				if(position_list[j].id == target_id){
-					mvwprintw(w,position_list[j].y,position_list[j].x,"Menu Option 1");
-					wrefresh(w);
+					mvwprintw(w,position_list[j].y,position_list[j].x,"%s", menu_list[i].name);
 				}
 			}
 		}	

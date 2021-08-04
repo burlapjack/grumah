@@ -8,6 +8,7 @@
 #include <string.h>
 #include "../include/component.h"
 #include "../include/entity.h"
+#include "../include/entity_prefabs.h"
 #include "../include/system.h"
 #include <locale.h>
 
@@ -58,13 +59,13 @@ int main(){
 	entity_list_menu_option = malloc(sizeof (*entity_list_menu_option) * entity_list_size_menu_option);	
 	
 
-	entity_add_component_menu_option(&entity_list_menu_option, &entity_list_size_menu_option, next_entity_id, "Option 1",1,1,1);
-	entity_add_component_position(&entity_list_position, &entity_list_size_position, next_entity_id, 10, 5);
+//	entity_add_component_menu_option(&entity_list_menu_option, &entity_list_size_menu_option, next_entity_id, "Option 1",1,1,1);
+//	entity_add_component_position(&entity_list_position, &entity_list_size_position, next_entity_id, 10, 5);
 
-	mvwprintw(win_main,4,3,"x: %u y: %u", entity_list_position[0].x, entity_list_position[0].y);
+	entity_prefab_create_title_menu(&next_entity_id, &entity_list_menu_option, &entity_list_size_menu_option, &entity_list_position, &entity_list_size_position);
 	/* game loop */
 
-	int ch;
+//	int ch;
 	unsigned int game_loop_run = 1;		
 	unsigned int game_state = 1;		
 

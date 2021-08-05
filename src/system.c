@@ -84,7 +84,7 @@ void system_menu(WINDOW *w, ComponentMenuOption *menu_list, size_t menu_list_len
 				if(position_list[jj].id == target_id){
 					if(menu_list[k].highlighted == 1) wattron(w,A_REVERSE);
 					mvwprintw(w,position_list[jj].y,position_list[jj].x,"%s", menu_list[k].name);
-					wrefresh(w);
+				//	wrefresh(w);
 					wattroff(w,A_REVERSE);
 				}
 			}

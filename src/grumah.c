@@ -69,7 +69,7 @@ int main(){
 	while(game_loop_run == 1){
 		ch = wgetch(win_main);
 		system_menu(win_main, entity_list_menu_option, entity_list_size_menu_option, entity_list_position, entity_list_size_position, ch, &game_state);
-		graphics_draw_titlescreen(win_main,1,1);
+		graphics_draw_titlescreen(win_main,9,2);
 		wrefresh(win_main);
 	}
 

@@ -6,6 +6,7 @@
 #include <ncurses.h>
 #include <stdint.h>
 #include <string.h>
+#include "../include/graphics.h"
 #include "../include/component.h"
 #include "../include/entity.h"
 #include "../include/entity_prefabs.h"
@@ -61,24 +62,14 @@ int main(){
 	entity_prefab_create_title_menu(&next_entity_id, &entity_list_menu_option, &entity_list_size_menu_option, &entity_list_position, &entity_list_size_position);
 
 	/* game loop */
-//	int ch;
+	int ch;
 	unsigned int game_loop_run = 1;		
 	unsigned int game_state = 1;		
 
 	while(game_loop_run == 1){
-		//ch = wgetch(win_main);
-
-		system_menu(win_main, entity_list_menu_option, entity_list_size_menu_option, entity_list_position, entity_list_size_position, &game_state);
-		switch(game_state){
-			case 0:
-				break;
-			case 1:
-				break;
-			case 2:
-				break;
-			default:
-				break;
-		}
+		ch = wgetch(win_main);
+		system_menu(win_main, entity_list_menu_option, entity_list_size_menu_option, entity_list_position, entity_list_size_position, ch, &game_state);
+		graphics_draw_titlescreen(win_main,1,1);
 		wrefresh(win_main);
 	}
 

@@ -18,9 +18,9 @@ void entity_prefab_create_player(unsigned int id, int x, int y, ComponentPositio
 }
 	
 void entity_prefab_create_title_menu(unsigned int *id, ComponentMenuOption **cmo, size_t *cmo_list_size, ComponentPosition **cp, size_t *cp_list_size){
-	entity_add_component_menu_option(cmo, cmo_list_size,*id,"Start New Game",1,0,1);
+	entity_add_component_menu_option(cmo, cmo_list_size,*id,"Start New Game",1,1);
 	entity_add_component_position(cp, cp_list_size, *id, 33, 16);
 	*id = *id + 1;
-	entity_add_component_menu_option(cmo, cmo_list_size,*id,"Exit Game",1,0,0);
+	entity_add_component_menu_option(cmo, cmo_list_size,*id,"Exit Game",1,0);
 	entity_add_component_position(cp, cp_list_size, *id, 35, 17);
 }

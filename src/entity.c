@@ -120,7 +120,7 @@ void entity_add_component_stats(ComponentStats **entity_list, size_t *list_size,
 	}
 }
 
-void entity_add_component_menu_option(ComponentMenuOption **entity_list, size_t *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int child_menu_id, unsigned int highlighted){
+void entity_add_component_menu_option(ComponentMenuOption **entity_list, size_t *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted){
 
 	for(size_t i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*entity_list)[i].id != 0){
@@ -130,7 +130,6 @@ void entity_add_component_menu_option(ComponentMenuOption **entity_list, size_t 
 			(*entity_list)[i].id = id;
 			strcpy((*entity_list)[i].name, name ); /* check if this is right! */
 			(*entity_list)[i].game_state = game_state;	
-			(*entity_list)[i].child_menu_id = child_menu_id;	
 			(*entity_list)[i].highlighted = highlighted;	
 			break;
 		}

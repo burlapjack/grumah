@@ -41,26 +41,21 @@ int main(){
 	/* Entities */
 	unsigned int next_entity_id = 1;
 
-	//Initialize Entity lists (arrays of component objects)
-	ComponentPosition* entity_list_position;
-	ComponentDraw* entity_list_draw;
-	ComponentStats* entity_list_stats;
-	ComponentMenuOption* entity_list_menu_option;
+	/* Initialize Entity lists (arrays of component objects) */
+	ComponentPosition* cp;
+	ComponentDraw* cd;
+	ComponentStats* cs;
+	ComponentMenuOption* co;
 	
-	size_t entity_list_size_init = 20;	
-	size_t entity_list_size_position = entity_list_size_init;
-	size_t entity_list_size_draw = entity_list_size_init;
-	size_t entity_list_size_stats = entity_list_size_init;
-	size_t entity_list_size_menu_option = entity_list_size_init;
+	size_t size_init = 20;	
+	size_t cp_size = size_init;
+	size_t cd_size = size_init;
+	size_t cs_size = size_init;
+	size_t co_size = size_init;
 
-	entity_list_init_all(20, &entity_list_position, &entity_list_draw, &entity_list_stats, &entity_list_menu_option);
-		
-//	entity_list_position = malloc(sizeof (*entity_list_position) * entity_list_size_position);	
-//	entity_list_draw = malloc(sizeof (*entity_list_draw) * entity_list_size_draw);	
-//	entity_list_stats = malloc(sizeof (*entity_list_stats) * entity_list_size_stats);	
-//	entity_list_menu_option = malloc(sizeof (*entity_list_menu_option) * entity_list_size_menu_option);	
+	entity_list_init_all(20, &cp, &cd, &cs, &co);
 	
-	entity_prefab_create_title_menu(&next_entity_id, &entity_list_menu_option, &entity_list_size_menu_option, &entity_list_position, &entity_list_size_position);
+	entity_prefab_create_title_menu(&next_entity_id, &co, &co_size, &cp, &cp_size);
 
 	/* game loop */
 	int ch;
@@ -69,17 +64,14 @@ int main(){
 
 	while(game_loop_run == 1){
 		ch = wgetch(win_main);
-		system_menu(win_main, entity_list_menu_option, entity_list_size_menu_option, entity_list_position, entity_list_size_position, ch, &game_state);
+		system_menu(win_main, co, co_size, cp, cp_size, ch, &game_state);
 		graphics_draw_titlescreen(win_main,9,2);
 		wrefresh(win_main);
 	}
 
 
-	//free all dynamically allocated memory
-	free(entity_list_position);
-	free(entity_list_draw);
-	free(entity_list_stats);
-	free(entity_list_menu_option);
+	/* free all dynamically allocated memory */
+	entity_list_free_all(cp, cd, cs, co);
 	delwin(win_main);
 	endwin();
 

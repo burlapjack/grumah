@@ -5,21 +5,26 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-/*------------ Init Entity Lists ------------*/
-
+/*----------- Init Entity Lists ----------------------------*/
 void entity_list_init_all(size_t list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co);
 
-/*------------ Entity List Manipulation -----*/
+
+/*----------- Deallocate Entity List Memory ----------------*/
+void entity_list_free_all(ComponentPosition *cp, ComponentDraw *cd, ComponentStats *cs, ComponentMenuOption *co);
+
+
+/*----------- Entity List Manipulation ---------------------*/
 void entity_list_size_double_position(ComponentPosition** entity_list, size_t *list_size);
 void entity_list_size_double_draw(ComponentDraw** entity_list, size_t *list_size);
 void entity_list_size_double_stats(ComponentStats** entity_list, size_t *list_size);
 void entity_list_size_double_menu_option(ComponentMenuOption** entity_list, size_t *list_size);
 
-/*------------ Entity Additions -------------*/
- 
+
+/*----------- Entity Additions -----------------------------*/
 void entity_add_component_position(ComponentPosition **entity_list, size_t *list_size, unsigned int id, unsigned int x, unsigned int y);
 void entity_add_component_draw(ComponentDraw **entity_list, size_t *list_size, unsigned int id, unsigned int color, char symbol);
 void entity_add_component_stats(ComponentStats **entity_list, size_t *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi);
 void entity_add_component_menu_option(ComponentMenuOption **entity_list, size_t *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted);
+
 
 #endif /*ENTITY_H*/

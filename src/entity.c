@@ -19,6 +19,15 @@ void entity_list_init_all(size_t list_size, ComponentPosition **cp, ComponentDra
 	*co = malloc(sizeof (*co) * list_size);	
 }
 
+/*-------------- Free all Entity Lists -----------------------------------------------------------*/
+
+void entity_list_free_all(ComponentPosition *cp, ComponentDraw *cd, ComponentStats *cs, ComponentMenuOption *co){
+
+	free(cp);
+	free(cd);
+	free(cs);
+	free(co);
+}
 
 /*---------------Double the size of an Entity list -----------------------------------------------*/
 

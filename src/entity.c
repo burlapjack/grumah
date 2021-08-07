@@ -9,6 +9,7 @@
 #include "../include/entity.h"
 #include "../include/system.h"
 
+
 /*---------------Initialize all Entity Lists -----------------------------------------------------*/
 
 void entity_list_init_all(size_t list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co){

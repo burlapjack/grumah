@@ -4,19 +4,19 @@ Grumah is a text\-based rogue\-like engine written in C
 for the Linux terminal.
 ## Features
 
--This engine utilizes a simple ECS (Entity Component System) 
+- This engine utilizes a simple ECS (Entity Component System) 
 approach that is popular in many other game engines. 
 
--Careful memory management  is handled automatically, allowing 
+- Careful memory management  is handled automatically, allowing 
 users to focus more on content rather than construction. 
 
--All type and function names are extra descriptive for 
+- All type and function names are extra descriptive for 
 confusion\-free, human\-readable code. 
 
 
 ## Prerequisites
 
--**Ncurses** This build was tested using Ncurses 6.0. 
+- **Ncurses** This build was tested using Ncurses 6.0. 
 
 ## Getting Started
 
@@ -33,7 +33,7 @@ necessary components:
 ```
 unsigned int next_entity = 1;
 
-ComponentPosition *position\_list;
+ComponentPosition *position_list;
 ComponentStats *stats_list;
 ComponentDraw *draw_list;
 
@@ -47,13 +47,13 @@ created your component lists,  allocate some memory space for them:
 
 ```
 
-size_t size_cp = 20;
-size_t size_cd = 20;
-size_t size_cs = 20;
+size_t size_position = 20;
+size_t size_draw = 20;
+size_t size_stats = 20;
 
-position_list = malloc(sizeof (*position_list) * size_cp ));
-draw_list = malloc (sizeof (*draw _list )  * size_cd ));
-stats_list = malloc (sizeof (*stats _list ) * size_cs));
+position_list = malloc(sizeof (*position_list) * size_position);
+draw_list = malloc (sizeof (*draw_list)  * size_draw);
+stats_list = malloc (sizeof (*stats_list) * size_stats);
 
 ```
 
@@ -64,9 +64,9 @@ Now let's give the player entity some components:
 
 ```
 
-entity_add_component_position(**position_list, *size_cp, next_id, 10, 10);
+entity_add_component_position(**position_list, *size_position, next_id, 10, 10);
 entity_add_component_draw(**draw_list, *size_draw, next_id, 1, '@');
-entity_add_component_stats(**stats_list, *size_draw, next_id, 100, 50, 50, 50);
+entity_add_component_stats(**stats_list, *size_stats, next_id, 100, 50, 50, 50);
 
 ```
 

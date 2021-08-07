@@ -43,21 +43,22 @@ int main(){
 
 	//Initialize Entity lists (arrays of component objects)
 	ComponentPosition* entity_list_position;
-//	ComponentDraw* entity_list_draw;
-//	ComponentStats* entity_list_stats;
+	ComponentDraw* entity_list_draw;
+	ComponentStats* entity_list_stats;
 	ComponentMenuOption* entity_list_menu_option;
 	
 	size_t entity_list_size_init = 20;	
-
 	size_t entity_list_size_position = entity_list_size_init;
-//	size_t entity_list_size_draw = entity_list_size_init;
-//	size_t entity_list_size_stats = entity_list_size_init;
+	size_t entity_list_size_draw = entity_list_size_init;
+	size_t entity_list_size_stats = entity_list_size_init;
 	size_t entity_list_size_menu_option = entity_list_size_init;
+
+	entity_list_init_all(20, &entity_list_position, &entity_list_draw, &entity_list_stats, &entity_list_menu_option);
 		
-	entity_list_position = malloc(sizeof (*entity_list_position) * entity_list_size_position);	
+//	entity_list_position = malloc(sizeof (*entity_list_position) * entity_list_size_position);	
 //	entity_list_draw = malloc(sizeof (*entity_list_draw) * entity_list_size_draw);	
 //	entity_list_stats = malloc(sizeof (*entity_list_stats) * entity_list_size_stats);	
-	entity_list_menu_option = malloc(sizeof (*entity_list_menu_option) * entity_list_size_menu_option);	
+//	entity_list_menu_option = malloc(sizeof (*entity_list_menu_option) * entity_list_size_menu_option);	
 	
 	entity_prefab_create_title_menu(&next_entity_id, &entity_list_menu_option, &entity_list_size_menu_option, &entity_list_position, &entity_list_size_position);
 
@@ -76,8 +77,8 @@ int main(){
 
 	//free all dynamically allocated memory
 	free(entity_list_position);
-//	free(entity_list_draw);
-//	free(entity_list_stats);
+	free(entity_list_draw);
+	free(entity_list_stats);
 	free(entity_list_menu_option);
 	delwin(win_main);
 	endwin();

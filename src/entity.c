@@ -9,6 +9,17 @@
 #include "../include/entity.h"
 #include "../include/system.h"
 
+/*---------------Initialize all Entity Lists -----------------------------------------------------*/
+
+void entity_list_init_all(size_t list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co){
+
+	*cp = malloc(sizeof (*cp) * list_size);	
+	*cd = malloc(sizeof (*cd) * list_size);	
+	*cs = malloc(sizeof (*cs) * list_size);	
+	*co = malloc(sizeof (*co) * list_size);	
+}
+
+
 /*---------------Double the size of an Entity list -----------------------------------------------*/
 
 void entity_list_size_double_position(ComponentPosition** entity_list, size_t *list_size){
@@ -129,7 +140,7 @@ void entity_add_component_menu_option(ComponentMenuOption **entity_list, size_t 
 		else if ((*entity_list)[i].id == 0){
 			(*entity_list)[i].id = id;
 			strcpy((*entity_list)[i].name, name ); /* check if this is right! */
-			(*entity_list)[i].game_state = game_state;	
+			(*entity_list)[i].parent_id = game_state;	
 			(*entity_list)[i].highlighted = highlighted;	
 			break;
 		}

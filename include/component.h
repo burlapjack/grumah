@@ -26,7 +26,7 @@ typedef struct{
 
 typedef struct{
 	unsigned int id;
-	unsigned int game_state;
+	unsigned int parent_id;
 	char name[32];
 	unsigned int highlighted;
 }ComponentMenuOption;

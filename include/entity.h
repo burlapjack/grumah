@@ -5,13 +5,17 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-/*------------Entity List Manipulation -----*/
+/*------------ Init Entity Lists ------------*/
+
+void entity_list_init_all(size_t list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co);
+
+/*------------ Entity List Manipulation -----*/
 void entity_list_size_double_position(ComponentPosition** entity_list, size_t *list_size);
 void entity_list_size_double_draw(ComponentDraw** entity_list, size_t *list_size);
 void entity_list_size_double_stats(ComponentStats** entity_list, size_t *list_size);
 void entity_list_size_double_menu_option(ComponentMenuOption** entity_list, size_t *list_size);
 
-/*------------Component creation -----------*/
+/*------------ Entity Additions -------------*/
  
 void entity_add_component_position(ComponentPosition **entity_list, size_t *list_size, unsigned int id, unsigned int x, unsigned int y);
 void entity_add_component_draw(ComponentDraw **entity_list, size_t *list_size, unsigned int id, unsigned int color, char symbol);

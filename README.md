@@ -33,7 +33,7 @@ necessary components:
 ```
 unsigned int next_entity = 1;
 
-ComponentPosition *position_list;
+ComponentPosition *pos_list;
 ComponentStats *stats_list;
 ComponentDraw *draw_list;
 
@@ -47,11 +47,11 @@ created your component lists,  allocate some memory space for them:
 
 ```
 
-size_t size_position = 20;
+size_t size_pos = 20;
 size_t size_draw = 20;
 size_t size_stats = 20;
 
-position_list = malloc(sizeof (*position_list) * size_position);
+pos_list = malloc(sizeof (*pos_list) * size_pos);
 draw_list = malloc (sizeof (*draw_list)  * size_draw);
 stats_list = malloc (sizeof (*stats_list) * size_stats);
 
@@ -63,13 +63,20 @@ that 20 different entities can be created using these 3 component types.
 Now let's give the player entity some components: 
 
 ```
-
-entity_add_component_position(**position_list, *size_position, next_id, 10, 10);
+unsigned int x = 10;
+unsigned int y = 15;
+entity_add_component_pos(**pos_list, *size_pos, next_id, x, y);
 entity_add_component_draw(**draw_list, *size_draw, next_id, 1, '@');
 entity_add_component_stats(**stats_list, *size_stats, next_id, 100, 50, 50, 50);
 
 ```
+We now have a player character with a position, some stats,  and a sprite.
 
+If you don't feel like adding every component one at a time,  there is a 
+player prefab function that handles all of the work for you: 
+ 
+```
+entity_prefab_create_player(next_id, x, y, **pos_list, *size_pos,**draw_list,*size_draw, **stats_list,*size_stats);
 
-
-
+```
+There are several prefab functions like this one at your disposal.

@@ -10,7 +10,29 @@
 #include "../include/system.h"
 
 
-/*---------------Initialize all Entity Lists -----------------------------------------------------*/
+
+void entity_add_player(unsigned int id, int x, int y, ComponentPosition **cp, size_t *cp_list_size,ComponentDraw **cd,size_t *cd_list_size, ComponentStats **cs,size_t *cs_list_size){
+	component_add_position( cp, cp_list_size, id, x, y); 		
+	component_add_draw( cd, cd_list_size, id, 1, '@');
+	component_add_stats(cs, cs_list_size, id, 5, 5, 5, 5);
+}
+	
+void entity_add_title_menu(unsigned int *id, ComponentMenuOption **cmo, size_t *cmo_list_size, ComponentPosition **cp, size_t *cp_list_size){
+	component_add_menu_option(cmo, cmo_list_size,*id,"Start New Game",1,1);
+	component_add_position(cp, cp_list_size, *id, 33, 16);
+	*id = *id + 1;
+	component_add_menu_option(cmo, cmo_list_size,*id,"Exit Game",1,0);
+	component_add_position(cp, cp_list_size, *id, 35, 17);
+}
+
+
+
+
+
+
+
+
+/*---------------Initialize Entity Lists -----------------------------------------------------*/
 
 void entity_list_init_all(size_t list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co){
 
@@ -19,6 +41,7 @@ void entity_list_init_all(size_t list_size, ComponentPosition **cp, ComponentDra
 	*cs = malloc(sizeof (*cs) * list_size);	
 	*co = malloc(sizeof (*co) * list_size);	
 }
+
 
 /*-------------- Free all Entity Lists -----------------------------------------------------------*/
 

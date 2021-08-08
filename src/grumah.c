@@ -9,7 +9,6 @@
 #include "../include/graphics.h"
 #include "../include/component.h"
 #include "../include/entity.h"
-#include "../include/entity_prefabs.h"
 #include "../include/system.h"
 #include <locale.h>
 
@@ -53,9 +52,9 @@ int main(){
 	size_t cs_size = size_init;
 	size_t co_size = size_init;
 
-	entity_list_init_all(20, &cp, &cd, &cs, &co);
+	component_list_init_all(20, &cp, &cd, &cs, &co);
 	
-	entity_prefab_create_title_menu(&next_entity_id, &co, &co_size, &cp, &cp_size);
+	entity_add_title_menu(&next_entity_id, &co, &co_size, &cp, &cp_size);
 
 	/* game loop */
 	int ch;
@@ -71,7 +70,7 @@ int main(){
 
 
 	/* free all dynamically allocated memory */
-	entity_list_free_all(cp, cd, cs, co);
+	component_list_free_all(cp, cd, cs, co);
 	delwin(win_main);
 	endwin();
 

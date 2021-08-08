@@ -35,4 +35,27 @@ typedef struct {
 	unsigned int id;
 	unsigned int key_pushed;
 }ComponentInput;
+
+
+/*----------- Init Component Lists ----------------------------*/
+void component_list_init_all(size_t list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co);
+
+
+/*----------- Deallocate Component List Memory ----------------*/
+void component_list_free_all(ComponentPosition *cp, ComponentDraw *cd, ComponentStats *cs, ComponentMenuOption *co);
+
+
+/*----------- Component List Manipulation ---------------------*/
+void component_list_size_double_position(ComponentPosition** component_list, size_t *list_size);
+void component_list_size_double_draw(ComponentDraw** component_list, size_t *list_size);
+void component_list_size_double_stats(ComponentStats** component_list, size_t *list_size);
+void component_list_size_double_menu_option(ComponentMenuOption** component_list, size_t *list_size);
+
+/*----------- Component Additions -----------------------------*/
+void component_add_position(ComponentPosition **component_list, size_t *list_size, unsigned int id, unsigned int x, unsigned int y);
+void component_add_draw(ComponentDraw **component_list, size_t *list_size, unsigned int id, unsigned int color, char symbol);
+void component_add_stats(ComponentStats **component_list, size_t *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi);
+void component_add_menu_option(ComponentMenuOption **component_list, size_t *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted);
+
+
 #endif /*COMPONENT_H*/

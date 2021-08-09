@@ -1,4 +1,4 @@
-//entity.c
+//component.c
 //Functions that manipulated entity lists
 //by burlapjack 2021
 
@@ -11,7 +11,7 @@
 
 /*---------------Initialize Component Lists -----------------------------------------------------*/
 
-void component_list_init_all(size_t list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co){
+void component_list_init_all(unsigned int list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co){
 
 	*cp = malloc(sizeof (*cp) * list_size);	
 	*cd = malloc(sizeof (*cd) * list_size);	
@@ -32,7 +32,7 @@ void component_list_free_all(ComponentPosition *cp, ComponentDraw *cd, Component
 
 /*---------------Double the size of an Component list -----------------------------------------------*/
 
-void component_list_size_double_position(ComponentPosition** component_list, size_t *list_size){
+void component_list_size_double_position(ComponentPosition** component_list, unsigned int *list_size){
 	//test the reallocation
 	ComponentPosition *temp = realloc(*component_list, sizeof **component_list * (*list_size * 2));
 	if (temp == NULL) {
@@ -41,13 +41,13 @@ void component_list_size_double_position(ComponentPosition** component_list, siz
 	}	
 	*component_list = temp;	
 
-	for(size_t i = *list_size; i < (*list_size * 2 ); ++i ){
+	for(unsigned int i = *list_size; i < (*list_size * 2 ); ++i ){
 		(*component_list)[i].id = 0;
 	}
 	*list_size = *list_size * 2;
 }
 
-void component_list_size_double_draw(ComponentDraw** component_list, size_t *list_size){
+void component_list_size_double_draw(ComponentDraw** component_list, unsigned int *list_size){
 	//test the reallocation
 	ComponentDraw* temp = realloc(*component_list, sizeof (**component_list) * (*list_size * 2));
 	if (temp == NULL) {
@@ -56,13 +56,13 @@ void component_list_size_double_draw(ComponentDraw** component_list, size_t *lis
 	}	
 	*component_list = temp;	
 
-	for(size_t i = *list_size; i < (*list_size * 2 ); ++i ){
+	for(unsigned int i = *list_size; i < (*list_size * 2 ); ++i ){
 		(*component_list)[i].id = 0;
 	}
 	*list_size = *list_size * 2;
 }
 
-void component_list_size_double_stats(ComponentStats** component_list, size_t *list_size){
+void component_list_size_double_stats(ComponentStats** component_list, unsigned int *list_size){
 	//test the reallocation
 	ComponentStats*temp = realloc(*component_list, sizeof **component_list * (*list_size * 2));
 	if (temp == NULL) {
@@ -71,13 +71,13 @@ void component_list_size_double_stats(ComponentStats** component_list, size_t *l
 	}	
 	*component_list = temp;	
 
-	for(size_t i = *list_size; i < (*list_size * 2 ); ++i ){
+	for(unsigned int i = *list_size; i < (*list_size * 2 ); ++i ){
 		(*component_list)[i].id = 0;
 	}
 	*list_size = *list_size * 2;
 }
 
-void component_list_size_double_menu_option(ComponentMenuOption** component_list, size_t *list_size){
+void component_list_size_double_menu_option(ComponentMenuOption** component_list, unsigned int *list_size){
 	//test the reallocation
 	ComponentMenuOption *temp = realloc(*component_list, sizeof **component_list * (*list_size * 2));
 	if (temp == NULL) {
@@ -86,7 +86,7 @@ void component_list_size_double_menu_option(ComponentMenuOption** component_list
 	}	
 	*component_list = temp;	
 
-	for(size_t i = *list_size; i < (*list_size * 2 ); ++i ){
+	for(unsigned int i = *list_size; i < (*list_size * 2 ); ++i ){
 		(*component_list)[i].id = 0;
 	}
 	*list_size = *list_size * 2;
@@ -97,8 +97,8 @@ void component_list_size_double_menu_option(ComponentMenuOption** component_list
 
 /*---------------Add Component to entity list-----------------------------------------------------*/
 
-void component_add_position(ComponentPosition **component_list,size_t *list_size, unsigned int id, unsigned int x, unsigned int y){
-	for(size_t i = 0; i < *list_size; ++i){
+void component_add_position(ComponentPosition **component_list,unsigned int *list_size, unsigned int id, unsigned int x, unsigned int y){
+	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_position(component_list,list_size);
 		}
@@ -111,8 +111,8 @@ void component_add_position(ComponentPosition **component_list,size_t *list_size
 	}
 }
 
-void component_add_draw(ComponentDraw **component_list, size_t *list_size, unsigned int id, unsigned int color, char symbol){
-	for(size_t i = 0; i < *list_size; ++i){
+void component_add_draw(ComponentDraw **component_list, unsigned int *list_size, unsigned int id, unsigned int color, char symbol){
+	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_draw(component_list,list_size);
 		}
@@ -125,8 +125,8 @@ void component_add_draw(ComponentDraw **component_list, size_t *list_size, unsig
 	}
 }
 
-void component_add_stats(ComponentStats **component_list, size_t *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi){
-	for(size_t i = 0; i < *list_size; ++i){
+void component_add_stats(ComponentStats **component_list, unsigned int *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi){
+	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_stats(component_list,list_size);
 		}
@@ -141,9 +141,9 @@ void component_add_stats(ComponentStats **component_list, size_t *list_size, uns
 	}
 }
 
-void component_add_menu_option(ComponentMenuOption **component_list, size_t *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted){
+void component_add_menu_option(ComponentMenuOption **component_list, unsigned int *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted){
 
-	for(size_t i = 0; i < *list_size; ++i){
+	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_menu_option(component_list,list_size);
 		}

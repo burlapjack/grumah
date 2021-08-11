@@ -1,5 +1,5 @@
 //entity.c
-//Functions that manipulated entity lists
+//Functions that manipulate entity lists
 //by burlapjack 2021
 
 #include <stdlib.h>

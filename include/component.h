@@ -63,11 +63,12 @@ typedef struct {
 /*----------- Init Component Lists ----------------------------*/
 void component_list_init_all(unsigned int list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co);
 
-void components_init(Component **c);
+void component_init(Component **c);
 
 /*----------- Deallocate Component List Memory ----------------*/
 void component_list_free_all(ComponentPosition *cp, ComponentDraw *cd, ComponentStats *cs, ComponentMenuOption *co);
 
+void component_free_all(Component *c);
 
 /*----------- Component List Manipulation ---------------------*/
 void component_list_size_double_position(ComponentPosition** component_list, unsigned int *list_size);

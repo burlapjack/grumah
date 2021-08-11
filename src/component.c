@@ -19,7 +19,7 @@ void component_list_init_all(unsigned int list_size, ComponentPosition **cp, Com
 	*co = malloc(sizeof (*co) * list_size);	
 }
 
-void components_init(Component **c){
+void component_init(Component **c){
 		
 	(*c)->draw  = malloc(sizeof ((*c)->draw) * (*c)->size_draw);	
 	(*c)->menu_option = malloc(sizeof ((*c)->menu_option) * (*c)->size_menu_option);	
@@ -27,8 +27,6 @@ void components_init(Component **c){
 	(*c)->stats  = malloc(sizeof ((*c)->stats) * (*c)->size_stats);	
 	(*c)->trigger  = malloc(sizeof ((*c)->trigger) * (*c)->size_trigger);	
 }
-
-
 
 
 /*-------------- Free all Component Lists -----------------------------------------------------------*/
@@ -39,6 +37,14 @@ void component_list_free_all(ComponentPosition *cp, ComponentDraw *cd, Component
 	free(cd);
 	free(cs);
 	free(co);
+}
+
+void component_free_all(Component *c){
+	free(c->draw);
+	free(c->menu_option);
+	free(c->position);
+	free(c->stats);
+	free(c->trigger);
 }
 
 /*---------------Double the size of an Component list -----------------------------------------------*/

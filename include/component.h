@@ -31,6 +31,16 @@ typedef struct{
 	unsigned int highlighted;
 }ComponentMenuOption;
 
+typedef struct{
+	unsigned int id;
+	unsigned int game_state;
+}ComponentTrigger;
+
+typedef struct{
+	unsigned int id;
+	unsigned int durability;
+}ComponentWall;
+
 typedef struct {
 	unsigned int id;
 	unsigned int key_pushed;
@@ -41,10 +51,12 @@ typedef struct {
 	ComponentDraw *draw;
 	ComponentStats *stats;
 	ComponentMenuOption *menu_option;
+	ComponentTrigger *trigger;
 	unsigned int size_position;
 	unsigned int size_draw;
 	unsigned int size_stats;
 	unsigned int size_menu_option;
+	unsigned int size_trigger;
 }Component;
 
 
@@ -61,12 +73,14 @@ void component_list_size_double_position(ComponentPosition** component_list, uns
 void component_list_size_double_draw(ComponentDraw** component_list, unsigned int *list_size);
 void component_list_size_double_stats(ComponentStats** component_list, unsigned int *list_size);
 void component_list_size_double_menu_option(ComponentMenuOption** component_list, unsigned int *list_size);
+void component_list_size_double_trigger(ComponentTrigger** component_list, unsigned int *list_size);
 
 /*----------- Component Additions -----------------------------*/
 void component_add_position(ComponentPosition **component_list, unsigned int *list_size, unsigned int id, unsigned int x, unsigned int y);
 void component_add_draw(ComponentDraw **component_list, unsigned int *list_size, unsigned int id, unsigned int color, char symbol);
 void component_add_stats(ComponentStats **component_list, unsigned int *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi);
 void component_add_menu_option(ComponentMenuOption **component_list, unsigned int *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted);
+void component_add_trigger(ComponentTrigger**component_list, unsigned int *list_size, unsigned int id, unsigned int game_state);
 
 
 #endif /*COMPONENT_H*/

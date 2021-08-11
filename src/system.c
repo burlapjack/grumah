@@ -32,7 +32,7 @@ void system_input(WINDOW *win){
 }
 
 
-void system_menu(WINDOW *w, ComponentMenuOption *menu_list, size_t menu_list_length, ComponentPosition *position_list, size_t position_list_length, int input, unsigned int *game_state){
+void system_menu(WINDOW *w, ComponentMenuOption *menu_list, unsigned int menu_list_length, ComponentPosition *position_list, unsigned int position_list_length, int input, unsigned int *game_state){
 
 	if(input == KEY_UP || input == KEY_DOWN){
 
@@ -40,7 +40,7 @@ void system_menu(WINDOW *w, ComponentMenuOption *menu_list, size_t menu_list_len
 		unsigned int down_selected = 99;
 		unsigned int up_selected = 99;
 		/* search for menu option to unhighlight */
-		for (size_t i = 0; i < menu_list_length; i++){
+		for (int i = 0; i < menu_list_length; i++){
 			if(menu_list[i].parent_id == *game_state && menu_list[i].id != 0){
 				if(menu_list[i].highlighted == 1){
 					deselected = i;
@@ -75,12 +75,12 @@ void system_menu(WINDOW *w, ComponentMenuOption *menu_list, size_t menu_list_len
 
 	unsigned int target_id;
 	/* search menu entities for matching game_state */
-	for(size_t k = 0; k < menu_list_length; k++){
+	for(int k = 0; k < menu_list_length; k++){
 		if( menu_list[k].parent_id == *game_state){
 			target_id = menu_list[k].id;
 
 			/* once a match is found, look for corresponding position */
-			for(size_t jj = 0; jj < position_list_length; jj++){
+			for(int jj = 0; jj < position_list_length; jj++){
 				if(position_list[jj].id == target_id){
 					if(menu_list[k].highlighted == 1) wattron(w,A_REVERSE);
 					mvwprintw(w,position_list[jj].y,position_list[jj].x,"%s", menu_list[k].name);

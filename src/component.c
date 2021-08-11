@@ -81,7 +81,7 @@ void component_list_size_double_menu_option(ComponentMenuOption** component_list
 	//test the reallocation
 	ComponentMenuOption *temp = realloc(*component_list, sizeof **component_list * (*list_size * 2));
 	if (temp == NULL) {
-		perror("Failure to reallocate component_list_stats");
+		perror("Failure to reallocate component_menu_option");
 		exit(EXIT_FAILURE);
 	}	
 	*component_list = temp;	
@@ -93,6 +93,20 @@ void component_list_size_double_menu_option(ComponentMenuOption** component_list
 }
 
 
+void component_list_size_double_trigger(ComponentTrigger** component_list, unsigned int *list_size){
+	//test the reallocation
+	ComponentTrigger *temp = realloc(*component_list, sizeof **component_list * (*list_size * 2));
+	if (temp == NULL) {
+		perror("Failure to reallocate component_trigger");
+		exit(EXIT_FAILURE);
+	}	
+	*component_list = temp;	
+
+	for(unsigned int i = *list_size; i < (*list_size * 2 ); ++i ){
+		(*component_list)[i].id = 0;
+	}
+	*list_size = *list_size * 2;
+}
 
 
 /*---------------Add Component to entity list-----------------------------------------------------*/
@@ -156,3 +170,19 @@ void component_add_menu_option(ComponentMenuOption **component_list, unsigned in
 		}
 	}
 }
+
+void component_add_trigger(ComponentTrigger**component_list, unsigned int *list_size, unsigned int id, unsigned int game_state){
+
+	for(unsigned int i = 0; i < *list_size; ++i){
+		if (i == *list_size-1 && (*component_list)[i].id != 0){
+			component_list_size_double_trigger(component_list,list_size);
+		}
+		else if ((*component_list)[i].id == 0){
+			(*component_list)[i].id = id;
+			(*component_list)[i].game_state = game_state;
+			break;
+		}
+	}
+}
+
+

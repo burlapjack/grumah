@@ -25,4 +25,3 @@ void entity_add_title_menu(unsigned int *id, ComponentMenuOption **cmo, unsigned
 	component_add_position(cp, cp_list_size, *id, 35, 17);
 }
 
-

@@ -11,8 +11,27 @@
 
 /*---------------Initialize Component Lists -----------------------------------------------------*/
 
-void component_list_init_all(unsigned int list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co){
+ComponentDraw* component_init_draw(unsigned int size_list){
+	ComponentDraw *c = malloc(sizeof (*c) * size_list);
+	return c;
+}
 
+ComponentMenuOption* component_init_menu_option(unsigned int size_list){
+	ComponentMenuOption *c = malloc(sizeof (*c) * size_list);
+	return c;
+}
+
+ComponentPosition* component_init_position(unsigned int size_list){
+	ComponentPosition *c = malloc(sizeof (*c) * size_list);
+	return c;	
+}
+
+ComponentStats* component_init_stats(unsigned int size_list){
+	ComponentStats *c = malloc(sizeof (*c) * size_list);
+	return c;
+}
+
+void component_list_init_all(unsigned int list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co){
 	*cp = malloc(sizeof (*cp) * list_size);	
 	*cd = malloc(sizeof (*cd) * list_size);	
 	*cs = malloc(sizeof (*cs) * list_size);	
@@ -20,7 +39,6 @@ void component_list_init_all(unsigned int list_size, ComponentPosition **cp, Com
 }
 
 void component_init(Component **c){
-		
 	(*c)->draw  = malloc(sizeof ((*c)->draw) * (*c)->size_draw);	
 	(*c)->menu_option = malloc(sizeof ((*c)->menu_option) * (*c)->size_menu_option);	
 	(*c)->position = malloc(sizeof ((*c)->position) * (*c)->size_position);	
@@ -29,10 +47,12 @@ void component_init(Component **c){
 }
 
 
+
+
+
 /*-------------- Free all Component Lists -----------------------------------------------------------*/
 
 void component_list_free_all(ComponentPosition *cp, ComponentDraw *cd, ComponentStats *cs, ComponentMenuOption *co){
-
 	free(cp);
 	free(cd);
 	free(cs);

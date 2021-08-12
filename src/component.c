@@ -31,6 +31,13 @@ ComponentStats* component_init_stats(unsigned int size_list){
 	return c;
 }
 
+ComponentTrigger* component_init_trigger(unsigned int size_list){
+	ComponentTrigger *c = malloc(sizeof (*c) * size_list);
+	return c;
+}
+
+
+/*----------------Initialize a component collection-----------------------------------------------*/
 void component_list_init_all(unsigned int list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co){
 	*cp = malloc(sizeof (*cp) * list_size);	
 	*cd = malloc(sizeof (*cd) * list_size);	
@@ -45,9 +52,6 @@ void component_init(Component **c){
 	(*c)->stats  = malloc(sizeof ((*c)->stats) * (*c)->size_stats);	
 	(*c)->trigger  = malloc(sizeof ((*c)->trigger) * (*c)->size_trigger);	
 }
-
-
-
 
 
 /*-------------- Free all Component Lists -----------------------------------------------------------*/

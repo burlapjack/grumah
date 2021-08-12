@@ -61,6 +61,14 @@ typedef struct {
 
 
 /*----------- Init Component Lists ----------------------------*/
+ComponentDraw* component_init_draw(unsigned int size_list);
+
+ComponentMenuOption* component_init_menu_option(unsigned int size_list);
+
+ComponentPosition* component_init_position(unsigned int size_list);
+
+ComponentStats* component_init_stats(unsigned int size_list);
+
 void component_list_init_all(unsigned int list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co);
 
 void component_init(Component **c);

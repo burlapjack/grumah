@@ -30,6 +30,8 @@ To start, you will want to set up an entity id counter, the component
 pointers and their respective sizes:
 
 ```
+#include "grumah.h"
+
 /*----- entity id counter -----*/
 unsigned int next_entity = 1;
 

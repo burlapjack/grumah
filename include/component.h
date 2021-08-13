@@ -69,8 +69,7 @@ ComponentTrigger* component_init_trigger(unsigned int size_list);
 
 void component_list_init_all(unsigned int list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co);
 
-void component_init(Component **c);
-
+Component* component_init(Component **c);
 
 /*----------- Deallocate Component List Memory ----------------*/
 void component_list_free_all(ComponentPosition *cp, ComponentDraw *cd, ComponentStats *cs, ComponentMenuOption *co);

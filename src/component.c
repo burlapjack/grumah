@@ -13,26 +13,31 @@
 
 ComponentDraw* component_init_draw(unsigned int size_list){
 	ComponentDraw *c = malloc(sizeof (*c) * size_list);
+	for( int i = 0; i < size_list; i++) (*c).id = 0;
 	return c;
 }
 
 ComponentMenuOption* component_init_menu_option(unsigned int size_list){
 	ComponentMenuOption *c = malloc(sizeof (*c) * size_list);
+	for( int i = 0; i < size_list; i++) (*c).id = 0;
 	return c;
 }
 
 ComponentPosition* component_init_position(unsigned int size_list){
 	ComponentPosition *c = malloc(sizeof (*c) * size_list);
+	for( int i = 0; i < size_list; i++) (*c).id = 0;
 	return c;	
 }
 
 ComponentStats* component_init_stats(unsigned int size_list){
 	ComponentStats *c = malloc(sizeof (*c) * size_list);
+	for( int i = 0; i < size_list; i++) (*c).id = 0;
 	return c;
 }
 
 ComponentTrigger* component_init_trigger(unsigned int size_list){
 	ComponentTrigger *c = malloc(sizeof (*c) * size_list);
+	for( int i = 0; i < size_list; i++) (*c).id = 0;
 	return c;
 }
 
@@ -45,13 +50,16 @@ void component_list_init_all(unsigned int list_size, ComponentPosition **cp, Com
 	*co = malloc(sizeof (*co) * list_size);	
 }
 
-void component_init(Component **c){
-	(*c)->draw  = malloc(sizeof ((*c)->draw) * (*c)->size_draw);	
-	(*c)->menu_option = malloc(sizeof ((*c)->menu_option) * (*c)->size_menu_option);	
-	(*c)->position = malloc(sizeof ((*c)->position) * (*c)->size_position);	
-	(*c)->stats  = malloc(sizeof ((*c)->stats) * (*c)->size_stats);	
-	(*c)->trigger  = malloc(sizeof ((*c)->trigger) * (*c)->size_trigger);	
+
+Component* component_init(Component **c){
+	(*c)->draw = component_init_draw(10);
+	(*c)->menu_option = component_init_menu_option(10);
+	(*c)->position = component_init_position(10);
+	(*c)->stats = component_init_stats(10);
+	(*c)->trigger = component_init_trigger(10);
+	return *c;	
 }
+
 
 
 /*-------------- Free all Component Lists -----------------------------------------------------------*/
@@ -197,7 +205,6 @@ void component_add_stats(ComponentStats **component_list, unsigned int *list_siz
 }
 
 void component_add_menu_option(ComponentMenuOption **component_list, unsigned int *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted){
-
 	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_menu_option(component_list,list_size);
@@ -213,7 +220,6 @@ void component_add_menu_option(ComponentMenuOption **component_list, unsigned in
 }
 
 void component_add_trigger(ComponentTrigger**component_list, unsigned int *list_size, unsigned int id, unsigned int game_state){
-
 	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_trigger(component_list,list_size);

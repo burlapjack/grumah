@@ -256,21 +256,8 @@ void component_list_double_trigger(Component *c){
 
 /*---------------Add Component to entity list-----------------------------------------------------*/
 
-void component_add_position(ComponentPosition **component_list,unsigned int *list_size, unsigned int id, unsigned int x, unsigned int y){
-	for(unsigned int i = 0; i < *list_size; ++i){
-		if (i == *list_size-1 && (*component_list)[i].id != 0){
-			component_list_size_double_position(component_list,list_size);
-		}
-		else if ((*component_list)[i].id == 0){
-			(*component_list)[i].id = id;	
-			(*component_list)[i].x = x;
-			(*component_list)[i].y = y;
-			break;
-		}
-	}
-}
 
-void component_add_draw(ComponentDraw **component_list, unsigned int *list_size, unsigned int id, unsigned int color, char symbol){
+void component_list_add_draw(ComponentDraw **component_list, unsigned int *list_size, unsigned int id, unsigned int color, char symbol){
 	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_draw(component_list,list_size);
@@ -284,7 +271,21 @@ void component_add_draw(ComponentDraw **component_list, unsigned int *list_size,
 	}
 }
 
-void component_add_stats(ComponentStats **component_list, unsigned int *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi){
+void component_list_add_position(ComponentPosition **component_list,unsigned int *list_size, unsigned int id, unsigned int x, unsigned int y){
+	for(unsigned int i = 0; i < *list_size; ++i){
+		if (i == *list_size-1 && (*component_list)[i].id != 0){
+			component_list_size_double_position(component_list,list_size);
+		}
+		else if ((*component_list)[i].id == 0){
+			(*component_list)[i].id = id;	
+			(*component_list)[i].x = x;
+			(*component_list)[i].y = y;
+			break;
+		}
+	}
+}
+
+void component_list_add_stats(ComponentStats **component_list, unsigned int *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi){
 	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_stats(component_list,list_size);
@@ -300,7 +301,7 @@ void component_add_stats(ComponentStats **component_list, unsigned int *list_siz
 	}
 }
 
-void component_add_menu_option(ComponentMenuOption **component_list, unsigned int *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted){
+void component_list_add_menu_option(ComponentMenuOption **component_list, unsigned int *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted){
 	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_menu_option(component_list,list_size);
@@ -315,7 +316,7 @@ void component_add_menu_option(ComponentMenuOption **component_list, unsigned in
 	}
 }
 
-void component_add_trigger(ComponentTrigger**component_list, unsigned int *list_size, unsigned int id, unsigned int game_state){
+void component_list_add_trigger(ComponentTrigger**component_list, unsigned int *list_size, unsigned int id, unsigned int game_state){
 	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_trigger(component_list,list_size);
@@ -323,6 +324,81 @@ void component_add_trigger(ComponentTrigger**component_list, unsigned int *list_
 		else if ((*component_list)[i].id == 0){
 			(*component_list)[i].id = id;
 			(*component_list)[i].game_state = game_state;
+			break;
+		}
+	}
+}
+
+
+//EXPERIMENTAL
+
+void component_add_draw(Component *c, unsigned int id, unsigned int color, char symbol) {
+	for(int i = 0; i < c->size_draw; ++i){
+		if (i == c->size_draw-1 && c->draw[i].id != 0){
+			component_list_double_draw(c);
+		}
+		else if (c->draw[i].id == 0){
+			c->draw[i].id = id;
+			c->draw[i].color = color;
+			c->draw[i].symbol = symbol;
+			break;
+		}
+	}
+}
+
+void component_add_position(Component *c, unsigned int id, unsigned int x, unsigned int y) {
+	for(int i = 0; i < c->size_position; ++i){
+		if (i == c->size_position-1 && c->position[i].id != 0){
+			component_list_double_position(c);
+		}
+		else if (c->position[i].id == 0){
+			c->position[i].id = id;
+			c->position[i].x = x;
+			c->position[i].y = y;
+			break;
+		}
+	}
+}
+
+void component_add_menu_option(Component *c, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted) {
+	for(int i = 0; i < (c->size_menu_option); ++i){
+		if (i == c->size_menu_option-1 && c->menu_option[i].id != 0){
+			component_list_double_menu_option(c);
+		}
+		else if (c->menu_option[i].id == 0){
+			c->menu_option[i].id = id;
+			strcpy(c->menu_option[i].name,name); /*check if this is right! */
+			c->menu_option[i].parent_id = game_state;
+			c->menu_option[i].highlighted = highlighted;
+			break;
+		}
+	}
+}
+
+void component_add_stats(Component *c, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi) {
+	for(int i = 0; i < c->size_stats; ++i){
+		if (i == c->size_stats-1 && c->stats[i].id != 0){
+			component_list_double_stats(c);
+		}
+		else if (c->stats[i].id == 0){
+			c->stats[i].id = id;
+			c->stats[i].hp = hp;
+			c->stats[i].strength = str;
+			c->stats[i].perception = per;
+			c->stats[i].agility = agi;
+			break;
+		}
+	}
+}
+
+void component_add_trigger(Component *c, unsigned int id, unsigned int game_state) {
+	for(int i = 0; i < c->size_trigger; ++i){
+		if (i == c->size_trigger-1 && c->trigger[i].id != 0){
+			component_list_double_trigger(c);
+		}
+		else if (c->trigger[i].id == 0){
+			c->trigger[i].id = id;
+			c->trigger[i].game_state = game_state;
 			break;
 		}
 	}

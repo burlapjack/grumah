@@ -83,15 +83,25 @@ void component_list_size_double_position(ComponentPosition** component_list, uns
 void component_list_size_double_stats(ComponentStats** component_list, unsigned int *list_size);
 void component_list_size_double_trigger(ComponentTrigger** component_list, unsigned int *list_size);
 
-
+void component_list_double_draw(Component *c);
+void component_list_double_menu_option(Component *c);
+void component_list_double_position(Component *c);
+void component_list_double_stats(Component *c);
 void component_list_double_trigger(Component *c);
 
 /*----------- Component Additions -----------------------------*/
-void component_add_draw(ComponentDraw **component_list, unsigned int *list_size, unsigned int id, unsigned int color, char symbol);
-void component_add_menu_option(ComponentMenuOption **component_list, unsigned int *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted);
-void component_add_position(ComponentPosition **component_list, unsigned int *list_size, unsigned int id, unsigned int x, unsigned int y);
-void component_add_stats(ComponentStats **component_list, unsigned int *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi);
-void component_add_trigger(ComponentTrigger**component_list, unsigned int *list_size, unsigned int id, unsigned int game_state);
+void component_list_add_draw(ComponentDraw **component_list, unsigned int *list_size, unsigned int id, unsigned int color, char symbol);
+void component_list_add_menu_option(ComponentMenuOption **component_list, unsigned int *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted);
+void component_list_add_position(ComponentPosition **component_list, unsigned int *list_size, unsigned int id, unsigned int x, unsigned int y);
+void component_list_add_stats(ComponentStats **component_list, unsigned int *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi);
+void component_list_add_trigger(ComponentTrigger**component_list, unsigned int *list_size, unsigned int id, unsigned int game_state);
+
+
+void component_add_draw(Component *c, unsigned int id, unsigned int color, char symbol);
+void component_add_position(Component *c, unsigned int id, unsigned int x, unsigned int y);
+void component_add_menu_option(Component *c, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted);
+void component_add_stats(Component *c, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi);
+void component_add_trigger(Component *c, unsigned int id, unsigned int game_state);
 
 
 #endif /*COMPONENT_H*/

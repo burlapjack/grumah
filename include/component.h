@@ -61,15 +61,15 @@ typedef struct {
 
 
 /*----------- Init Component Lists ----------------------------*/
-ComponentDraw* component_init_draw(unsigned int size_list);
-ComponentMenuOption* component_init_menu_option(unsigned int size_list);
-ComponentPosition* component_init_position(unsigned int size_list);
-ComponentStats* component_init_stats(unsigned int size_list);
-ComponentTrigger* component_init_trigger(unsigned int size_list);
+ComponentDraw* component_init_draw(ComponentDraw **c, unsigned int size_list);
+ComponentMenuOption* component_init_menu_option(ComponentMenuOption **c, unsigned int size_list);
+ComponentPosition* component_init_position(ComponentPosition **c,unsigned int size_list);
+ComponentStats* component_init_stats(ComponentStats **c, unsigned int size_list);
+ComponentTrigger* component_init_trigger(ComponentTrigger **c, unsigned int size_list);
 
 void component_list_init_all(unsigned int list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co);
 
-Component* component_init(Component **c);
+Component* component_init(Component **c, unsigned int size_lists);
 
 /*----------- Deallocate Component List Memory ----------------*/
 void component_list_free_all(ComponentPosition *cp, ComponentDraw *cd, ComponentStats *cs, ComponentMenuOption *co);

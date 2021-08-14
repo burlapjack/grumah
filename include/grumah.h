@@ -5,5 +5,6 @@
 #include <ncurses.h>
 #include "component.h"
 #include "entity.h"
+#include "system.h"
 
 #endif /* GRUMAH_H */

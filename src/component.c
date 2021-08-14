@@ -11,34 +11,35 @@
 
 /*---------------Initialize Component Lists -----------------------------------------------------*/
 
-ComponentDraw* component_init_draw(unsigned int size_list){
-	ComponentDraw *c = malloc(sizeof (*c) * size_list);
-	for( int i = 0; i < size_list; i++) (*c).id = 0;
-	return c;
+ComponentDraw* component_init_draw(ComponentDraw **c, unsigned int size_list){
+	
+	*c = malloc(sizeof (*c) * size_list);
+	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	return *c;
 }
 
-ComponentMenuOption* component_init_menu_option(unsigned int size_list){
-	ComponentMenuOption *c = malloc(sizeof (*c) * size_list);
-	for( int i = 0; i < size_list; i++) (*c).id = 0;
-	return c;
+ComponentMenuOption* component_init_menu_option(ComponentMenuOption **c, unsigned int size_list){
+	*c = malloc(sizeof (*c) * size_list);
+	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	return *c;
 }
 
-ComponentPosition* component_init_position(unsigned int size_list){
-	ComponentPosition *c = malloc(sizeof (*c) * size_list);
-	for( int i = 0; i < size_list; i++) (*c).id = 0;
-	return c;	
+ComponentPosition* component_init_position(ComponentPosition **c, unsigned int size_list){
+	*c = malloc(sizeof (*c) * size_list);
+	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	return *c;	
 }
 
-ComponentStats* component_init_stats(unsigned int size_list){
-	ComponentStats *c = malloc(sizeof (*c) * size_list);
-	for( int i = 0; i < size_list; i++) (*c).id = 0;
-	return c;
+ComponentStats* component_init_stats(ComponentStats **c, unsigned int size_list){
+	*c = malloc(sizeof (*c) * size_list);
+	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	return *c;
 }
 
-ComponentTrigger* component_init_trigger(unsigned int size_list){
-	ComponentTrigger *c = malloc(sizeof (*c) * size_list);
-	for( int i = 0; i < size_list; i++) (*c).id = 0;
-	return c;
+ComponentTrigger* component_init_trigger(ComponentTrigger **c, unsigned int size_list){
+	*c = malloc(sizeof (*c) * size_list);
+	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	return *c;
 }
 
 
@@ -51,12 +52,18 @@ void component_list_init_all(unsigned int list_size, ComponentPosition **cp, Com
 }
 
 
-Component* component_init(Component **c){
-	(*c)->draw = component_init_draw(10);
-	(*c)->menu_option = component_init_menu_option(10);
-	(*c)->position = component_init_position(10);
-	(*c)->stats = component_init_stats(10);
-	(*c)->trigger = component_init_trigger(10);
+Component* component_init(Component **c, unsigned int size_lists){
+	
+	(*c)->draw = component_init_draw(&(*c)->draw, size_lists);
+	(*c)->size_draw = size_lists;
+	(*c)->menu_option = component_init_menu_option(&(*c)->menu_option, size_lists);
+	(*c)->size_menu_option = size_lists;
+	(*c)->position = component_init_position(&(*c)->position, size_lists);
+	(*c)->size_position = size_lists;
+	(*c)->stats = component_init_stats(&(*c)->stats,size_lists);
+	(*c)->size_stats = size_lists;
+	(*c)->trigger = component_init_trigger(&(*c)->trigger, size_lists);
+	(*c)->size_trigger = size_lists;
 	return *c;	
 }
 

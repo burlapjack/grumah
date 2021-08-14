@@ -51,20 +51,28 @@ void component_list_init_all(unsigned int list_size, ComponentPosition **cp, Com
 	*co = malloc(sizeof (*co) * list_size);	
 }
 
+// Init all component lists within a Component instance
+Component* component_init(Component *c, unsigned int size_lists){
+	c->draw = malloc( sizeof (*(c->draw)) * size_lists); 
+	c->size_draw = size_lists;
+	c->menu_option = malloc( sizeof (*(c->menu_option)) * size_lists);
+	c->size_menu_option = size_lists;
+	c->position = malloc( sizeof (*(c->position)) * size_lists);
+	c->size_position = size_lists;
+	c->stats = malloc( sizeof (*(c->stats)) * size_lists);
+	c->size_stats = size_lists;
+	c->trigger = malloc( sizeof (*(c->trigger)) * size_lists);
+	c->size_trigger = size_lists;
 
-Component* component_init(Component **c, unsigned int size_lists){
-	
-	(*c)->draw = component_init_draw(&(*c)->draw, size_lists);
-	(*c)->size_draw = size_lists;
-	(*c)->menu_option = component_init_menu_option(&(*c)->menu_option, size_lists);
-	(*c)->size_menu_option = size_lists;
-	(*c)->position = component_init_position(&(*c)->position, size_lists);
-	(*c)->size_position = size_lists;
-	(*c)->stats = component_init_stats(&(*c)->stats,size_lists);
-	(*c)->size_stats = size_lists;
-	(*c)->trigger = component_init_trigger(&(*c)->trigger, size_lists);
-	(*c)->size_trigger = size_lists;
-	return *c;	
+	for( unsigned int i = 0; i < size_lists; i++){
+		c->draw[i].id = 0;
+		c->menu_option[i].id = 0;
+		c->position[i].id = 0;
+		c->stats[i].id = 0;
+		c->trigger[i].id = 0;
+	}
+
+	return c;	
 }
 
 

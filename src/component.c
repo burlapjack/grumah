@@ -172,6 +172,87 @@ void component_list_size_double_trigger(ComponentTrigger** component_list, unsig
 	*list_size = *list_size * 2;
 }
 
+//EXPERIMENTAL
+
+void component_list_double_position(Component *c){
+	//test the reallocation
+	ComponentPosition *temp = realloc(c->position, sizeof (ComponentPosition) * (c->size_position* 2));
+	if (temp == NULL) {
+		perror("Failure to reallocate component_position");
+		exit(EXIT_FAILURE);
+	}	
+	c->position = temp;	
+
+	for(unsigned int i = c->size_position; i < (c->size_position * 2 ); ++i ){
+		c->position[i].id = 0;
+	}
+	c->size_position = c->size_position * 2;
+}
+
+
+void component_list_double_draw(Component *c){
+	//test the reallocation
+	ComponentDraw *temp = realloc(c->draw, sizeof (ComponentDraw) * (c->size_draw* 2));
+	if (temp == NULL) {
+		perror("Failure to reallocate component_draw");
+		exit(EXIT_FAILURE);
+	}	
+	c->draw = temp;	
+
+	for(unsigned int i = c->size_draw; i < (c->size_draw * 2 ); ++i ){
+		c->draw[i].id = 0;
+	}
+	c->size_draw= c->size_draw * 2;
+}
+
+void component_list_double_stats(Component *c){
+	//test the reallocation
+	ComponentStats *temp = realloc(c->stats, sizeof (ComponentStats) * (c->size_stats* 2));
+	if (temp == NULL) {
+		perror("Failure to reallocate component_stats");
+		exit(EXIT_FAILURE);
+	}	
+	c->stats = temp;	
+
+	for(unsigned int i = c->size_stats; i < (c->size_stats * 2 ); ++i ){
+		c->stats[i].id = 0;
+	}
+	c->size_stats= c->size_stats * 2;
+}
+
+
+
+void component_list_double_menu_option(Component *c){
+	//test the reallocation
+	ComponentMenuOption *temp = realloc(c->menu_option, sizeof (ComponentMenuOption) * (c->size_menu_option * 2));
+	if (temp == NULL) {
+		perror("Failure to reallocate component_menu_option");
+		exit(EXIT_FAILURE);
+	}	
+	c->menu_option = temp;	
+
+	for(unsigned int i = c->size_menu_option; i < (c->size_menu_option* 2 ); ++i ){
+		c->menu_option[i].id = 0;
+	}
+	c->size_menu_option = c->size_menu_option * 2;
+}
+
+
+
+void component_list_double_trigger(Component *c){
+	//test the reallocation
+	ComponentTrigger *temp = realloc(c->trigger, sizeof (ComponentTrigger) * (c->size_trigger * 2));
+	if (temp == NULL) {
+		perror("Failure to reallocate component_trigger");
+		exit(EXIT_FAILURE);
+	}	
+	c->trigger = temp;	
+
+	for(unsigned int i = c->size_trigger; i < (c->size_trigger * 2 ); ++i ){
+		c->trigger[i].id = 0;
+	}
+	c->size_trigger = c->size_trigger * 2;
+}
 
 /*---------------Add Component to entity list-----------------------------------------------------*/
 

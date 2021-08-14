@@ -83,6 +83,9 @@ void component_list_size_double_position(ComponentPosition** component_list, uns
 void component_list_size_double_stats(ComponentStats** component_list, unsigned int *list_size);
 void component_list_size_double_trigger(ComponentTrigger** component_list, unsigned int *list_size);
 
+
+void component_list_double_trigger(Component *c);
+
 /*----------- Component Additions -----------------------------*/
 void component_add_draw(ComponentDraw **component_list, unsigned int *list_size, unsigned int id, unsigned int color, char symbol);
 void component_add_menu_option(ComponentMenuOption **component_list, unsigned int *list_size, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted);

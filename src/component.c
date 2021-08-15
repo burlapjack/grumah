@@ -42,7 +42,6 @@ ComponentTrigger* component_init_trigger(ComponentTrigger **c, unsigned int size
 	return *c;
 }
 
-
 /*----------------Initialize a component collection-----------------------------------------------*/
 void component_list_init_all(unsigned int list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co){
 	*cp = malloc(sizeof (*cp) * list_size);	
@@ -74,8 +73,6 @@ Component* component_init(Component *c, unsigned int size_lists){
 
 	return c;	
 }
-
-
 
 /*-------------- Free all Component Lists -----------------------------------------------------------*/
 
@@ -257,7 +254,7 @@ void component_list_double_trigger(Component *c){
 /*---------------Add Component to entity list-----------------------------------------------------*/
 
 
-void component_list_add_draw(ComponentDraw **component_list, unsigned int *list_size, unsigned int id, unsigned int color, char symbol){
+void component_list_add_draw(ComponentDraw **component_list, unsigned int *list_size, unsigned int id, int color, char symbol){
 	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_draw(component_list,list_size);
@@ -332,7 +329,7 @@ void component_list_add_trigger(ComponentTrigger**component_list, unsigned int *
 
 //EXPERIMENTAL
 
-void component_add_draw(Component *c, unsigned int id, unsigned int color, char symbol) {
+void component_add_draw(Component *c, unsigned int id, int color, char symbol) {
 	for(int i = 0; i < c->size_draw; ++i){
 		if (i == c->size_draw-1 && c->draw[i].id != 0){
 			component_list_double_draw(c);
@@ -404,4 +401,52 @@ void component_add_trigger(Component *c, unsigned int id, unsigned int game_stat
 	}
 }
 
+/*---------------Query Component Lists -----------------------------------------------------------*/
+
+// Find the total of a certain component
+unsigned int component_count_draw(Component *c){
+	unsigned int total;
+	for(int i = 0; i < (c->size_draw); i++){
+		if(c->draw[i].id != 0) total++;
+	}
+	return total;
+}
+
+unsigned int component_count_position(Component *c){
+	unsigned int total;
+	for(int i = 0; i < (c->size_position); i++){
+		if(c->position[i].id != 0) total++;
+	}
+	return total;
+}
+
+unsigned int component_count_menu_option(Component *c){
+	unsigned int total;
+	for(int i = 0; i < (c->size_menu_option); i++){
+		if(c->menu_option[i].id != 0) total++;
+	}
+	return total;
+}
+
+unsigned int component_count_stats(Component *c){
+	unsigned int total;
+	for(int i = 0; i < (c->size_stats); i++){
+		if(c->stats[i].id != 0) total++;
+	}
+	return total;
+}
+
+unsigned int component_count_trigger(Component *c){
+	unsigned int total;
+	for(int i = 0; i < (c->size_trigger); i++){
+		if(c->trigger[i].id != 0) total++;
+	}
+	return total;
+}
+
+unsigned int component_count_all(Component *c){
+	unsigned int total = 0;
+	total = component_count_draw(c) + component_count_position(c) + component_count_menu_option(c) + component_count_stats(c) + component_count_trigger(c);
+	return total;	
+}
 

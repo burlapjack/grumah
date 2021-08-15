@@ -450,3 +450,5 @@ unsigned int component_count_all(Component *c){
 	return total;	
 }
 
+
+

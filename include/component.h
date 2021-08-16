@@ -108,7 +108,8 @@ unsigned int component_count_menu_option(Component *c);
 unsigned int component_count_position(Component *c);
 unsigned int component_count_stats(Component *c);
 unsigned int component_count_trigger(Component *c);
-
 unsigned int component_count_all(Component *c);
+
+unsigned int component_count_invisible(Component *c);
 
 #endif /*COMPONENT_H*/

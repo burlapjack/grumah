@@ -405,7 +405,7 @@ void component_add_trigger(Component *c, unsigned int id, unsigned int game_stat
 
 // Find the total of a certain component
 unsigned int component_count_draw(Component *c){
-	unsigned int total;
+	unsigned int total=0;
 	for(int i = 0; i < (c->size_draw); i++){
 		if(c->draw[i].id != 0) total++;
 	}
@@ -413,7 +413,7 @@ unsigned int component_count_draw(Component *c){
 }
 
 unsigned int component_count_position(Component *c){
-	unsigned int total;
+	unsigned int total=0;
 	for(int i = 0; i < (c->size_position); i++){
 		if(c->position[i].id != 0) total++;
 	}
@@ -421,7 +421,7 @@ unsigned int component_count_position(Component *c){
 }
 
 unsigned int component_count_menu_option(Component *c){
-	unsigned int total;
+	unsigned int total=0;
 	for(int i = 0; i < (c->size_menu_option); i++){
 		if(c->menu_option[i].id != 0) total++;
 	}
@@ -429,7 +429,7 @@ unsigned int component_count_menu_option(Component *c){
 }
 
 unsigned int component_count_stats(Component *c){
-	unsigned int total;
+	unsigned int total=0;
 	for(int i = 0; i < (c->size_stats); i++){
 		if(c->stats[i].id != 0) total++;
 	}
@@ -437,7 +437,7 @@ unsigned int component_count_stats(Component *c){
 }
 
 unsigned int component_count_trigger(Component *c){
-	unsigned int total;
+	unsigned int total=0;
 	for(int i = 0; i < (c->size_trigger); i++){
 		if(c->trigger[i].id != 0) total++;
 	}
@@ -451,3 +451,15 @@ unsigned int component_count_all(Component *c){
 }
 
 
+unsigned int component_count_invisible(Component *c){
+	unsigned int total = 0;
+	for(int i = 0; i < (c->size_position); i++){
+		if(c->position[i].id != 0){
+			for(int j = 0; j < (c->size_draw); j++){
+				if(c->position[i].id == c->draw[j].id) break;
+				if(j == c->size_draw-1) total++;
+			}
+		}	
+	}
+	return total;
+}

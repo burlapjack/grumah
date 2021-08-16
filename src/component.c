@@ -446,9 +446,8 @@ unsigned int component_count_trigger(Component *c){
 
 unsigned int component_count_all(Component *c){
 	unsigned int total = 0;
-	total = component_count_draw(c) + component_count_position(c) + component_count_menu_option(c) + component_count_stats(c) + component_count_trigger(c);
+	total = component_count_draw(c) + component_count_position(c) + component_count_menu_option(c) + total + component_count_stats(c) + total + component_count_trigger(c);
 	return total;	
 }
-
 
 

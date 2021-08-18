@@ -9,6 +9,6 @@
 
 void system_input(WINDOW *win);
 
-void system_menu(WINDOW *w, ComponentMenuOption *menu_list, unsigned int menu_list_length, ComponentPosition *position_list, unsigned int position_list_length, int input, unsigned int *game_state);
+void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input);
 
 #endif /*SYSTEM_H*/

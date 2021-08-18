@@ -32,7 +32,10 @@ void system_input(WINDOW *win){
 }
 
 
-void system_menu(WINDOW *w, ComponentMenuOption *menu_list, unsigned int menu_list_length, ComponentPosition *position_list, unsigned int position_list_length, int input, unsigned int *game_state){
+
+//void system_menu(WINDOW *w, ComponentMenuOption *menu_list, unsigned int menu_list_length, ComponentPosition *position_list, unsigned int position_list_length, int input, unsigned int *game_state);
+
+void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 
 	if(input == KEY_UP || input == KEY_DOWN){
 
@@ -40,9 +43,9 @@ void system_menu(WINDOW *w, ComponentMenuOption *menu_list, unsigned int menu_li
 		unsigned int down_selected = 99;
 		unsigned int up_selected = 99;
 		/* search for menu option to unhighlight */
-		for (int i = 0; i < menu_list_length; i++){
-			if(menu_list[i].parent_id == *game_state && menu_list[i].id != 0){
-				if(menu_list[i].highlighted == 1){
+		for (int i = 0; i < (c->size_menu_option); i++){
+			if(c->menu_option[i].parent_id == *game_state && c->menu_option[i].id != 0){
+				if(c->menu_option[i].highlighted == 1){
 					deselected = i;
 					break;
 				}
@@ -50,8 +53,8 @@ void system_menu(WINDOW *w, ComponentMenuOption *menu_list, unsigned int menu_li
 		}
 
 		/* search for new highlighted menu option */
-		for (int j = menu_list_length; j > -1;  j--){
-			if(menu_list[j].parent_id == *game_state && menu_list[j].id != 0){
+		for (int j = c->size_menu_option; j > -1;  j--){
+			if(c->menu_option[j].parent_id == *game_state && c->menu_option[j].id != 0){
 				if(j > deselected) down_selected = j;
 				if(j < deselected) up_selected = j;	
 			}	
@@ -59,15 +62,15 @@ void system_menu(WINDOW *w, ComponentMenuOption *menu_list, unsigned int menu_li
 		
 		if(input == KEY_UP){
 			if(up_selected != 99){
-			   	menu_list[up_selected].highlighted = 1;
-				menu_list[deselected].highlighted = 0;
+			   	c->menu_option[up_selected].highlighted = 1;
+				c->menu_option[deselected].highlighted = 0;
 			}
 			//else menu_list[down_selected].highlighted = 1;
 		}
 		else if(input == KEY_DOWN){
 			if(down_selected != 99) {
-				menu_list[down_selected].highlighted = 1;
-				menu_list[deselected].highlighted = 0;
+				c->menu_option[down_selected].highlighted = 1;
+				c->menu_option[deselected].highlighted = 0;
 			}
 			//else menu_list[up_selected].highlighted = 1;
 		}
@@ -75,15 +78,15 @@ void system_menu(WINDOW *w, ComponentMenuOption *menu_list, unsigned int menu_li
 
 	unsigned int target_id;
 	/* search menu entities for matching game_state */
-	for(int k = 0; k < menu_list_length; k++){
-		if( menu_list[k].parent_id == *game_state){
-			target_id = menu_list[k].id;
+	for(int k = 0; k < c->size_menu_option; k++){
+		if( c->menu_option[k].parent_id == *game_state){
+			target_id = c->menu_option[k].id;
 
 			/* once a match is found, look for corresponding position */
-			for(int jj = 0; jj < position_list_length; jj++){
-				if(position_list[jj].id == target_id){
-					if(menu_list[k].highlighted == 1) wattron(w,A_REVERSE);
-					mvwprintw(w,position_list[jj].y,position_list[jj].x,"%s", menu_list[k].name);
+			for(int jj = 0; jj < (c->size_position); jj++){
+				if(c->position[jj].id == target_id){
+					if(c->menu_option[k].highlighted == 1) wattron(w,A_REVERSE);
+					mvwprintw(w,c->position[jj].y,c->position[jj].x,"%s", c->menu_option[k].name);
 				//	wrefresh(w);
 					wattroff(w,A_REVERSE);
 				}

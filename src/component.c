@@ -450,7 +450,6 @@ unsigned int component_count_all(Component *c){
 	return total;	
 }
 
-
 unsigned int component_count_invisible(Component *c){
 	unsigned int total = 0;
 	for(int i = 0; i < (c->size_position); i++){

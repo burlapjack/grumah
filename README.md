@@ -16,7 +16,7 @@ confusion\-free, human\-readable code.
 
 ## Prerequisites
 
-- **Ncurses** This build was tested using Ncurses 6.0. 
+- **Ncurses:** This build was tested using Ncurses 6.0. 
 
 ## Getting Started
 
@@ -26,33 +26,24 @@ entity id number assigned to it.  A *System* is a function that
 continually passes in components during runtime; they manipulate 
 component values as required.
 
-To start, you will want to set up an entity id counter, the component 
-pointers and their respective sizes:
+To start, you will want to set up an entity id counter and a
+Component object pointer.
 
 ```
 #include "grumah.h"
 
-/*----- entity id counter -----*/
+/*----- entity id counter --------------*/
 unsigned int next_entity = 1;
 
-/*----- component lists -----*/
-ComponentPosition *pos;
-ComponentDraw *drw;
-ComponentStats *sts;
-ComponentMenuOption *mno;
 
-/*------ Component list sizes ----*/
-unsigned int n_pos = 20;
-unsigned int n_drw = 20;
-unsigned int n_sts = 20;
-unsigned int n_mno = 20;
-
-/*-------Initialize lists --------*/
-void component_list_init_all(20, **pos, **drw, **sts, **cmo);
+/*----- Initialize a Component Object --*/
+unsigned int num_components = 10;
+Component *c = malloc(sizeof (*c));
+c = component_init(c, num_components);
 
 ```
-Here, 20 empty slots for each component list has been allocated.  This means
-that 20 different components can be created using these 3 component types.
+Component *c is a pointer to a struct that holds all the different kinds of
+components that will be needed.  We will be using this pointer a lot.
 
 Now,  let's add a player entity:
  
@@ -61,10 +52,10 @@ entity_add_player(next_id, x, y, **pos, *n_pos, **drw, *n_drw, **sts, *n_sts);
 
 ```
 
-You can use the entity\_list\_free\_all function to deallocate all of that 
+You can use the component\_free\_all function to deallocate all of that 
 memory when the program ends:
 
 ```
-entity_list_free_all(*pos, *drw, *sts, *mno);
+void component_free_all(c);
 
 ```

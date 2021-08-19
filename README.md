@@ -48,7 +48,8 @@ components that will be needed.  We will be using this pointer a lot.
 Now,  let's add a player entity:
  
 ```
-entity_add_player(next_id, x, y, **pos, *n_pos, **drw, *n_drw, **sts, *n_sts);
+/*------Add player entity at x=10, y=12 --*/
+entity_add_plyr(c, next_entity, 10, 12);
 
 ```
 

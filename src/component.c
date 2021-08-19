@@ -268,7 +268,7 @@ void component_list_add_draw(ComponentDraw **component_list, unsigned int *list_
 	}
 }
 
-void component_list_add_position(ComponentPosition **component_list,unsigned int *list_size, unsigned int id, unsigned int x, unsigned int y){
+void component_list_add_position(ComponentPosition **component_list,unsigned int *list_size, unsigned int id, int x, int y){
 	for(unsigned int i = 0; i < *list_size; ++i){
 		if (i == *list_size-1 && (*component_list)[i].id != 0){
 			component_list_size_double_position(component_list,list_size);
@@ -343,7 +343,7 @@ void component_add_draw(Component *c, unsigned int id, int color, char symbol) {
 	}
 }
 
-void component_add_position(Component *c, unsigned int id, unsigned int x, unsigned int y) {
+void component_add_position(Component *c, unsigned int id, int x, int y) {
 	for(int i = 0; i < c->size_position; ++i){
 		if (i == c->size_position-1 && c->position[i].id != 0){
 			component_list_double_position(c);

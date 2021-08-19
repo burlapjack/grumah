@@ -214,7 +214,7 @@ void component_list_double_stats(Component *c){
 	for(unsigned int i = c->size_stats; i < (c->size_stats * 2 ); ++i ){
 		c->stats[i].id = 0;
 	}
-	c->size_stats= c->size_stats * 2;
+	c->size_stats = c->size_stats * 2;
 }
 
 
@@ -357,7 +357,7 @@ void component_add_position(Component *c, unsigned int id, int x, int y) {
 	}
 }
 
-void component_add_menu_option(Component *c, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted) {
+void component_add_menu_option(Component *c, unsigned int id, char name[32], unsigned int parent_id, unsigned int highlighted) {
 	for(int i = 0; i < (c->size_menu_option); ++i){
 		if (i == c->size_menu_option-1 && c->menu_option[i].id != 0){
 			component_list_double_menu_option(c);
@@ -365,7 +365,7 @@ void component_add_menu_option(Component *c, unsigned int id, char name[32], uns
 		else if (c->menu_option[i].id == 0){
 			c->menu_option[i].id = id;
 			strcpy(c->menu_option[i].name,name); /*check if this is right! */
-			c->menu_option[i].parent_id = game_state;
+			c->menu_option[i].parent_id = parent_id;
 			c->menu_option[i].highlighted = highlighted;
 			break;
 		}

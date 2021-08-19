@@ -102,7 +102,7 @@ void component_list_add_trigger(ComponentTrigger**component_list, unsigned int *
 
 void component_add_draw(Component *c, unsigned int id, int color, char symbol);
 void component_add_position(Component *c, unsigned int id, int x, int y);
-void component_add_menu_option(Component *c, unsigned int id, char name[32], unsigned int game_state, unsigned int highlighted);
+void component_add_menu_option(Component *c, unsigned int id, char name[32], unsigned int parent_id, unsigned int highlighted);
 void component_add_stats(Component *c, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi);
 void component_add_trigger(Component *c, unsigned int id, unsigned int game_state);
 

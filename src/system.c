@@ -42,6 +42,7 @@ void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 		unsigned int deselected;
 		unsigned int down_selected = 99;
 		unsigned int up_selected = 99;
+
 		/* search for menu option to unhighlight */
 		for (int i = 0; i < (c->size_menu_option); i++){
 			if(c->menu_option[i].parent_id == *game_state && c->menu_option[i].id != 0){
@@ -52,11 +53,12 @@ void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 			}	
 		}
 
-		/* search for new highlighted menu option */
+		/* search for menu options that are adjacent to the 
+		 * currently highlighted  menu option */
 		for (int j = c->size_menu_option; j > -1;  j--){
 			if(c->menu_option[j].parent_id == *game_state && c->menu_option[j].id != 0){
-				if(j > deselected) down_selected = j;
-				if(j < deselected) up_selected = j;	
+				if(j > deselected && j < c->size_menu_option) down_selected = j;
+				if(j < deselected  ) up_selected = j;	
 			}	
 		}
 		

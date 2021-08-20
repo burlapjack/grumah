@@ -18,13 +18,22 @@ confusion\-free, human\-readable code.
 
 - **Ncurses:** This build was tested using Ncurses 6.0. 
 
-## Getting Started
-
+## Short Summary
 Grumah defines an *Entity* (aka game object), as nothing more than
 an id number.  A *Component* is merely an attribute with an
 entity id number assigned to it.  A *System* is a function that 
 continually passes in components during runtime; they manipulate 
 component values as required.
+
+Within the Grumah libraries are the entity, component and system
+modules.  The component module contains the definitions of each
+component type such as ComponentPosition and ComponentDraw.  The
+entity module contains helpful functions that create various common 
+entities such as a default player entity or a menu entity.  Lastly,
+the system module contains the functions that are run in the 
+game-loop such as system\_menu and system\_draw\_map. 
+
+## Getting Started
 
 To start, you will want to set up an entity id counter and a
 Component object pointer.

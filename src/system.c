@@ -9,6 +9,7 @@
 #include <ncurses.h>
 #include "../include/component.h"
 
+
 void system_input(WINDOW *win){
 
 	int ch = wgetch(win);
@@ -32,6 +33,19 @@ void system_input(WINDOW *win){
 }
 
 
+static unsigned int menu_find_highlight(Component *c,unsigned int game_state ){
+	unsigned int highlighted;
+	for (int i = 0; i < (c->size_menu_option); i++){
+		if(c->menu_option[i].parent_id == game_state && c->menu_option[i].id != 0){
+			if(c->menu_option[i].highlighted == 1){
+				highlighted= i;
+				break;
+			}
+		}
+	}
+	return highlighted;
+}
+
 
 //void system_menu(WINDOW *w, ComponentMenuOption *menu_list, unsigned int menu_list_length, ComponentPosition *position_list, unsigned int position_list_length, int input, unsigned int *game_state);
 
@@ -44,6 +58,7 @@ void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 		unsigned int up_selected = 99;
 
 		/* search for menu option to unhighlight */
+		/*
 		for (int i = 0; i < (c->size_menu_option); i++){
 			if(c->menu_option[i].parent_id == *game_state && c->menu_option[i].id != 0){
 				if(c->menu_option[i].highlighted == 1){
@@ -52,6 +67,8 @@ void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 				}
 			}	
 		}
+*/
+		deselected = menu_find_highlight(c,*game_state);
 
 		/* search for menu options that are adjacent to the 
 		 * currently highlighted  menu option */
@@ -96,7 +113,5 @@ void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 		}	
 	}
 }	
-
-
 
 

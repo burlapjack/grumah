@@ -1,5 +1,4 @@
-/* system.c
- * by burlapjack 2021
+/* system.c * by burlapjack 2021
  *
  * System functions run continuously, 
  * taking in entity components.
@@ -9,6 +8,8 @@
 #include <ncurses.h>
 #include "../include/component.h"
 
+static unsigned int menu_get_option_highlighted(Component *c,unsigned int game_state);
+static unsigned int menu_get_option_next(ComponentMenuOption *cmo, unsigned int size_menu_option, unsigned int game_state, unsigned int highlighted, int input);
 
 void system_input(WINDOW *win){
 
@@ -32,67 +33,15 @@ void system_input(WINDOW *win){
 
 }
 
-
-static unsigned int menu_find_highlight(Component *c,unsigned int game_state ){
-	unsigned int highlighted;
-	for (int i = 0; i < (c->size_menu_option); i++){
-		if(c->menu_option[i].parent_id == game_state && c->menu_option[i].id != 0){
-			if(c->menu_option[i].highlighted == 1){
-				highlighted= i;
-				break;
-			}
-		}
-	}
-	return highlighted;
-}
-
-
-//void system_menu(WINDOW *w, ComponentMenuOption *menu_list, unsigned int menu_list_length, ComponentPosition *position_list, unsigned int position_list_length, int input, unsigned int *game_state);
-
 void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 
 	if(input == KEY_UP || input == KEY_DOWN){
-
-		unsigned int deselected;
-		unsigned int down_selected = 99;
-		unsigned int up_selected = 99;
-
-		/* search for menu option to unhighlight */
-		/*
-		for (int i = 0; i < (c->size_menu_option); i++){
-			if(c->menu_option[i].parent_id == *game_state && c->menu_option[i].id != 0){
-				if(c->menu_option[i].highlighted == 1){
-					deselected = i;
-					break;
-				}
-			}	
-		}
-*/
-		deselected = menu_find_highlight(c,*game_state);
-
-		/* search for menu options that are adjacent to the 
-		 * currently highlighted  menu option */
-		for (int j = c->size_menu_option; j > -1;  j--){
-			if(c->menu_option[j].parent_id == *game_state && c->menu_option[j].id != 0){
-				if(j > deselected && j < c->size_menu_option) down_selected = j;
-				if(j < deselected  ) up_selected = j;	
-			}	
-		}
-		
-		if(input == KEY_UP){
-			if(up_selected != 99){
-			   	c->menu_option[up_selected].highlighted = 1;
-				c->menu_option[deselected].highlighted = 0;
-			}
-			//else menu_list[down_selected].highlighted = 1;
-		}
-		else if(input == KEY_DOWN){
-			if(down_selected != 99) {
-				c->menu_option[down_selected].highlighted = 1;
-				c->menu_option[deselected].highlighted = 0;
-			}
-			//else menu_list[up_selected].highlighted = 1;
-		}
+		unsigned int highlighted;
+		highlighted = menu_get_option_highlighted(c,*game_state);
+		unsigned int new_highlighted=highlighted;
+		new_highlighted = menu_get_option_next(c->menu_option,c->size_menu_option,*game_state,highlighted,input);
+		c->menu_option[highlighted].highlighted = 0;
+		c->menu_option[new_highlighted].highlighted = 1;
 	}
 
 	unsigned int target_id;
@@ -106,7 +55,6 @@ void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 				if(c->position[jj].id == target_id){
 					if(c->menu_option[k].highlighted == 1) wattron(w,A_REVERSE);
 					mvwprintw(w,c->position[jj].y,c->position[jj].x,"%s", c->menu_option[k].name);
-				//	wrefresh(w);
 					wattroff(w,A_REVERSE);
 				}
 			}
@@ -114,4 +62,34 @@ void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 	}
 }	
 
+static unsigned int menu_get_option_highlighted(Component *c,unsigned int game_state){
+	unsigned int highlighted;
+	for (unsigned int i = 0; i < (c->size_menu_option); i++){
+		if(c->menu_option[i].parent_id == game_state && c->menu_option[i].id != 0){
+			if(c->menu_option[i].highlighted == 1){
+				highlighted= i;
+				break;
+			}
+		}
+	}
+	return highlighted;
+}
 
+static unsigned int menu_get_option_next(ComponentMenuOption *cmo, unsigned int size_menu_option, unsigned int game_state, unsigned int highlighted, int input){
+	unsigned int next = highlighted;
+
+//	if (input == KEY_UP) id_start = highlighted; else if(input == KEY_DOWN) id_start = 0;
+	for (unsigned int i = 0; i < size_menu_option; i++){
+		if(cmo[i].parent_id == game_state && cmo[i].id != 0){
+		}	
+			if(input == KEY_UP ){
+				if(i < highlighted) next = i; else if(i == highlighted) break;	
+			}
+			else if(input == KEY_DOWN && i > highlighted){
+				if(i < size_menu_option) next = i;
+				break;
+			}
+			
+	}
+	return next;
+}

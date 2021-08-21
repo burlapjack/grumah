@@ -37,11 +37,13 @@ void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 
 	if(input == KEY_UP || input == KEY_DOWN){
 		unsigned int highlighted;
+
 		highlighted = menu_get_option_highlighted(c,*game_state);
-		unsigned int new_highlighted=highlighted;
+		unsigned int new_highlighted = highlighted;
 		new_highlighted = menu_get_option_next(c->menu_option,c->size_menu_option,*game_state,highlighted,input);
 		c->menu_option[highlighted].highlighted = 0;
 		c->menu_option[new_highlighted].highlighted = 1;
+		mvwprintw(w,12, 2,"menu option: %u", new_highlighted);
 	}
 
 	unsigned int target_id;
@@ -78,18 +80,19 @@ static unsigned int menu_get_option_highlighted(Component *c,unsigned int game_s
 static unsigned int menu_get_option_next(ComponentMenuOption *cmo, unsigned int size_menu_option, unsigned int game_state, unsigned int highlighted, int input){
 	unsigned int next = highlighted;
 
-//	if (input == KEY_UP) id_start = highlighted; else if(input == KEY_DOWN) id_start = 0;
 	for (unsigned int i = 0; i < size_menu_option; i++){
 		if(cmo[i].parent_id == game_state && cmo[i].id != 0){
-		}	
-			if(input == KEY_UP ){
-				if(i < highlighted) next = i; else if(i == highlighted) break;	
-			}
-			else if(input == KEY_DOWN && i > highlighted){
-				if(i < size_menu_option) next = i;
+			
+			if(input == KEY_UP && i < highlighted){
+				next = i;
 				break;
 			}
-			
+			else if(input == KEY_DOWN && i > highlighted){
+				next = i;
+				break;
+			}
+		}
 	}
 	return next;
+
 }

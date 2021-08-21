@@ -171,6 +171,22 @@ void component_list_size_double_trigger(ComponentTrigger** component_list, unsig
 
 //EXPERIMENTAL
 
+void component_list_double_input(Component *c){
+	//test the reallocation
+	ComponentInput *temp = realloc(c->input, sizeof (ComponentInput) * (c->size_input* 2));
+	if (temp == NULL) {
+		perror("Failure to reallocate component_input");
+		exit(EXIT_FAILURE);
+	}	
+	c->input= temp;	
+
+	for(unsigned int i = c->size_input; i < (c->size_input * 2 ); ++i ){
+		c->input[i].id = 0;
+	}
+	c->size_input = c->size_input * 2;
+
+}
+
 void component_list_double_position(Component *c){
 	//test the reallocation
 	ComponentPosition *temp = realloc(c->position, sizeof (ComponentPosition) * (c->size_position* 2));
@@ -328,6 +344,18 @@ void component_list_add_trigger(ComponentTrigger**component_list, unsigned int *
 
 
 //EXPERIMENTAL
+
+void component_add_input(Component *c, unsigned int id) {
+	for(int i = 0; i < c->size_draw; ++i){
+		if (i == c->size_draw-1 && c->draw[i].id != 0){
+			component_list_double_draw(c);
+		}
+		else if (c->draw[i].id == 0){
+			c->input[i].key_pressed = 0;
+			break;
+		}
+	}
+}
 
 void component_add_draw(Component *c, unsigned int id, int color, char symbol) {
 	for(int i = 0; i < c->size_draw; ++i){

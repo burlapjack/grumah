@@ -38,7 +38,7 @@ game-loop such as system\_menu and system\_draw\_map.
 To start, you will want to set up an entity id counter and a
 Component object pointer.
 
-```
+```c
 #include "grumah.h"
 
 /*----- entity id counter --------------*/
@@ -56,7 +56,7 @@ components that will be needed.  We will be using this pointer a lot.
 
 Now,  let's add a player entity:
  
-```
+```c
 /*------Add player entity at x=10, y=12 --*/
 entity_add_plyr(c, next_entity, 10, 12);
 
@@ -65,7 +65,7 @@ entity_add_plyr(c, next_entity, 10, 12);
 You can use the component\_free\_all function to deallocate all of that 
 memory when the program ends:
 
-```
+```c
 void component_free_all(c);
 
 ```

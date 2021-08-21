@@ -5,6 +5,11 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+typedef struct {
+	unsigned int id;
+	int key_pressed;
+}ComponentInput;
+
 typedef struct{
 	unsigned int id;
 	unsigned int x,y;
@@ -36,26 +41,15 @@ typedef struct{
 	unsigned int game_state;
 }ComponentTrigger;
 
-typedef struct{
-	unsigned int id;
-	unsigned int durability;
-}ComponentWall;
 
 typedef struct {
-	unsigned int id;
-	unsigned int key_pushed;
-}ComponentInput;
-
-
-
-
-
-typedef struct {
+	ComponentInput *input;
 	ComponentPosition *position;
 	ComponentDraw *draw;
 	ComponentStats *stats;
 	ComponentMenuOption *menu_option;
 	ComponentTrigger *trigger;
+	unsigned int size_input;
 	unsigned int size_position;
 	unsigned int size_draw;
 	unsigned int size_stats;
@@ -87,6 +81,7 @@ void component_list_size_double_position(ComponentPosition** component_list, uns
 void component_list_size_double_stats(ComponentStats** component_list, unsigned int *list_size);
 void component_list_size_double_trigger(ComponentTrigger** component_list, unsigned int *list_size);
 
+void component_list_double_input(Component *c);
 void component_list_double_draw(Component *c);
 void component_list_double_menu_option(Component *c);
 void component_list_double_position(Component *c);
@@ -100,6 +95,7 @@ void component_list_add_position(ComponentPosition **component_list, unsigned in
 void component_list_add_stats(ComponentStats **component_list, unsigned int *list_size, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi);
 void component_list_add_trigger(ComponentTrigger**component_list, unsigned int *list_size, unsigned int id, unsigned int game_state);
 
+void component_add_input(Component *c, unsigned int id);
 void component_add_draw(Component *c, unsigned int id, int color, char symbol);
 void component_add_position(Component *c, unsigned int id, int x, int y);
 void component_add_menu_option(Component *c, unsigned int id, char name[32], unsigned int parent_id, unsigned int highlighted);

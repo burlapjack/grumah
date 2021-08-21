@@ -2,7 +2,9 @@
 
 Grumah is a text\-based rogue\-like engine written in C
 for the Linux terminal.
+
 ## Features
+[![License](https://img.shields.io/github/license/burlapjack/grumah)](https://github.com/burlapjack/grumah/blob/master/LICENSE)
 
 - This engine utilizes a simple ECS (Entity Component System) 
 approach that is popular in many other game engines. 

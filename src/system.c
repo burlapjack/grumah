@@ -79,3 +79,11 @@ void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 	}
 }	
 
+void system_map_draw(WINDOW *w, char *map[], unsigned int map_width, unsigned int map_height){
+	for (unsigned int i = 0; i < map_height; i++){
+		for(unsigned int j = 0; j < map_width; i++){
+			mvwaddch(w, i, j, map[i][j]); 
+		}
+	}
+}
+

@@ -20,7 +20,6 @@ confusion\-free, human\-readable code.
 ## Prerequisites
 
 - **Ncurses:** This build was tested using Ncurses 6.0. 
-
 ## Short Summary
 Grumah defines an *Entity* (aka game object), as nothing more than
 an id number.  A *Component* is merely an attribute with an

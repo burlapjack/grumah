@@ -5,6 +5,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+/*----------- Component Types --------------------------------*/
 typedef struct {
 	unsigned int id;
 	int key_pressed;
@@ -41,7 +42,7 @@ typedef struct{
 	unsigned int game_state;
 }ComponentTrigger;
 
-
+/*----------- Component Container ----------------------------*/
 typedef struct {
 	ComponentInput *input;
 	ComponentPosition *position;

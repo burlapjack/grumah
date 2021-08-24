@@ -6,5 +6,6 @@
 #include "component.h"
 #include "entity.h"
 #include "system.h"
+#include "map.h"
 
 #endif /* GRUMAH_H */

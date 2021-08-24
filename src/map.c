@@ -22,16 +22,16 @@ static int rand_int(int n){
 
 
 /*---------------------- Init a map that is all walls ------------------------------------------------------------------------*/
-void map_generate_init(char *map[], int map_width, int map_height){
+void map_generate_init(char *map, int map_width, int map_height){
 	for (unsigned int i = 0; i < map_height; i++){
 		for (unsigned int j = 0; j < map_width; j++){
-			map[i][j] = '#';
+			*(map + (i * sizeof (char) *map_width) + (j * sizeof (char)) ) = '#';
 		}
 	}
 }
 
-/*---------------------- Simple Room Placement Map Gen Algorythm -------------------------------------------------------------*/
-void map_generate_srp(char *map[], int map_width, int map_height, int room_size_max, int room_size_min){
+/*---------------------- Simple-Room-Placement Map Gen Algorythm -------------------------------------------------------------*/
+void map_generate_srp(char *map, int map_width, int map_height, int room_size_max, int room_size_min){
 	int x,y,x2,y2;
 	unsigned int room_fits = 0;
 	/*------------ Initialize map ----------------------------*/
@@ -43,5 +43,17 @@ void map_generate_srp(char *map[], int map_width, int map_height, int room_size_
 		x2 = rand_int(room_size_max) + x + room_size_min;	
 		y = rand_int(map_height- 5);	
 		y2 = rand_int(room_size_max) + y + room_size_min;	
+			
+		if( *(map + (y * sizeof (char)) + (x * sizeof (char))) 
+				&& *(map + (y * sizeof (char) + map_width) + (x2 * sizeof (char))) 
+				&& *(map + (y2 * sizeof (char) + map_width) + (x * sizeof (char))) 
+				&& *(map + (y2 * sizeof (char) + map_width) + (x2 * sizeof (char)))){ 
+
+			for(int i = y; i < y2; i++){
+				for(int j = x; j < x2; j++){
+					*(map + (i * sizeof (char) * map_width) + (j * sizeof (char))) = '.';
+				}
+			}
+		}
 	}
 }

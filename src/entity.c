@@ -16,7 +16,7 @@ void entity_add_player(unsigned int id, int x, int y, ComponentPosition **cp, un
 }
 	
 
-void entity_add_plyr(Component *c, unsigned int id, unsigned int x, unsigned int y){
+void entity_add_plyr(Component *c, unsigned int id, int x, int y){
 	component_add_position(c, id, x, y);		
 	component_add_draw(c, id, 1, '@');
 	component_add_stats(c, id, 5, 5, 5, 5);

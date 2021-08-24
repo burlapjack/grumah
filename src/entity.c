@@ -16,8 +16,6 @@ void entity_add_player(unsigned int id, int x, int y, ComponentPosition **cp, un
 }
 	
 
-//Experimental 
-
 void entity_add_plyr(Component *c, unsigned int id, unsigned int x, unsigned int y){
 	component_add_position(c, id, x, y);		
 	component_add_draw(c, id, 1, '@');
@@ -32,3 +30,4 @@ void entity_add_title_menu(Component *c, unsigned int *id){
 	component_add_position(c, *id, 35, 17);
 	
 }
+

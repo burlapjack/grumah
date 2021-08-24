@@ -31,20 +31,20 @@ void system_input(WINDOW *win){
 
 }
 
-void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
+void system_menu(WINDOW *w, Component *c, unsigned int *menu_visible, int input){
 
 	if(input == KEY_UP || input == KEY_DOWN){
 		unsigned int highlighted;
 
 		for (unsigned int i = 0; i < (c->size_menu_option); i++){
-			if(c->menu_option[i].parent_id == *game_state && c->menu_option[i].id != 0 && c->menu_option[i].highlighted == 1){
+			if(c->menu_option[i].parent_id == *menu_visible && c->menu_option[i].id != 0 && c->menu_option[i].highlighted == 1){
 					highlighted= i;
 					break;
 			}
 		}
 		unsigned int new_highlighted = highlighted;
 		for (unsigned int i = 0; i < c->size_menu_option; i++){
-			if(c->menu_option[i].parent_id == *game_state && c->menu_option[i].id != 0){
+			if(c->menu_option[i].parent_id == *menu_visible && c->menu_option[i].id != 0){
 				if(input == KEY_UP && i < highlighted){
 					new_highlighted = i;
 					break;
@@ -62,9 +62,9 @@ void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 	}
 
 	unsigned int target_id;
-	/* search menu entities for matching game_state */
+	/* search menu entities for matching menu_visible */
 	for(int k = 0; k < c->size_menu_option; k++){
-		if( c->menu_option[k].parent_id == *game_state){
+		if( c->menu_option[k].parent_id == *menu_visible){
 			target_id = c->menu_option[k].id;
 
 			/* once a match is found, look for corresponding position */
@@ -79,10 +79,10 @@ void system_menu(WINDOW *w, Component *c, unsigned int *game_state, int input){
 	}
 }	
 
-void system_map_draw(WINDOW *w, char *map[], unsigned int map_width, unsigned int map_height){
+void system_map_draw(WINDOW *w, char *map, unsigned int map_width, unsigned int map_height){
 	for (unsigned int i = 0; i < map_height; i++){
 		for(unsigned int j = 0; j < map_width; i++){
-			mvwaddch(w, i, j, map[i][j]); 
+			mvwaddch(w, i, j, (map+i)[j]); 
 		}
 	}
 }

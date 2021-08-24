@@ -1,6 +1,6 @@
 # Grumah
 
-Grumah is a text\-based rogue\-like engine written in C
+Text\-based rogue\-like engine written in C
 for the Linux terminal.
 
 ## Features

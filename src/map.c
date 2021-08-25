@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <ncurses.h>
+#include "../include/map.h"
 
 /*--------------------- Pseudo-random number generator ----------------------------------------------------------------------*/
 static int rand_int(int n){
@@ -21,17 +22,17 @@ static int rand_int(int n){
 	}
 }
 
-
 /*---------------------- Init a map that is all walls ------------------------------------------------------------------------*/
 void map_generate_init(char *map, int map_width, int map_height){
 	for (unsigned int i = 0; i < map_height; i++){
 		for (unsigned int j = 0; j < map_width; j++){
-			*(map + (i * sizeof (char) *map_width) + (j * sizeof (char))) = '#';
+			*((map + i) + j) = '#';	
 		}
 	}
 }
 
 /*---------------------- Simple-Room-Placement Map Gen Algorythm -------------------------------------------------------------*/
+
 void map_generate_srp(char *map, int map_width, int map_height, int room_size_max, int room_size_min){
 	int x,y,x2,y2;
 	unsigned int room_fits = 0;
@@ -51,10 +52,11 @@ void map_generate_srp(char *map, int map_width, int map_height, int room_size_ma
 
 			for(int i = y; i < y2; i++){
 				for(int j = x; j < x2; j++){
-					*(map + (i * sizeof (char) * map_width) + (j * sizeof (char))) = '.';
+					//*(map + (i * sizeof (char) * map_width) + (j * sizeof (char))) = '.';
 				}
 			}
 			room_fits = 1;	
 		}
 	}
 }
+

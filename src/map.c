@@ -23,12 +23,13 @@ static int rand_int(int n){
 }
 
 /*---------------------- Init a map that is all walls ------------------------------------------------------------------------*/
-void map_generate_init(char *map, int map_width, int map_height){
-	for (unsigned int i = 0; i < map_height; i++){
-		for (unsigned int j = 0; j < map_width; j++){
-			*((map + i) + j) = '#';	
-		}
+char* map_init(char *map, int map_width, int map_height){
+	map = (char *)malloc((map_height * map_width) * sizeof (char));
+
+	for (int i = 0; i < map_height * map_width; i++){
+		map[i] = '#';
 	}
+	return map;
 }
 
 /*---------------------- Simple-Room-Placement Map Gen Algorythm -------------------------------------------------------------*/
@@ -37,7 +38,7 @@ void map_generate_srp(char *map, int map_width, int map_height, int room_size_ma
 	int x,y,x2,y2;
 	unsigned int room_fits = 0;
 	/*------------ Initialize map ----------------------------*/
-	map_generate_init(map, map_width, map_height);	
+//	map_generate_init(map, map_width, map_height);	
 
 	/*------------ Place rooms -------------------------------*/
 	while( room_fits == 0){

@@ -79,11 +79,12 @@ void system_menu(WINDOW *w, Component *c, unsigned int *menu_visible, int input)
 	}
 }	
 
-void system_map_draw(WINDOW *w, char map[32][32], int map_width, int map_height){
+void system_map_draw(WINDOW *w, char *map, int map_width, int map_height,int x_offset, int y_offset){
+	int n;
 	for (int i = 0; i < map_height; i++){
-		for(int j = 0; j < map_width; i++){
-			mvwaddch(w, i, j, map[i][j] ); 
-
+		for(int j = 0; j < map_width; j++){
+			n = i*j+j;	
+			mvwaddch(w,i,j,map[n]); 
 		}
 	}
 }

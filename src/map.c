@@ -37,7 +37,6 @@ char* map_init(char *map, int map_width, int map_height){
 void map_generate_srp(char *map, int map_width, int map_height, int room_size_max, int room_size_min, int num_rooms){
 	int x,y,x2,y2;
 	int room_topleft, room_topright,room_bottomleft,room_bottomright; 
-	int padding_topleft, padding_topright,padding_bottomleft,padding_bottomright; 
 	int n = 0;
 
 	/*------------ Place rooms -------------------------------*/
@@ -56,47 +55,18 @@ void map_generate_srp(char *map, int map_width, int map_height, int room_size_ma
 		y2 = (y2 < (map_height-2) ? y2 : map_height - 2);
 
 		/*-------- Translate 2D coords into 1D coords---------*/
+		int i,j;
 		room_topleft = y*map_width + x;
 		room_topright = y*map_width + x2;
 		room_bottomleft = y2*map_width + x;
 		room_bottomright = y2*map_width + x2;
 
-		/*-------- Room Padding ------------------------------*/	
-		int i,j,k,p, padding_width,padding_height;
-		padding_topleft = ((y-1) * map_width) + (x-1);
-		padding_topright = ((y-1) * map_width) + (x2+1);
-		padding_bottomleft = ((y2+1) * map_width) + (x-1);
-		padding_bottomright = ((y2+1) * map_width) + (x2+1);
-		padding_width = padding_topright - padding_topleft;
-		padding_height = padding_bottomleft - padding_topleft;
-
-		/*-------- Make sure room has walls all around it --------------------*/
-		/*-------- Check padding on top and bottom sides of room -------------*/
-		for(i = 0; i < padding_width; i++){
-
-			if( map[padding_topleft + i] != '#')break;
-			if( map[padding_bottomleft + i] != '#')break;
-			if( map[padding_topleft + i] == '#' &&  map[padding_bottomleft + i] == '#' && i == padding_width){
-
-				/*-------- Check padding on left and right sides of room -----*/
-				for(j = 0; j < padding_height; j += map_width ){
-					if( map[padding_topleft + j ] != '#')break;
-					if( map[padding_topright + j] != '#')break;
-					if( map[padding_topleft + j] == '#' && map[padding_topright + j] == '#' && j == padding_height){
-
-						/*-------- Check collisions with other rooms ---------*/
-					//	if( map[room_topleft]=='#' && map[room_topright]=='#' && map[room_bottomleft]=='#' && map[room_bottomright]=='#'){ 
-							for(k = y; k < y2; k++){
-								for(p = x; p < x2; p++){
-									map[(k*map_width)+p] = '.';	
-								}
-							}
-							n++;	
-						//}
-					}	
-				}
-			}	
-		}
-	}
+		for(i = y; i < y2; i++){
+			for(j = x; j < x2; j++){
+				map[(i*map_width)+j]='.';
+			}
+		}	
+		n++;
+	}	
 }
 

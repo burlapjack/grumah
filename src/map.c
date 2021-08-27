@@ -36,71 +36,67 @@ char* map_init(char *map, int map_width, int map_height){
 
 void map_generate_srp(char *map, int map_width, int map_height, int room_size_max, int room_size_min, int num_rooms){
 	int x,y,x2,y2;
-	int rxy, rx2y,rxy2,rx2y2; 
-	int pxy, px2y,pxy2,px2y2; 
+	int room_topleft, room_topright,room_bottomleft,room_bottomright; 
+	int padding_topleft, padding_topright,padding_bottomleft,padding_bottomright; 
 	int n = 0;
 
 	/*------------ Place rooms -------------------------------*/
 	while(n < num_rooms ){
+		/*-------- Propose new randomized room coords --------*/
 		x = rand_int(map_width - 2);	
 		y = rand_int(map_height - 2);	
 		x2 = rand_int(room_size_max) + x + room_size_min;	
 		y2 = rand_int(room_size_max) + y + room_size_min;	
 
-		/*-------- Check coords are within bounds ------------*/
-		x = ((x > 0) ? x : 2);
-		y = ((y > 0) ? y : 2);
+		/*-------- Check coords are within bounds of map -----*/
+		/*-------- Correct coords as needed ------------------*/
+		x = ((x > 1) ? x : 2);
+		y = ((y > 1) ? y : 2);
 		x2 = (x2 < (map_width-2) ? x2 : map_width - 2);
 		y2 = (y2 < (map_height-2) ? y2 : map_height - 2);
 
 		/*-------- Translate 2D coords into 1D coords---------*/
-		rxy = y*map_width + x;
-		pxy = (y-1)*map_width + (x-1);
-		
-		rx2y = y*map_width + x2;
-		px2y = (y-1)*map_width + (x2+1);
-
-		rxy2 = y2*map_width + x;
-		pxy2 = (y2+1)*map_width + (x-1);
-
-		rx2y2 = y2*map_width + x2;
-		px2y2 = (y2+1)*map_width + (x2+1);
-
+		room_topleft = y*map_width + x;
+		room_topright = y*map_width + x2;
+		room_bottomleft = y2*map_width + x;
+		room_bottomright = y2*map_width + x2;
 
 		/*-------- Room Padding ------------------------------*/	
-		int obstructions = 4;
-		int i,j,pw,ph;
-		pw = px2y - pxy;
-		ph = pxy2 - pxy;
-		for(i = 0; i < pw; i++){
-			if( map[pxy + i] != '#')break;
-			if( map[pxy + i] == '#' && i == pw) obstructions -= 1;
-		}
-		for(i = 0; i < pw; i++){
-			if( map[pxy2 + i] != '#')break;
-			if( map[pxy2 + i] == '#' && i == pw) obstructions -= 1;
-		}
-		for(i = 0; i < ph; i++ ){
-			if( map[pxy + i] != '#')break;
-			if( map[pxy + i] == '#' && i == ph) obstructions -= 1;
-		}
-		for(i = 0; i < ph; i++ ){
-			if( map[px2y + (i*map_width)] != '#')break;
-			if( map[px2y + (i*map_width)] == '#' && i == ph) obstructions -= 1;
-		}
-		
-		/*-------- Check collisions with other rooms ---------*/
-		if( map[rxy]=='#' && map[rx2y]=='#' && map[rxy2]=='#' && map[rx2y2]=='#'){ 
-			//printw("x = %d y = %d x2 = %d y2 = %d ", x,y,x2,y2);
-			for(i = y; i < y2; i++){
-				for(j = x; j < x2; j++){
-					map[(i*map_width)+j] = '.';	
-				}
-			}
+		int i,j,k,p, padding_width,padding_height;
+		padding_topleft = ((y-1) * map_width) + (x-1);
+		padding_topright = ((y-1) * map_width) + (x2+1);
+		padding_bottomleft = ((y2+1) * map_width) + (x-1);
+		padding_bottomright = ((y2+1) * map_width) + (x2+1);
+		padding_width = padding_topright - padding_topleft;
+		padding_height = padding_bottomleft - padding_topleft;
 
-			n++;	
+		/*-------- Make sure room has walls all around it --------------------*/
+		/*-------- Check padding on top and bottom sides of room -------------*/
+		for(i = 0; i < padding_width; i++){
+
+			if( map[padding_topleft + i] != '#')break;
+			if( map[padding_bottomleft + i] != '#')break;
+			if( map[padding_topleft + i] == '#' &&  map[padding_bottomleft + i] == '#' && i == padding_width){
+
+				/*-------- Check padding on left and right sides of room -----*/
+				for(j = 0; j < padding_height; j += map_width ){
+					if( map[padding_topleft + j ] != '#')break;
+					if( map[padding_topright + j] != '#')break;
+					if( map[padding_topleft + j] == '#' && map[padding_topright + j] == '#' && j == padding_height){
+
+						/*-------- Check collisions with other rooms ---------*/
+					//	if( map[room_topleft]=='#' && map[room_topright]=='#' && map[room_bottomleft]=='#' && map[room_bottomright]=='#'){ 
+							for(k = y; k < y2; k++){
+								for(p = x; p < x2; p++){
+									map[(k*map_width)+p] = '.';	
+								}
+							}
+							n++;	
+						//}
+					}	
+				}
+			}	
 		}
 	}
-	
 }
 

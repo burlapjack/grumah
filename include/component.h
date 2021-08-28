@@ -39,8 +39,17 @@ typedef struct{
 
 typedef struct{
 	unsigned int id;
+	int x1;
+	int x2;
+	int y1;
+	int y2;
+}ComponentRoom;
+
+typedef struct{
+	unsigned int id;
 	unsigned int game_state;
 }ComponentTrigger;
+
 
 /*----------- Component Container ----------------------------*/
 typedef struct {

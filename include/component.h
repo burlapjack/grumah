@@ -18,6 +18,12 @@ typedef struct{
 
 typedef struct{
 	unsigned int id;
+	int width;
+	int height;
+}ComponentSize;
+
+typedef struct{
+	unsigned int id;
 	char symbol;
 	int color;
 }ComponentDraw;
@@ -39,39 +45,32 @@ typedef struct{
 
 typedef struct{
 	unsigned int id;
-	int x1;
-	int x2;
-	int y1;
-	int y2;
-}ComponentRoom;
-
-typedef struct{
-	unsigned int id;
 	unsigned int game_state;
 }ComponentTrigger;
-
 
 /*----------- Component Container ----------------------------*/
 typedef struct {
 	ComponentInput *input;
 	ComponentPosition *position;
+	ComponentSize *size;
 	ComponentDraw *draw;
 	ComponentStats *stats;
 	ComponentMenuOption *menu_option;
 	ComponentTrigger *trigger;
 	unsigned int size_input;
 	unsigned int size_position;
+	unsigned int size_size;
 	unsigned int size_draw;
-	unsigned int size_stats;
 	unsigned int size_menu_option;
+	unsigned int size_stats;
 	unsigned int size_trigger;
 }Component;
-
 
 /*----------- Init Component Lists ----------------------------*/
 ComponentDraw* component_init_draw(ComponentDraw **c, unsigned int size_list);
 ComponentMenuOption* component_init_menu_option(ComponentMenuOption **c, unsigned int size_list);
 ComponentPosition* component_init_position(ComponentPosition **c,unsigned int size_list);
+ComponentSize* component_init_size(ComponentSize**c, unsigned int size_list);
 ComponentStats* component_init_stats(ComponentStats **c, unsigned int size_list);
 ComponentTrigger* component_init_trigger(ComponentTrigger **c, unsigned int size_list);
 
@@ -95,6 +94,7 @@ void component_list_double_input(Component *c);
 void component_list_double_draw(Component *c);
 void component_list_double_menu_option(Component *c);
 void component_list_double_position(Component *c);
+void component_list_double_size(Component *c);
 void component_list_double_stats(Component *c);
 void component_list_double_trigger(Component *c);
 

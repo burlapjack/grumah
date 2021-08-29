@@ -30,6 +30,12 @@ ComponentPosition* component_init_position(ComponentPosition **c, unsigned int s
 	return *c;	
 }
 
+ComponentSize* component_init_size(ComponentSize **c, unsigned int size_list){
+	*c = malloc(sizeof (*c) * size_list);
+	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	return *c;
+}
+
 ComponentStats* component_init_stats(ComponentStats **c, unsigned int size_list){
 	*c = malloc(sizeof (*c) * size_list);
 	for( int i = 0; i < size_list; i++) (*c)->id = 0;
@@ -216,6 +222,21 @@ void component_list_double_draw(Component *c){
 		c->draw[i].id = 0;
 	}
 	c->size_draw= c->size_draw * 2;
+}
+
+void component_list_double_size(Component *c){
+	//test the reallocation
+	ComponentSize *temp = realloc(c->size, sizeof (ComponentSize) * (c->size_size* 2));
+	if (temp == NULL) {
+		perror("Failure to reallocate component_size");
+		exit(EXIT_FAILURE);
+	}	
+	c->size = temp;	
+
+	for(unsigned int i = c->size_size; i < (c->size_size * 2 ); ++i ){
+		c->size[i].id = 0;
+	}
+	c->size_size = c->size_size * 2;
 }
 
 void component_list_double_stats(Component *c){

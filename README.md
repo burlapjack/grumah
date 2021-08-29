@@ -37,15 +37,50 @@ game-loop such as system\_menu and system\_draw\_map.
 
 ## Getting Started
 
-To start, you will want to set up an entity id counter and a
-Component object pointer.
+In your project directory that also contains the grumah directory, 
+create a new main.c file that contains \#include for ncurses and 
+grumah. Make sure to initialize ncurses so that you have a proper 
+window to work with.  If you are using Linux, good chances are you 
+have a recent version of ncurses installed already.
 
 ```c
-#include "grumah.h"
+/* main.c */
 
+#include <ncurses.h>
+#include "../include/grumah.h"
+
+int main(int argc, char *argv[]){
+	
+	int win_width = 80;
+	int win_height = 24;
+	unsigned int game_running = 1;
+	
+	/*----- ncurses boilerplate-------------*/
+	initscr();
+	cbreak();
+	keypad(stdscr, TRUE);					
+	noecho();
+	curse_set(0);
+	WINDOW *win = newwin(win_height, win_width, 0, 0);	
+
+	/*----- game loop ----------------------*/
+	while(game_running == 1){
+		//game code will here.
+	}
+
+	/*----- game over ----------------------*/
+	/*----- free ncurses from memory -------*/
+	delwin(win);
+	endwin();
+	return 0;
+}
+```
+Next, you will want to set up an entity id counter and a 
+Component object pointer inside your main function.
+
+```c
 /*----- entity id counter --------------*/
 unsigned int next_entity = 1;
-
 
 /*----- Initialize a Component Object --*/
 unsigned int num_components = 10;
@@ -54,9 +89,9 @@ c = component_init(c, num_components);
 
 ```
 Component *c is a pointer to a struct that holds all the different kinds of
-components that will be needed.  We will be using this pointer a lot.
+components that will be needed.  You will be using this pointer a lot.
 
-Now,  let's add a player entity:
+Now, add a player entity:
  
 ```c
 /*------Add player entity at x=10, y=12 --*/
@@ -68,6 +103,5 @@ You can use the component\_free\_all function to deallocate all of that
 memory when the program ends:
 
 ```c
-void component_free_all(c);
-
+component_free_all(c);
 ```

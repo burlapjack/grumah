@@ -7,7 +7,25 @@
 #include <string.h>
 #include "../include/component.h"
 #include "../include/system.h"
-
+/*
+ * All component types are structs that include an id 
+ * and some related variables:
+ *
+ * typedef struct{
+ *		unsigned int id;
+ *		int x;
+ *		int y;
+ * }ComponentPosition;
+ *
+ * Components then have to be add to arrays (lists). 
+ * Optionally, the programmer can choose to initialize 
+ * a container of type 'Component' that sets up all 
+ * component lists automatically.
+ *
+ * Component *c;
+ * component_init(c, size_lists);
+ *
+ */
 
 /*---------------Initialize Component Lists -----------------------------------------------------*/
 
@@ -363,8 +381,7 @@ void component_list_add_trigger(ComponentTrigger**component_list, unsigned int *
 	}
 }
 
-
-//EXPERIMENTAL
+/*-------------- Add Component to entity list using a Component container struct -----------------*/
 
 void component_add_input(Component *c, unsigned int id) {
 	for(int i = 0; i < c->size_draw; ++i){
@@ -416,6 +433,18 @@ void component_add_menu_option(Component *c, unsigned int id, char name[32], uns
 			strcpy(c->menu_option[i].name,name); /*check if this is right! */
 			c->menu_option[i].parent_id = parent_id;
 			c->menu_option[i].highlighted = highlighted;
+			break;
+		}
+	}
+}
+
+void component_add_size(Component *c, unsigned int id, int width, int height) {
+	for(int i = 0; i < c->size_size; ++i){
+		if (i == c->size_size-1 && c->size[i].id != 0){
+			component_list_double_size(c);
+		}
+		else if (c->size[i].id == 0){
+			c->size[i].id = id;
 			break;
 		}
 	}

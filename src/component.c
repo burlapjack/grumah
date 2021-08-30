@@ -66,13 +66,6 @@ ComponentTrigger* component_init_trigger(ComponentTrigger **c, unsigned int size
 	return *c;
 }
 
-/*----------------Initialize a component collection-----------------------------------------------*/
-void component_list_init_all(unsigned int list_size, ComponentPosition **cp, ComponentDraw **cd, ComponentStats **cs, ComponentMenuOption **co){
-	*cp = malloc(sizeof (*cp) * list_size);	
-	*cd = malloc(sizeof (*cd) * list_size);	
-	*cs = malloc(sizeof (*cs) * list_size);	
-	*co = malloc(sizeof (*co) * list_size);	
-}
 
 // Init all component lists within a Component instance
 Component* component_init(Component *c, unsigned int size_lists){
@@ -505,6 +498,14 @@ unsigned int component_count_menu_option(Component *c){
 	}
 	return total;
 }
+
+unsigned int component_count_size(Component *c){
+	unsigned int total=0;
+	for(int i = 0; i < (c->size_size); i++){
+		if(c->size[i].id != 0) total++;
+	}
+	return total;
+};
 
 unsigned int component_count_stats(Component *c){
 	unsigned int total=0;

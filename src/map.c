@@ -1,4 +1,4 @@
-/* map_generate.c * by burlapjack 2021
+/* map.c * by burlapjack 2021
  * procedural map generation
  */
 
@@ -31,18 +31,21 @@ int map_xy(int x, int y, int map_width){
 }
 
 /*---------------------- Init a map that is all walls ------------------------------------------------------------------------*/
-char* map_init(char *map, int map_width, int map_height){
-	map = (char *)malloc((map_height * map_width) * sizeof (char));
+char** map_init(char **map, int map_width, int map_height){
+	map = malloc(sizeof (char) * map_height );
 
-	for (int i = 0; i < (map_height * map_width); i++){
-		map[i] = '#';
+	for (int i = 0; i < (map_height); i++){
+		for (int j = 0; i < (map_width); j++){
+			map[i][j] = '#';
+		}
 	}
 	return map;
 }
 
 /*---------------------- Simple-Room-Placement Map Gen Algorithm -------------------------------------------------------------*/
 
-void map_generate_srp(char *map, int map_width, int map_height, int room_size_max, int room_size_min, int num_rooms){
+void map_generate_srp(char **map, int map_width, int map_height, int room_size_max, int room_size_min, int num_rooms){
+	
 	int x,y,h,w;
 	int i,j,k,cell;
 	int n = 3;
@@ -61,6 +64,7 @@ void map_generate_srp(char *map, int map_width, int map_height, int room_size_ma
 
 		/*-------- Check coords are within bounds of map -----*/
 		/*-------- Correct coords as needed ------------------*/
+
 		x = (x > 1 ? x : 2);
 		y = (y > 1 ? y : 2);
 		w = (w < map_width-2-x ? w : map_width - 2);
@@ -95,8 +99,8 @@ void map_generate_srp(char *map, int map_width, int map_height, int room_size_ma
 	for(i = 0; i < num_rooms; i++){
 		for(j = rm_pos[i].y; j < rm_size[i].height + rm_pos[i].y; j++){
 			for(k = rm_pos[i].x; k < rm_size[i].width + rm_pos[i].x; k++){
-				cell = map_xy(k,j,map_width);
-				map[cell] = '.';
+				//cell = map_xy(k,j,map_width);
+				map[j][k] = '.';
 			}
 		}
 	}

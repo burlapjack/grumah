@@ -89,3 +89,5 @@ void system_map_draw(WINDOW *w, char **map, int map_width, int map_height,int x_
 	}
 }
 
+
+

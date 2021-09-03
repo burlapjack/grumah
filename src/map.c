@@ -26,8 +26,13 @@ static int rand_int(int n){
 
 
 /*---------------------- Init a map that is all walls ------------------------------------------------------------------------*/
-
-
+char** map_init(char **map,int map_width, int map_height){
+	unsigned int i;
+	map = malloc( sizeof(*map) * map_height );
+	for(i = 0; i < map_height; i++){
+		map[i] = malloc( sizeof (*map) * map_width);
+	};
+};
 
 /*---------------------- Simple-Room-Placement Map Gen Algorithm -------------------------------------------------------------*/
 

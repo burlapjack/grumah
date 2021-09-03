@@ -26,6 +26,7 @@ typedef struct{
 	unsigned int id;
 	char symbol;
 	int color;
+	int layer;
 }ComponentDraw;
 
 typedef struct{

@@ -26,14 +26,20 @@ static int rand_int(int n){
 
 
 /*---------------------- Init a map that is all walls ------------------------------------------------------------------------*/
-char** map_init(char **map,int map_width, int map_height){
-	unsigned int i;
-	map = malloc( sizeof(*map) * map_height );
-	for(i = 0; i < map_height; i++){
-		map[i] = malloc( sizeof (*map) * map_width);
-	};
-};
+void map_init(size_t map_rows, size_t map_columns, char(**map)[map_rows][map_columns]){
+	*map = malloc( sizeof(char[map_rows][map_columns]) );
+	assert(*map != NULL);
+}
 
-/*---------------------- Simple-Room-Placement Map Gen Algorithm -------------------------------------------------------------*/
+//void component_add_position(Component *c, unsigned int id, int x, int y) {
+void map_ini(Component *c, int map_width, int map_height, unsigned int *next_id){
+	int i,j;
 
-
+	for ( i = 0; i < map_width; i++){
+		for ( j = 0; j < map_height; j++){
+			component_add_position(c, *next_id, j, i);
+			component_add_draw(c, *next_id, 1, '#'); 
+			next_id++;
+		}
+	}	
+}

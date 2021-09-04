@@ -13,7 +13,8 @@ typedef struct {
 
 typedef struct{
 	unsigned int id;
-	int x,y;
+	int x;
+	int y;
 }ComponentPosition;
 
 typedef struct{

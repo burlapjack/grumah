@@ -70,14 +70,15 @@ ComponentTrigger* component_init_trigger(ComponentTrigger **c, unsigned int size
 // Init all component lists within a Component instance
 Component* component_init(Component *c, unsigned int size_lists){
 	c->draw = malloc( sizeof (*(c->draw)) * size_lists); 
-	c->size_draw = size_lists;
 	c->menu_option = malloc( sizeof (*(c->menu_option)) * size_lists);
-	c->size_menu_option = size_lists;
 	c->position = malloc( sizeof (*(c->position)) * size_lists);
-	c->size_position = size_lists;
 	c->stats = malloc( sizeof (*(c->stats)) * size_lists);
-	c->size_stats = size_lists;
 	c->trigger = malloc( sizeof (*(c->trigger)) * size_lists);
+
+	c->size_draw = size_lists;
+	c->size_menu_option = size_lists;
+	c->size_position = size_lists;
+	c->size_stats = size_lists;
 	c->size_trigger = size_lists;
 
 	for( unsigned int i = 0; i < size_lists; i++){
@@ -89,6 +90,75 @@ Component* component_init(Component *c, unsigned int size_lists){
 	}
 
 	return c;	
+}
+
+/*-------------- Delete Component list data (without deallocation) ----------------------------------*/
+void component_delete_all_draw(Component *c){
+	unsigned int i;
+	for(i = 0; i < (c->size_draw); i++){
+		c->draw[i].id = 0;
+		c->draw[i].symbol = ' ';
+		c->draw[i].layer = 0;
+	}	
+}
+
+void component_delete_all_input(Component *c){
+	unsigned int i;
+	for(i = 0; i < (c->size_draw); i++){
+		c->input[i].id = 0;
+		c->input[i].key_pressed = 0; //This might need to change
+	}
+}
+
+void component_delete_all_menu_option(Component *c){
+	unsigned int i;
+	for(i = 0; i < (c->size_menu_option); i++){
+		c->menu_option[i].id = 0;
+		c->menu_option[i].parent_id = 0;
+		memset(c->menu_option[i].name, ' ', 32);
+		c->menu_option[i].highlighted = 0;
+	}	
+}
+
+
+void component_delete_all_position(Component *c){
+	unsigned int i;	
+	for(i = 0; i < (c->size_position); i++){
+		c->position[i].id = 0;
+		c->position[i].x =  0;
+		c->position[i].y =  0;
+	}
+}
+
+void component_delete_all_size(Component *c){
+	unsigned int i;	
+	for(i = 0; i < (c->size_size); i++){
+		c->size[i].id = 0;
+		c->size[i].width = 0;	
+		c->size[i].height = 0;	
+	}
+}
+
+
+void component_delete_all_stats(Component *c){
+	
+	unsigned int i;	
+	for(i = 0; i < (c->size_stats); i++){
+		c->stats[i].id = 0;
+		c->stats[i].hp = 0;
+		c->stats[i].strength = 0;
+		c->stats[i].perception = 0;
+		c->stats[i].agility = 0;
+	}
+}
+
+void component_delete_all_trigger(Component *c){
+	unsigned int i;	
+	for(i = 0; i < (c->size_trigger); i++){
+		c->trigger[i].id = 0;
+		c->trigger[i].game_state = 0;
+
+	}
 }
 
 /*-------------- Free all Component Lists -----------------------------------------------------------*/
@@ -388,7 +458,7 @@ void component_add_input(Component *c, unsigned int id) {
 	}
 }
 
-void component_add_draw(Component *c, unsigned int id, int color, char symbol) {
+void component_add_draw(Component *c, unsigned int id, unsigned int layer, int color, char symbol) {
 	for(int i = 0; i < c->size_draw; ++i){
 		if (i == c->size_draw-1 && c->draw[i].id != 0){
 			component_list_double_draw(c);
@@ -397,6 +467,7 @@ void component_add_draw(Component *c, unsigned int id, int color, char symbol) {
 			c->draw[i].id = id;
 			c->draw[i].color = color;
 			c->draw[i].symbol = symbol;
+			c->draw[i].layer = layer;
 			break;
 		}
 	}

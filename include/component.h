@@ -125,6 +125,8 @@ void component_delete_all_size(Component *c);
 void component_delete_all_stats(Component *c);
 void component_delete_all_trigger(Component *c);
 
+void component_delete_all(Component *c);
+
 /*----------- Component container free memory -----------------*/
 void component_clear_all(Component *c);
 

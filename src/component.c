@@ -66,7 +66,6 @@ ComponentTrigger* component_init_trigger(ComponentTrigger **c, unsigned int size
 	return *c;
 }
 
-
 // Init all component lists within a Component instance
 Component* component_init(Component *c, unsigned int size_lists){
 	c->draw = malloc( sizeof (*(c->draw)) * size_lists); 
@@ -120,7 +119,6 @@ void component_delete_all_menu_option(Component *c){
 	}	
 }
 
-
 void component_delete_all_position(Component *c){
 	unsigned int i;	
 	for(i = 0; i < (c->size_position); i++){
@@ -141,7 +139,6 @@ void component_delete_all_size(Component *c){
 
 
 void component_delete_all_stats(Component *c){
-	
 	unsigned int i;	
 	for(i = 0; i < (c->size_stats); i++){
 		c->stats[i].id = 0;
@@ -160,6 +157,16 @@ void component_delete_all_trigger(Component *c){
 
 	}
 }
+
+void component_delete_all(Component *c){
+	component_delete_all_draw(c);	
+	component_delete_all_menu_option(c);
+	component_delete_all_position(c);	
+	component_delete_all_size(c);	
+	component_delete_all_stats(c);	
+	component_delete_all_trigger(c);	
+}
+
 
 /*-------------- Free all Component Lists -----------------------------------------------------------*/
 

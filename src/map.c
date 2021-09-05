@@ -26,12 +26,6 @@ static int rand_int(int n){
 
 
 /*---------------------- Init a map that is all walls ------------------------------------------------------------------------*/
-//void map_init(size_t map_rows, size_t map_columns, char(**map)[map_rows][map_columns]){
-//	*map = malloc( sizeof(char[map_rows][map_columns]) );
-//	assert(*map != NULL);
-//}
-
-//void component_add_position(Component *c, unsigned int id, int x, int y) {
 
 void map_init(Component *c, int map_width, int map_height, unsigned int *next_id){
 	int i,j;

@@ -53,17 +53,17 @@ typedef struct{
 /*----------- Component Container ----------------------------*/
 typedef struct {
 	ComponentInput *input;
+	ComponentDraw *draw;
+	ComponentMenuOption *menu_option;
 	ComponentPosition *position;
 	ComponentSize *size;
-	ComponentDraw *draw;
 	ComponentStats *stats;
-	ComponentMenuOption *menu_option;
 	ComponentTrigger *trigger;
+	unsigned int size_draw;
 	unsigned int size_input;
+	unsigned int size_menu_option;
 	unsigned int size_position;
 	unsigned int size_size;
-	unsigned int size_draw;
-	unsigned int size_menu_option;
 	unsigned int size_stats;
 	unsigned int size_trigger;
 }Component;
@@ -99,7 +99,7 @@ void component_add_size(Component *c, unsigned int id, int width, int height);
 void component_add_stats(Component *c, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi);
 void component_add_trigger(Component *c, unsigned int id, unsigned int game_state);
 
-/*----------- Component deletion without reallocation ---------*/
+/*----------- Component deletion without deallocation ---------*/
 void component_delete_all_draw(Component *c);
 void component_delete_all_input(Component *c);
 void component_delete_all_menu_option(Component *c);
@@ -123,5 +123,8 @@ unsigned int component_count_trigger(Component *c);
 unsigned int component_count_all(Component *c);
 
 unsigned int component_count_invisible(Component *c);
+
+/*----------- Component Set Values ----------------------------*/
+void component_set_draw_layer(Component *c, unsigned int component_id, unsigned int draw_layer);
 
 #endif /*COMPONENT_H*/

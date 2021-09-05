@@ -171,10 +171,19 @@ void component_delete_all(Component *c){
 
 void component_free_all(Component *c){
 	free(c->draw);
+	c->draw = NULL;
+	free(c->input);
+	c->input = NULL;
 	free(c->menu_option);
+	c->menu_option = NULL;
 	free(c->position);
+	c->position = NULL;
+	free(c->size);
+	c->size = NULL;
 	free(c->stats);
+	c->stats = NULL;
 	free(c->trigger);
+	c->trigger = NULL;
 }
 
 /*---------------Double the size of an Component list -----------------------------------------------*/
@@ -422,7 +431,7 @@ unsigned int component_count_size(Component *c){
 		if(c->size[i].id != 0) total++;
 	}
 	return total;
-};
+}
 
 unsigned int component_count_stats(Component *c){
 	unsigned int total=0;
@@ -457,4 +466,15 @@ unsigned int component_count_invisible(Component *c){
 		}	
 	}
 	return total;
+}
+
+/*-------------- Set Component Draw Layer --------------------------------------------------------*/
+
+void component_set_draw_layer(Component *c, unsigned int component_id, unsigned int draw_layer){
+	int i;
+	for(i = 0; i < (c->size_draw); i++){
+		if(c->draw[i].id == component_id){
+			c->draw[i].layer = draw_layer;	
+		}
+	}
 }

@@ -79,14 +79,16 @@ void system_menu(WINDOW *w, Component *c, unsigned int *menu_visible, int input)
 	}
 }	
 
-void system_map_draw(WINDOW *w, char **map, int map_width, int map_height,int x_offset, int y_offset){
-	int i,j,n=0;
-	for (i = 0; i < map_height; i++){
-		for(j = 0; j < map_width; j++){
-			mvwaddch(w,i+y_offset,j+x_offset,map[i][j]); 
-			n++;
+void system_draw(WINDOW *w,Component *c, unsigned int num_draw_layers, int x_offset, int y_offset){
+	unsigned int i,j;
+	/* iterate through component draw layers */
+	for( i = 0; i < num_draw_layers; i++){
+		if(c->draw[i].layer == i){
+			for(j = 0; j < c->size_position; j++){
+				if ( c->position[j].id == c->draw[i].id){
+					mvwaddch(w,c->position[i].y, c->position[i].x, c->draw[i].symbol);
+				}	
+			}
 		}
-	}
+	}	
 }
-
-

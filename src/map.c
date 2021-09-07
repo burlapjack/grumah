@@ -28,13 +28,12 @@
 /*---------------------- Init a map that is all walls ------------------------------------------------------------------------*/
 
 void map_init(Component *c, int map_width, int map_height, unsigned int *next_id){
-	int i,j;
 
-	for ( i = 0; i < map_width; i++){
-		for ( j = 0; j < map_height; j++){
+	for ( int i = 0; i < map_height; i++){
+		for ( int j = 0; j < map_width; j++){
 			component_add_position(c, *next_id, j, i);
 			component_add_draw(c, *next_id, 0, 1, '#'); 
-			next_id++;
+			*next_id += 1;
 		}
 	}	
 }

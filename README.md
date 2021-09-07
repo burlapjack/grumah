@@ -85,7 +85,7 @@ unsigned int next_entity = 1;
 /*----- Initialize a Component Object --*/
 unsigned int num_components = 10;
 Component *c = malloc(sizeof (*c));
-c = component_init(c, num_components);
+component_init(c, num_components);
 
 ```
 Component *c is a pointer to a struct that holds all the different kinds of

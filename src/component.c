@@ -29,72 +29,72 @@
 
 /*---------------Initialize Component Lists -----------------------------------------------------*/
 
-ComponentDraw* component_init_draw(ComponentDraw **c, unsigned int size_list){
+ComponentDraw* component_init_draw(ComponentDraw **c, size_t size_list){
 	
 	*c = malloc(sizeof (*c) * size_list);
-	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
 	return *c;
 }
 
-ComponentMenuOption* component_init_menu_option(ComponentMenuOption **c, unsigned int size_list){
+ComponentMenuOption* component_init_menu_option(ComponentMenuOption **c, size_t size_list){
 	*c = malloc(sizeof (*c) * size_list);
-	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
 	return *c;
 }
 
-ComponentPosition* component_init_position(ComponentPosition **c, unsigned int size_list){
+ComponentPosition* component_init_position(ComponentPosition **c, size_t size_list){
 	*c = malloc(sizeof (*c) * size_list);
-	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
 	return *c;	
 }
 
-ComponentSize* component_init_size(ComponentSize **c, unsigned int size_list){
+ComponentSize* component_init_size(ComponentSize **c, size_t size_list){
 	*c = malloc(sizeof (*c) * size_list);
-	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
 	return *c;
 }
 
-ComponentStats* component_init_stats(ComponentStats **c, unsigned int size_list){
+ComponentStats* component_init_stats(ComponentStats **c, size_t size_list){
 	*c = malloc(sizeof (*c) * size_list);
-	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
 	return *c;
 }
 
-ComponentTrigger* component_init_trigger(ComponentTrigger **c, unsigned int size_list){
+ComponentTrigger* component_init_trigger(ComponentTrigger **c, size_t size_list){
 	*c = malloc(sizeof (*c) * size_list);
-	for( int i = 0; i < size_list; i++) (*c)->id = 0;
+	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
 	return *c;
 }
 
 // Init all component lists within a Component instance
-Component* component_init(Component *c, unsigned int size_lists){
+void component_init(Component *c, size_t size_lists){
 	c->draw = malloc( sizeof (*(c->draw)) * size_lists); 
 	c->menu_option = malloc( sizeof (*(c->menu_option)) * size_lists);
 	c->position = malloc( sizeof (*(c->position)) * size_lists);
+	c->size = malloc( sizeof (*(c->size)) * size_lists);
 	c->stats = malloc( sizeof (*(c->stats)) * size_lists);
 	c->trigger = malloc( sizeof (*(c->trigger)) * size_lists);
 
 	c->size_draw = size_lists;
 	c->size_menu_option = size_lists;
 	c->size_position = size_lists;
+	c->size_size = size_lists;
 	c->size_stats = size_lists;
 	c->size_trigger = size_lists;
 
-	for( unsigned int i = 0; i < size_lists; i++){
+	for( size_t i = 0; i < size_lists; i++){
 		c->draw[i].id = 0;
 		c->menu_option[i].id = 0;
 		c->position[i].id = 0;
+		c->size[i].id = 0;
 		c->stats[i].id = 0;
 		c->trigger[i].id = 0;
 	}
-
-	return c;	
 }
 
 /*-------------- Delete Component list data (without deallocation) ----------------------------------*/
 void component_delete_all_draw(Component *c){
-	unsigned int i;
-	for(i = 0; i < (c->size_draw); i++){
+	for(size_t i = 0; i < (c->size_draw); i++){
 		c->draw[i].id = 0;
 		c->draw[i].symbol = ' ';
 		c->draw[i].layer = 0;
@@ -102,16 +102,14 @@ void component_delete_all_draw(Component *c){
 }
 
 void component_delete_all_input(Component *c){
-	unsigned int i;
-	for(i = 0; i < (c->size_draw); i++){
+	for(size_t i = 0; i < (c->size_draw); i++){
 		c->input[i].id = 0;
 		c->input[i].key_pressed = 0; //This might need to change
 	}
 }
 
 void component_delete_all_menu_option(Component *c){
-	unsigned int i;
-	for(i = 0; i < (c->size_menu_option); i++){
+	for(size_t i = 0; i < (c->size_menu_option); i++){
 		c->menu_option[i].id = 0;
 		c->menu_option[i].parent_id = 0;
 		memset(c->menu_option[i].name, ' ', 32);
@@ -120,8 +118,7 @@ void component_delete_all_menu_option(Component *c){
 }
 
 void component_delete_all_position(Component *c){
-	unsigned int i;	
-	for(i = 0; i < (c->size_position); i++){
+	for(size_t i = 0; i < (c->size_position); i++){
 		c->position[i].id = 0;
 		c->position[i].x =  0;
 		c->position[i].y =  0;
@@ -129,8 +126,7 @@ void component_delete_all_position(Component *c){
 }
 
 void component_delete_all_size(Component *c){
-	unsigned int i;	
-	for(i = 0; i < (c->size_size); i++){
+	for(size_t i = 0; i < (c->size_size); i++){
 		c->size[i].id = 0;
 		c->size[i].width = 0;	
 		c->size[i].height = 0;	
@@ -139,8 +135,7 @@ void component_delete_all_size(Component *c){
 
 
 void component_delete_all_stats(Component *c){
-	unsigned int i;	
-	for(i = 0; i < (c->size_stats); i++){
+	for(size_t i = 0; i < (c->size_stats); i++){
 		c->stats[i].id = 0;
 		c->stats[i].hp = 0;
 		c->stats[i].strength = 0;
@@ -150,8 +145,7 @@ void component_delete_all_stats(Component *c){
 }
 
 void component_delete_all_trigger(Component *c){
-	unsigned int i;	
-	for(i = 0; i < (c->size_trigger); i++){
+	for(size_t i = 0; i < (c->size_trigger); i++){
 		c->trigger[i].id = 0;
 		c->trigger[i].game_state = 0;
 
@@ -172,8 +166,8 @@ void component_delete_all(Component *c){
 void component_free_all(Component *c){
 	free(c->draw);
 	c->draw = NULL;
-	free(c->input);
-	c->input = NULL;
+	//free(c->input);
+	//c->input = NULL;
 	free(c->menu_option);
 	c->menu_option = NULL;
 	free(c->position);
@@ -184,6 +178,7 @@ void component_free_all(Component *c){
 	c->stats = NULL;
 	free(c->trigger);
 	c->trigger = NULL;
+	free(c);
 }
 
 /*---------------Double the size of an Component list -----------------------------------------------*/
@@ -196,8 +191,7 @@ void component_list_double_input(Component *c){
 		exit(EXIT_FAILURE);
 	}	
 	c->input= temp;	
-
-	for(unsigned int i = c->size_input; i < (c->size_input * 2 ); ++i ){
+	for(size_t i = c->size_input; i < (c->size_input * 2 ); ++i ){
 		c->input[i].id = 0;
 	}
 	c->size_input = c->size_input * 2;
@@ -207,18 +201,17 @@ void component_list_double_input(Component *c){
 void component_list_double_position(Component *c){
 	//test the reallocation
 	ComponentPosition *temp = realloc(c->position, sizeof (ComponentPosition) * (c->size_position* 2));
+
 	if (temp == NULL) {
 		perror("Failure to reallocate component_position");
 		exit(EXIT_FAILURE);
 	}	
 	c->position = temp;	
-
-	for(unsigned int i = c->size_position; i < (c->size_position * 2 ); ++i ){
+	for(size_t i = c->size_position; i < (c->size_position * 2 ); ++i ){
 		c->position[i].id = 0;
 	}
 	c->size_position = c->size_position * 2;
 }
-
 
 void component_list_double_draw(Component *c){
 	//test the reallocation
@@ -228,11 +221,10 @@ void component_list_double_draw(Component *c){
 		exit(EXIT_FAILURE);
 	}	
 	c->draw = temp;	
-
-	for(unsigned int i = c->size_draw; i < (c->size_draw * 2 ); ++i ){
+	for(size_t i = c->size_draw; i < (c->size_draw * 2 ); ++i ){
 		c->draw[i].id = 0;
 	}
-	c->size_draw= c->size_draw * 2;
+	c->size_draw = c->size_draw * 2;
 }
 
 void component_list_double_size(Component *c){
@@ -243,8 +235,7 @@ void component_list_double_size(Component *c){
 		exit(EXIT_FAILURE);
 	}	
 	c->size = temp;	
-
-	for(unsigned int i = c->size_size; i < (c->size_size * 2 ); ++i ){
+	for(size_t i = c->size_size; i < (c->size_size * 2 ); ++i ){
 		c->size[i].id = 0;
 	}
 	c->size_size = c->size_size * 2;
@@ -258,8 +249,7 @@ void component_list_double_stats(Component *c){
 		exit(EXIT_FAILURE);
 	}	
 	c->stats = temp;	
-
-	for(unsigned int i = c->size_stats; i < (c->size_stats * 2 ); ++i ){
+	for(size_t i = c->size_stats; i < (c->size_stats * 2 ); ++i ){
 		c->stats[i].id = 0;
 	}
 	c->size_stats = c->size_stats * 2;
@@ -275,8 +265,7 @@ void component_list_double_menu_option(Component *c){
 		exit(EXIT_FAILURE);
 	}	
 	c->menu_option = temp;	
-
-	for(unsigned int i = c->size_menu_option; i < (c->size_menu_option* 2 ); ++i ){
+	for(size_t i = c->size_menu_option; i < (c->size_menu_option* 2 ); ++i ){
 		c->menu_option[i].id = 0;
 	}
 	c->size_menu_option = c->size_menu_option * 2;
@@ -293,7 +282,7 @@ void component_list_double_trigger(Component *c){
 	}	
 	c->trigger = temp;	
 
-	for(unsigned int i = c->size_trigger; i < (c->size_trigger * 2 ); ++i ){
+	for(size_t i = c->size_trigger; i < (c->size_trigger * 2 ); ++i ){
 		c->trigger[i].id = 0;
 	}
 	c->size_trigger = c->size_trigger * 2;
@@ -302,7 +291,7 @@ void component_list_double_trigger(Component *c){
 /*-------------- Add Component to entity list using a Component container struct -----------------*/
 
 void component_add_input(Component *c, unsigned int id) {
-	for(int i = 0; i < c->size_draw; ++i){
+	for(size_t i = 0; i < c->size_draw; ++i){
 		if (i == c->size_draw-1 && c->draw[i].id != 0){
 			component_list_double_draw(c);
 		}
@@ -314,8 +303,8 @@ void component_add_input(Component *c, unsigned int id) {
 }
 
 void component_add_draw(Component *c, unsigned int id, unsigned int layer, int color, char symbol) {
-	for(int i = 0; i < c->size_draw; ++i){
-		if (i == c->size_draw-1 && c->draw[i].id != 0){
+	for(size_t i = 0; i < c->size_draw; ++i){
+		if (i == (c->size_draw - 1) && c->draw[i].id != 0){
 			component_list_double_draw(c);
 		}
 		else if (c->draw[i].id == 0){
@@ -329,8 +318,8 @@ void component_add_draw(Component *c, unsigned int id, unsigned int layer, int c
 }
 
 void component_add_position(Component *c, unsigned int id, int x, int y) {
-	for(int i = 0; i < c->size_position; ++i){
-		if (i == c->size_position-1 && c->position[i].id != 0){
+	for(size_t i = 0; i < (c->size_position); ++i){
+		if (i == (c->size_position-1) && c->position[i].id != 0){
 			component_list_double_position(c);
 		}
 		else if (c->position[i].id == 0){
@@ -343,7 +332,7 @@ void component_add_position(Component *c, unsigned int id, int x, int y) {
 }
 
 void component_add_menu_option(Component *c, unsigned int id, char name[32], unsigned int parent_id, unsigned int highlighted) {
-	for(int i = 0; i < (c->size_menu_option); ++i){
+	for(size_t i = 0; i < (c->size_menu_option); ++i){
 		if (i == c->size_menu_option-1 && c->menu_option[i].id != 0){
 			component_list_double_menu_option(c);
 		}
@@ -358,7 +347,7 @@ void component_add_menu_option(Component *c, unsigned int id, char name[32], uns
 }
 
 void component_add_size(Component *c, unsigned int id, int width, int height) {
-	for(int i = 0; i < c->size_size; ++i){
+	for(size_t i = 0; i < c->size_size; ++i){
 		if (i == c->size_size-1 && c->size[i].id != 0){
 			component_list_double_size(c);
 		}
@@ -370,7 +359,7 @@ void component_add_size(Component *c, unsigned int id, int width, int height) {
 }
 
 void component_add_stats(Component *c, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi) {
-	for(int i = 0; i < c->size_stats; ++i){
+	for(size_t i = 0; i < c->size_stats; ++i){
 		if (i == c->size_stats-1 && c->stats[i].id != 0){
 			component_list_double_stats(c);
 		}
@@ -386,7 +375,7 @@ void component_add_stats(Component *c, unsigned int id, unsigned int hp, unsigne
 }
 
 void component_add_trigger(Component *c, unsigned int id, unsigned int game_state) {
-	for(int i = 0; i < c->size_trigger; ++i){
+	for(size_t i = 0; i < c->size_trigger; ++i){
 		if (i == c->size_trigger-1 && c->trigger[i].id != 0){
 			component_list_double_trigger(c);
 		}
@@ -403,7 +392,7 @@ void component_add_trigger(Component *c, unsigned int id, unsigned int game_stat
 // Find the total of a certain component
 unsigned int component_count_draw(Component *c){
 	unsigned int total=0;
-	for(int i = 0; i < (c->size_draw); i++){
+	for(size_t i = 0; i < (c->size_draw); i++){
 		if(c->draw[i].id != 0) total++;
 	}
 	return total;
@@ -411,7 +400,7 @@ unsigned int component_count_draw(Component *c){
 
 unsigned int component_count_position(Component *c){
 	unsigned int total=0;
-	for(int i = 0; i < (c->size_position); i++){
+	for(size_t i = 0; i < (c->size_position); i++){
 		if(c->position[i].id != 0) total++;
 	}
 	return total;
@@ -419,7 +408,7 @@ unsigned int component_count_position(Component *c){
 
 unsigned int component_count_menu_option(Component *c){
 	unsigned int total=0;
-	for(int i = 0; i < (c->size_menu_option); i++){
+	for(size_t i = 0; i < (c->size_menu_option); i++){
 		if(c->menu_option[i].id != 0) total++;
 	}
 	return total;
@@ -427,7 +416,7 @@ unsigned int component_count_menu_option(Component *c){
 
 unsigned int component_count_size(Component *c){
 	unsigned int total=0;
-	for(int i = 0; i < (c->size_size); i++){
+	for(size_t i = 0; i < (c->size_size); i++){
 		if(c->size[i].id != 0) total++;
 	}
 	return total;
@@ -435,7 +424,7 @@ unsigned int component_count_size(Component *c){
 
 unsigned int component_count_stats(Component *c){
 	unsigned int total=0;
-	for(int i = 0; i < (c->size_stats); i++){
+	for(size_t i = 0; i < (c->size_stats); i++){
 		if(c->stats[i].id != 0) total++;
 	}
 	return total;
@@ -443,7 +432,7 @@ unsigned int component_count_stats(Component *c){
 
 unsigned int component_count_trigger(Component *c){
 	unsigned int total=0;
-	for(int i = 0; i < (c->size_trigger); i++){
+	for(size_t i = 0; i < (c->size_trigger); i++){
 		if(c->trigger[i].id != 0) total++;
 	}
 	return total;
@@ -457,7 +446,7 @@ unsigned int component_count_all(Component *c){
 
 unsigned int component_count_invisible(Component *c){
 	unsigned int total = 0;
-	for(int i = 0; i < (c->size_position); i++){
+	for(size_t i = 0; i < (c->size_position); i++){
 		if(c->position[i].id != 0){
 			for(int j = 0; j < (c->size_draw); j++){
 				if(c->position[i].id == c->draw[j].id) break;
@@ -471,8 +460,7 @@ unsigned int component_count_invisible(Component *c){
 /*-------------- Set Component Draw Layer --------------------------------------------------------*/
 
 void component_set_draw_layer(Component *c, unsigned int component_id, unsigned int draw_layer){
-	int i;
-	for(i = 0; i < (c->size_draw); i++){
+	for(size_t i = 0; i < (c->size_draw); i++){
 		if(c->draw[i].id == component_id){
 			c->draw[i].layer = draw_layer;	
 		}

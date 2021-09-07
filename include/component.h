@@ -59,24 +59,24 @@ typedef struct {
 	ComponentSize *size;
 	ComponentStats *stats;
 	ComponentTrigger *trigger;
-	unsigned int size_draw;
-	unsigned int size_input;
-	unsigned int size_menu_option;
-	unsigned int size_position;
-	unsigned int size_size;
-	unsigned int size_stats;
-	unsigned int size_trigger;
+	size_t size_draw;
+	size_t size_input;
+	size_t size_menu_option;
+	size_t size_position;
+	size_t size_size;
+	size_t size_stats;
+	size_t size_trigger;
 }Component;
 
 /*----------- Init Component Lists ----------------------------*/
-ComponentDraw* component_init_draw(ComponentDraw **c, unsigned int size_list);
-ComponentMenuOption* component_init_menu_option(ComponentMenuOption **c, unsigned int size_list);
-ComponentPosition* component_init_position(ComponentPosition **c,unsigned int size_list);
-ComponentSize* component_init_size(ComponentSize**c, unsigned int size_list);
-ComponentStats* component_init_stats(ComponentStats **c, unsigned int size_list);
-ComponentTrigger* component_init_trigger(ComponentTrigger **c, unsigned int size_list);
+ComponentDraw* component_init_draw(ComponentDraw **c, size_t size_list);
+ComponentMenuOption* component_init_menu_option(ComponentMenuOption **c, size_t size_list);
+ComponentPosition* component_init_position(ComponentPosition **c,size_t size_list);
+ComponentSize* component_init_size(ComponentSize**c, size_t size_list);
+ComponentStats* component_init_stats(ComponentStats **c, size_t size_list);
+ComponentTrigger* component_init_trigger(ComponentTrigger **c, size_t size_list);
 
-Component* component_init(Component *c, unsigned int size_lists);
+void component_init(Component *c, size_t size_lists);
 
 /*----------- Deallocate Component List Memory ----------------*/
 void component_free_all(Component *c);

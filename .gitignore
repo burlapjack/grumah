@@ -1,4 +1,6 @@
 Makefile
 src/grumah.c
 grumah
+*.swp
+bin/
 *.o

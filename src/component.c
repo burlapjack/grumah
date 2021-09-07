@@ -29,43 +29,6 @@
 
 /*---------------Initialize Component Lists -----------------------------------------------------*/
 
-ComponentDraw* component_init_draw(ComponentDraw **c, size_t size_list){
-	
-	*c = malloc(sizeof (*c) * size_list);
-	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
-	return *c;
-}
-
-ComponentMenuOption* component_init_menu_option(ComponentMenuOption **c, size_t size_list){
-	*c = malloc(sizeof (*c) * size_list);
-	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
-	return *c;
-}
-
-ComponentPosition* component_init_position(ComponentPosition **c, size_t size_list){
-	*c = malloc(sizeof (*c) * size_list);
-	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
-	return *c;	
-}
-
-ComponentSize* component_init_size(ComponentSize **c, size_t size_list){
-	*c = malloc(sizeof (*c) * size_list);
-	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
-	return *c;
-}
-
-ComponentStats* component_init_stats(ComponentStats **c, size_t size_list){
-	*c = malloc(sizeof (*c) * size_list);
-	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
-	return *c;
-}
-
-ComponentTrigger* component_init_trigger(ComponentTrigger **c, size_t size_list){
-	*c = malloc(sizeof (*c) * size_list);
-	for( size_t i = 0; i < size_list; i++) (*c)->id = 0;
-	return *c;
-}
-
 // Init all component lists within a Component instance
 void component_init(Component *c, size_t size_lists){
 	c->draw = malloc( sizeof (*(c->draw)) * size_lists); 

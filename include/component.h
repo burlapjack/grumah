@@ -68,14 +68,6 @@ typedef struct {
 	size_t size_trigger;
 }Component;
 
-/*----------- Init Component Lists ----------------------------*/
-ComponentDraw* component_init_draw(ComponentDraw **c, size_t size_list);
-ComponentMenuOption* component_init_menu_option(ComponentMenuOption **c, size_t size_list);
-ComponentPosition* component_init_position(ComponentPosition **c,size_t size_list);
-ComponentSize* component_init_size(ComponentSize**c, size_t size_list);
-ComponentStats* component_init_stats(ComponentStats **c, size_t size_list);
-ComponentTrigger* component_init_trigger(ComponentTrigger **c, size_t size_list);
-
 void component_init(Component *c, size_t size_lists);
 
 /*----------- Deallocate Component List Memory ----------------*/

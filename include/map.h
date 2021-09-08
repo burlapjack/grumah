@@ -15,5 +15,6 @@ void map_generate_rooms(Component *c, size_t number_of_rooms, int map_height, in
 
 char map_lookup_symbol(Component *c, int x, int y);
 
-size_t map_lookup_draw_index(Component *c, int x, int y);
+void map_replace_symbol(Component *c, int x, int y, char char_old, char char_new);
+
 #endif /* MAP_H */

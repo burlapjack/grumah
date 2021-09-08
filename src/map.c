@@ -45,9 +45,8 @@ void map_init(Component *c, int map_width, int map_height, unsigned int *next_id
 	}	
 }
 
-/*---------------------- Find symbol at map location ---------------------------------------------*/
-char map_lookup_symbol(Component *c, int x, int y){
-	char ch;
+/*---------------------- Replace symbol at map location ---------------------------------------------*/
+void map_replace_symbol(Component *c, int x, int y, char char_old, char char_new){
 	unsigned int id = 0;
 	for(size_t i = 0; i < (c->size_position); i++){
 		if( c->position[i].x == x && c->position[i].y == y){
@@ -57,13 +56,12 @@ char map_lookup_symbol(Component *c, int x, int y){
 	}
 	if(id != 0){
 		for(size_t j = 0; j < c->size_draw; j++){
-			if(c->draw[j].id == id){
-				ch = c->draw[j].symbol;
+			if(c->draw[j].id == id && c->draw[j].symbol == char_old){
+				c->draw[j].symbol = char_new;
 				break;
 			}	
 		}
-	}else ch = ' ';
-	return ch;
+	}
 }
 
 /*---------------------- Find draw component index for map location ------------------------------*/
@@ -85,9 +83,6 @@ size_t map_lookup_draw_index(Component *c, int x, int y){
 	return index;
 }
 
-
-
-
 /*---------------------- Randomly Placed Rooms ---------------------------------------------------*/
 void map_generate_rooms(Component *c, size_t number_of_rooms, int map_height, int map_width, int room_max_width, int room_max_height){
 	int room_x, room_x2, room_y, room_y2;	
@@ -104,7 +99,7 @@ void map_generate_rooms(Component *c, size_t number_of_rooms, int map_height, in
 		room_x2 = rand_int( room_max_width ) + room_x;
 		room_x2 = min_int((map_width - room_padding), room_x2);
 		room_y2 = rand_int( room_max_height ) + room_y;
-		room_y2 = min_int((map_height- room_padding), room_y2);
+		room_y2 = min_int((map_height - room_padding), room_y2);
 		collision = 0;
 		for(size_t j = 0; j < c->size_position; j++){
 			px = c->position[j].x;
@@ -121,7 +116,7 @@ void map_generate_rooms(Component *c, size_t number_of_rooms, int map_height, in
 		if(collision == 0){
 			for(size_t j = room_y; j < room_y2; j++){
 				for(size_t k = room_x; k < room_x2; k++){
-					//Something here
+					map_replace_symbol(c, j, k, '#', '.');
 				}
 			}
 		}

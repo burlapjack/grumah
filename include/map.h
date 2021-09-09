@@ -7,12 +7,15 @@
 
 #include "component.h"
 
+typedef struct{
+	int x,y,x2,y2;
+}Room;
+
 int map_xy(int x, int y, int map_width);
 
 void map_init(Component *c, int map_width, int map_height, int *next_id);
 
-
-void map_gen_rooms(Component *c, char *map_array, int map_width, int map_height, int number_of_rooms, int room_max_width, int room_max_height);
+void map_generate_rooms(Component *c, char *map_array, int map_width, int map_height, int number_of_rooms, int room_max_width, int room_max_height);
 
 char map_lookup_symbol(Component *c, int x, int y);
 

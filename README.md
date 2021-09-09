@@ -80,10 +80,10 @@ Component object pointer inside your main function.
 
 ```c
 /*----- entity id counter --------------*/
-unsigned int next_entity = 1;
+int next_entity = 1;
 
 /*----- Initialize a Component Object --*/
-unsigned int num_components = 10;
+int num_components = 10;
 Component *c = malloc(sizeof (*c));
 component_init(c, num_components);
 

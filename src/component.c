@@ -12,7 +12,7 @@
  * and some related variables:
  *
  * typedef struct{
- *		unsigned int id;
+ *		int id;
  *		int x;
  *		int y;
  * }ComponentPosition;
@@ -253,7 +253,7 @@ void component_list_double_trigger(Component *c){
 
 /*-------------- Add Component to entity list using a Component container struct -----------------*/
 
-void component_add_input(Component *c, unsigned int id) {
+void component_add_input(Component *c, int id) {
 	for(size_t i = 0; i < c->size_draw; ++i){
 		if (i == c->size_draw-1 && c->draw[i].id != 0){
 			component_list_double_draw(c);
@@ -265,7 +265,7 @@ void component_add_input(Component *c, unsigned int id) {
 	}
 }
 
-void component_add_draw(Component *c, unsigned int id, unsigned int layer, int color, char symbol) {
+void component_add_draw(Component *c, int id, int layer, int color, char symbol) {
 	for(size_t i = 0; i < c->size_draw; ++i){
 		if (i == (c->size_draw - 1) && c->draw[i].id != 0){
 			component_list_double_draw(c);
@@ -280,7 +280,7 @@ void component_add_draw(Component *c, unsigned int id, unsigned int layer, int c
 	}
 }
 
-void component_add_position(Component *c, unsigned int id, int x, int y) {
+void component_add_position(Component *c, int id, int x, int y) {
 	for(size_t i = 0; i < (c->size_position); ++i){
 		if (i == (c->size_position-1) && c->position[i].id != 0){
 			component_list_double_position(c);
@@ -294,7 +294,7 @@ void component_add_position(Component *c, unsigned int id, int x, int y) {
 	}
 }
 
-void component_add_menu_option(Component *c, unsigned int id, char name[32], unsigned int parent_id, unsigned int highlighted) {
+void component_add_menu_option(Component *c, int id, char name[32], int parent_id, int highlighted) {
 	for(size_t i = 0; i < (c->size_menu_option); ++i){
 		if (i == c->size_menu_option-1 && c->menu_option[i].id != 0){
 			component_list_double_menu_option(c);
@@ -309,7 +309,7 @@ void component_add_menu_option(Component *c, unsigned int id, char name[32], uns
 	}
 }
 
-void component_add_size(Component *c, unsigned int id, int width, int height) {
+void component_add_size(Component *c, int id, int width, int height) {
 	for(size_t i = 0; i < c->size_size; ++i){
 		if (i == c->size_size-1 && c->size[i].id != 0){
 			component_list_double_size(c);
@@ -321,7 +321,7 @@ void component_add_size(Component *c, unsigned int id, int width, int height) {
 	}
 }
 
-void component_add_stats(Component *c, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi) {
+void component_add_stats(Component *c, int id, int hp, int str, int per, int agi) {
 	for(size_t i = 0; i < c->size_stats; ++i){
 		if (i == c->size_stats-1 && c->stats[i].id != 0){
 			component_list_double_stats(c);
@@ -337,7 +337,7 @@ void component_add_stats(Component *c, unsigned int id, unsigned int hp, unsigne
 	}
 }
 
-void component_add_trigger(Component *c, unsigned int id, unsigned int game_state) {
+void component_add_trigger(Component *c, int id, int game_state) {
 	for(size_t i = 0; i < c->size_trigger; ++i){
 		if (i == c->size_trigger-1 && c->trigger[i].id != 0){
 			component_list_double_trigger(c);
@@ -353,62 +353,62 @@ void component_add_trigger(Component *c, unsigned int id, unsigned int game_stat
 /*---------------Query Component Lists -----------------------------------------------------------*/
 
 // Find the total of a certain component
-unsigned int component_count_draw(Component *c){
-	unsigned int total=0;
+int component_count_draw(Component *c){
+	int total=0;
 	for(size_t i = 0; i < (c->size_draw); i++){
 		if(c->draw[i].id != 0) total++;
 	}
 	return total;
 }
 
-unsigned int component_count_position(Component *c){
-	unsigned int total=0;
+int component_count_position(Component *c){
+	int total=0;
 	for(size_t i = 0; i < (c->size_position); i++){
 		if(c->position[i].id != 0) total++;
 	}
 	return total;
 }
 
-unsigned int component_count_menu_option(Component *c){
-	unsigned int total=0;
+int component_count_menu_option(Component *c){
+	int total=0;
 	for(size_t i = 0; i < (c->size_menu_option); i++){
 		if(c->menu_option[i].id != 0) total++;
 	}
 	return total;
 }
 
-unsigned int component_count_size(Component *c){
-	unsigned int total=0;
+int component_count_size(Component *c){
+	int total=0;
 	for(size_t i = 0; i < (c->size_size); i++){
 		if(c->size[i].id != 0) total++;
 	}
 	return total;
 }
 
-unsigned int component_count_stats(Component *c){
-	unsigned int total=0;
+int component_count_stats(Component *c){
+	int total=0;
 	for(size_t i = 0; i < (c->size_stats); i++){
 		if(c->stats[i].id != 0) total++;
 	}
 	return total;
 }
 
-unsigned int component_count_trigger(Component *c){
-	unsigned int total=0;
+int component_count_trigger(Component *c){
+	int total=0;
 	for(size_t i = 0; i < (c->size_trigger); i++){
 		if(c->trigger[i].id != 0) total++;
 	}
 	return total;
 }
 
-unsigned int component_count_all(Component *c){
-	unsigned int total = 0;
+int component_count_all(Component *c){
+	int total = 0;
 	total = component_count_draw(c) + component_count_position(c) + component_count_menu_option(c) + total + component_count_stats(c) + total + component_count_trigger(c);
 	return total;	
 }
 
-unsigned int component_count_invisible(Component *c){
-	unsigned int total = 0;
+int component_count_invisible(Component *c){
+	int total = 0;
 	for(size_t i = 0; i < (c->size_position); i++){
 		if(c->position[i].id != 0){
 			for(int j = 0; j < (c->size_draw); j++){
@@ -422,7 +422,7 @@ unsigned int component_count_invisible(Component *c){
 
 /*-------------- Set Component Draw Layer --------------------------------------------------------*/
 
-void component_set_draw_layer(Component *c, unsigned int component_id, unsigned int draw_layer){
+void component_set_draw_layer(Component *c, int component_id, int draw_layer){
 	for(size_t i = 0; i < (c->size_draw); i++){
 		if(c->draw[i].id == component_id){
 			c->draw[i].layer = draw_layer;	

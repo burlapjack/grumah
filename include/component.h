@@ -7,47 +7,47 @@
 
 /*----------- Component Types --------------------------------*/
 typedef struct {
-	unsigned int id;
+	int id;
 	int key_pressed;
 }ComponentInput;
 
 typedef struct{
-	unsigned int id;
+	int id;
 	int x;
 	int y;
 }ComponentPosition;
 
 typedef struct{
-	unsigned int id;
+	int id;
 	int width;
 	int height;
 }ComponentSize;
 
 typedef struct{
-	unsigned int id;
-	unsigned int layer;
+	int id;
+	int layer;
 	char symbol;
 	int color;
 }ComponentDraw;
 
 typedef struct{
-	unsigned int id;
-	unsigned int hp;
-	unsigned int strength;
-	unsigned int perception;
-	unsigned int agility;
+	int id;
+	int hp;
+	int strength;
+	int perception;
+	int agility;
 }ComponentStats;
 
 typedef struct{
-	unsigned int id;
-	unsigned int parent_id;
+	int id;
+	int parent_id;
 	char name[32];
-	unsigned int highlighted;
+	int highlighted;
 }ComponentMenuOption;
 
 typedef struct{
-	unsigned int id;
-	unsigned int game_state;
+	int id;
+	int game_state;
 }ComponentTrigger;
 
 /*----------- Component Container ----------------------------*/
@@ -83,13 +83,13 @@ void component_list_double_stats(Component *c);
 void component_list_double_trigger(Component *c);
 
 /*----------- Component Container Additions -------------------*/
-void component_add_input(Component *c, unsigned int id);
-void component_add_draw(Component *c, unsigned int id, unsigned int layer, int color, char symbol);
-void component_add_position(Component *c, unsigned int id, int x, int y);
-void component_add_menu_option(Component *c, unsigned int id, char name[32], unsigned int parent_id, unsigned int highlighted);
-void component_add_size(Component *c, unsigned int id, int width, int height);
-void component_add_stats(Component *c, unsigned int id, unsigned int hp, unsigned int str, unsigned int per, unsigned int agi);
-void component_add_trigger(Component *c, unsigned int id, unsigned int game_state);
+void component_add_input(Component *c, int id);
+void component_add_draw(Component *c, int id, int layer, int color, char symbol);
+void component_add_position(Component *c, int id, int x, int y);
+void component_add_menu_option(Component *c, int id, char name[32], int parent_id, int highlighted);
+void component_add_size(Component *c, int id, int width, int height);
+void component_add_stats(Component *c, int id, int hp, int str, int per, int agi);
+void component_add_trigger(Component *c, int id, int game_state);
 
 /*----------- Component deletion without deallocation ---------*/
 void component_delete_all_draw(Component *c);
@@ -106,17 +106,17 @@ void component_delete_all(Component *c);
 void component_free__all(Component *c);
 
 /*----------- Component Queries -------------------------------*/
-unsigned int component_count_draw(Component *c);
-unsigned int component_count_menu_option(Component *c);
-unsigned int component_count_position(Component *c);
-unsigned int component_count_size(Component *c);
-unsigned int component_count_stats(Component *c);
-unsigned int component_count_trigger(Component *c);
-unsigned int component_count_all(Component *c);
+int component_count_draw(Component *c);
+int component_count_menu_option(Component *c);
+int component_count_position(Component *c);
+int component_count_size(Component *c);
+int component_count_stats(Component *c);
+int component_count_trigger(Component *c);
+int component_count_all(Component *c);
 
-unsigned int component_count_invisible(Component *c);
+int component_count_invisible(Component *c);
 
 /*----------- Component Set Values ----------------------------*/
-void component_set_draw_layer(Component *c, unsigned int component_id, unsigned int draw_layer);
+void component_set_draw_layer(Component *c, int component_id, int draw_layer);
 
 #endif /*COMPONENT_H*/

@@ -17,7 +17,7 @@ const char GRAPHICS_TITLE[12][61] = {
 };
 
 
-void graphics_draw_titlescreen(WINDOW *w,unsigned int x, unsigned int y){
+void graphics_draw_titlescreen(WINDOW *w,int x, int y){
 
 	/* Title Screen Graphic */
 		wattron(w,A_ALTCHARSET); 

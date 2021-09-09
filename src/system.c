@@ -31,19 +31,19 @@ void system_input(WINDOW *win){
 
 }
 
-void system_menu(WINDOW *w, Component *c, unsigned int *menu_visible, int input){
+void system_menu(WINDOW *w, Component *c, int *menu_visible, int input){
 
 	if(input == KEY_UP || input == KEY_DOWN){
-		unsigned int highlighted;
+		int highlighted;
 
-		for (unsigned int i = 0; i < (c->size_menu_option); i++){
+		for (int i = 0; i < (c->size_menu_option); i++){
 			if(c->menu_option[i].parent_id == *menu_visible && c->menu_option[i].id != 0 && c->menu_option[i].highlighted == 1){
 					highlighted= i;
 					break;
 			}
 		}
-		unsigned int new_highlighted = highlighted;
-		for (unsigned int i = 0; i < c->size_menu_option; i++){
+		int new_highlighted = highlighted;
+		for (int i = 0; i < c->size_menu_option; i++){
 			if(c->menu_option[i].parent_id == *menu_visible && c->menu_option[i].id != 0){
 				if(input == KEY_UP && i < highlighted){
 					new_highlighted = i;
@@ -61,7 +61,7 @@ void system_menu(WINDOW *w, Component *c, unsigned int *menu_visible, int input)
 		mvwprintw(w,12, 2,"menu option: %u", new_highlighted);
 	}
 
-	unsigned int target_id;
+	int target_id;
 	/* search menu entities for matching menu_visible */
 	for(int k = 0; k < c->size_menu_option; k++){
 		if( c->menu_option[k].parent_id == *menu_visible){
@@ -79,7 +79,7 @@ void system_menu(WINDOW *w, Component *c, unsigned int *menu_visible, int input)
 	}
 }	
 
-void system_draw_layer(WINDOW *w,Component *c, unsigned int draw_layer, int x_offset, int y_offset){
+void system_draw_layer(WINDOW *w,Component *c, int draw_layer, int x_offset, int y_offset){
 	for(size_t i = 0; i < (c->size_draw); i++){
 		if (c->draw[i].layer == draw_layer){
 			for(size_t j = 0; j < c->size_position; j++){

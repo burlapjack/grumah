@@ -37,13 +37,11 @@ static int min_int(int a, int b){
 
 /*---------------------- Init a map that is all walls --------------------------------------------*/
 
-void map_init(Component *c, int map_width, int map_height, int *next_id){
+void map_init(char *map_array, int map_width, int map_height){
 
 	for ( int i = 0; i < map_height; i++){
 		for ( int j = 0; j < map_width; j++){
-			component_add_position(c, *next_id, j, i);
-			component_add_draw(c, *next_id, 0, 1, '#'); 
-			*next_id += 1;
+			map_array[ i * map_width + j] = '#';
 		}
 	}	
 }
@@ -88,9 +86,9 @@ size_t map_lookup_draw_index(Component *c, int x, int y){
 
 /*---------------------- Randomly Placed Rooms ---------------------------------------------------*/
 
-void map_generate_rooms(Component *c, char *map_array, int map_width, int map_height, int number_of_rooms, int room_max_width, int room_max_height){
+void map_generate_rooms(char *map_array, int map_width, int map_height, int number_of_rooms, int room_min_width, int room_min_height, int room_max_width, int room_max_height){
 	int room_x,room_y, room_x2, room_y2;
-	int rooms_added;
+	int rooms_added = 0;
 	int padding = 2;
 	int collision_detected = 0;
 	Room rooms[number_of_rooms];	
@@ -101,16 +99,16 @@ void map_generate_rooms(Component *c, char *map_array, int map_width, int map_he
 		room_x = max_int(2, room_x);
 		room_y = rand_int(map_height - room_max_height - padding);
 		room_y = max_int(2, room_y);
-		room_x2 = rand_int(room_max_width) + room_x;
+		room_x2 = rand_int(room_max_width) + room_x + room_min_width;
 		room_x2 = min_int(map_width - 2, room_x2);
-		room_y2 = rand_int(room_max_height) + room_y;
+		room_y2 = rand_int(room_max_height) + room_y + room_min_height;
 		room_y2 = min_int(map_height - 2, room_y2);
 
 		for(int i = 0; i < rooms_added; ++i){
-			if(room_x < rooms[i].x2 &&
-			room_x2 > rooms[i].x &&
-			room_y < rooms[i].y2 &&
-			room_y2 > rooms[i].y){
+			if(room_x <= rooms[i].x2 &&
+			room_x2 >= rooms[i].x &&
+			room_y <= rooms[i].y2 &&
+			room_y2 >= rooms[i].y){
 				/*--------- Collision detected ---------------*/
 				collision_detected = 1;
 				break;	
@@ -123,6 +121,7 @@ void map_generate_rooms(Component *c, char *map_array, int map_width, int map_he
 			rooms[rooms_added].y2 = room_y2;
 			++rooms_added;
 		}
+		collision_detected = 0;
 	}
 
 	for(int i = 0; i < number_of_rooms; ++i){

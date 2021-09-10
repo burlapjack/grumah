@@ -59,16 +59,16 @@ typedef struct {
 	ComponentSize *size;
 	ComponentStats *stats;
 	ComponentTrigger *trigger;
-	size_t size_draw;
-	size_t size_input;
-	size_t size_menu_option;
-	size_t size_position;
-	size_t size_size;
-	size_t size_stats;
-	size_t size_trigger;
+	int size_draw;
+	int size_input;
+	int size_menu_option;
+	int size_position;
+	int size_size;
+	int size_stats;
+	int intrigger;
 }Component;
 
-void component_init(Component *c, size_t size_lists);
+void component_init(Component *c, int size_lists);
 
 /*----------- Deallocate Component List Memory ----------------*/
 void component_free_all(Component *c);

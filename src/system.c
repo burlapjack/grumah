@@ -78,7 +78,17 @@ void system_menu(WINDOW *w, Component *c, int *menu_visible, int input){
 		}	
 	}
 }	
+/*------------------------------ Draw the map walls and rooms ------------------------------------*/
+void system_draw_map(WINDOW *w, char *map_array, int map_width, int map_height, int x_offset, int y_offset){
+	/*-- Will need to be edited later to accomodate colors --*/
+	for(int i = 0; i < map_height; i++){
+		for(int j = 0; j < map_width; j++){
+			mvwprintw( w, i + y_offset, j + x_offset, "%c", map_array[i * map_width + j] );
+		}
+	}
+}
 
+/*------------------------------ Draw components by layer ----------------------------------------*/
 void system_draw_layer(WINDOW *w,Component *c, int draw_layer, int x_offset, int y_offset){
 	for(size_t i = 0; i < (c->size_draw); i++){
 		if (c->draw[i].layer == draw_layer){

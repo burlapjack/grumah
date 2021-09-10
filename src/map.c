@@ -9,10 +9,6 @@
 #include "../include/component.h"
 
 /*--------------------- Pseudo-random number generator ----------------------------------------------------------------------*/
-
-
-
-
 static int rand_int(int n){
 	if((n - 1) == RAND_MAX){
 		return rand();
@@ -26,11 +22,11 @@ static int rand_int(int n){
 		return r % n;
 	}
 }
-
+/*------ Find the largest of two integers ------------------------------------------------------------------------------------*/
 static int max_int(int a, int b){
 	if (a > b) return a; else return b;
 }
-
+/*------ Find the smallest of two integers -----------------------------------------------------------------------------------*/
 static int min_int(int a, int b){
 	if (a < b) return a; else return b;
 }
@@ -91,9 +87,9 @@ void map_generate_rooms(char *map_array, int map_width, int map_height, int numb
 	int padding = 2;
 	int collision_detected = 0;
 	Room rooms[number_of_rooms];	
-
+	/* Room Creation */
 	while(rooms_added < number_of_rooms){
-		/*--------- Propose random room coordinates -----------*/
+		/* Propose random room coordinates */
 		room_x = rand_int(map_width - room_max_width - padding);
 		room_x = max_int(2, room_x);
 		room_y = rand_int(map_height - room_max_height - padding);
@@ -103,18 +99,18 @@ void map_generate_rooms(char *map_array, int map_width, int map_height, int numb
 		room_y2 = rand_int(room_max_height) + room_y + room_min_height;
 		room_y2 = min_int(map_height - 2, room_y2);
 
-		/*---- Check for collisions with existing rooms ------*/
+		/* Check for collisions with existing rooms */
 		for(int i = 0; i < rooms_added; ++i){
 			if(room_x <= rooms[i].x2 &&
 			room_x2 >= rooms[i].x &&
 			room_y <= rooms[i].y2 &&
 			room_y2 >= rooms[i].y){
-			/*-------- Collision detected --------------------*/
+			/* Collision detected */
 				collision_detected = 1;
 				break;	
 			}		
 		}
-		/*---- Add new room to array -------------------------*/
+		/* Add new room to array */
 		if(collision_detected == 0){
 			rooms[rooms_added].x = room_x;
 			rooms[rooms_added].y = room_y;
@@ -124,7 +120,7 @@ void map_generate_rooms(char *map_array, int map_width, int map_height, int numb
 		}
 		collision_detected = 0;
 	}
-	/*-------- "Carve" rooms into the map array --------------*/
+	/* "Carve" rooms into the map array */ 
 	for(int i = 0; i < number_of_rooms; ++i){
 		for(int j = rooms[i].y; j < rooms[i].y2; ++j){
 			for(int k = rooms[i].x; k < rooms[i].x2; ++k){
@@ -133,15 +129,22 @@ void map_generate_rooms(char *map_array, int map_width, int map_height, int numb
 		}
 	}
 
-	/*-------- Create hallways in between rooms --------------*/
+	/* Create hallways in between rooms */ 
 	Hall halls[number_of_rooms - 1];
 	for(int i = 0; i < (number_of_rooms - 1); ++i){
-		/*---- Hall coords start at middle of rooms. Dividing 2 
-		 * int coords gives us uneven but usable results. ----*/
+		/* Hall coords start at middle of rooms. Dividing 2 
+		 * int coords gives us uneven but usable results. */
 		halls[i].x = (rooms[i].x + rooms[i].x2)/2;		
 		halls[i].y = (rooms[i].y + rooms[i].y2)/2;
 		halls[i].x2 = (rooms[i + 1].x + rooms[i + 1].x2)/2;		
 		halls[i].y2 = (rooms[i + 1].y + rooms[i + 1].y2)/2;
 	}	
+	
+	/* "Carve" hallways in the map array */
+	for(int i = 0; i < (number_of_rooms - 1); ++i){
+		for(int j = halls[i].x; j < halls[i].x2; ++j){
+			map_array[ j * map_width + j ] = '.';
+		}
+	}
 }
 

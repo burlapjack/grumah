@@ -11,6 +11,10 @@ typedef struct{
 	int x,y,x2,y2;
 }Room;
 
+typedef struct{
+	int x,y,x2,y2;
+}Hall;
+
 int map_xy(int x, int y, int map_width);
 
 void map_init(char *map_array, int map_width, int map_height);

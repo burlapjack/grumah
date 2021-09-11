@@ -129,8 +129,10 @@ void map_generate_rooms(char *map_array, int map_width, int map_height, int numb
 		}
 	}
 
+	int xa,xb,ya,yb;
+	Hall halls[number_of_rooms];
+
 	/* Create hallways in between rooms */ 
-	Hall halls[number_of_rooms - 1];
 	for(int i = 0; i < (number_of_rooms - 1); ++i){
 		/* Hall coords start at middle of rooms. Dividing 2 
 		 * int coords gives us uneven but usable results. */
@@ -139,11 +141,20 @@ void map_generate_rooms(char *map_array, int map_width, int map_height, int numb
 		halls[i].x2 = (rooms[i + 1].x + rooms[i + 1].x2)/2;		
 		halls[i].y2 = (rooms[i + 1].y + rooms[i + 1].y2)/2;
 	}	
-	
 	/* "Carve" hallways in the map array */
 	for(int i = 0; i < (number_of_rooms - 1); ++i){
-		for(int j = halls[i].x; j < halls[i].x2; ++j){
-			map_array[ j * map_width + j ] = '.';
+
+		xa = min_int(halls[i].x,halls[i].x2);
+		xb = max_int(halls[i].x,halls[i].x2);
+		ya = min_int(halls[i].y,halls[i].y2);
+		yb = max_int(halls[i].y,halls[i].y2);
+		/* horizontal hallways */
+		for(int j = xa; j < xb; ++j){
+			map_array[ halls[i].y * map_width + j ] = '`';
+		}
+		/*  verticle hallways */
+		for(int j = ya; j < yb; ++j){
+			map_array[ j * map_width + halls[i].x2 ] = ',';
 		}
 	}
 }

@@ -1,3 +1,11 @@
+/* graphics.c
+ * by burlapjack 2021
+ *
+ * A collection of graphics-related test objects.  
+ * Everything written here are subject to change and are not
+ * intended to be included in the final release of Grumah.
+ */
+
 #include <ncurses.h>
 
 

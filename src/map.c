@@ -4,7 +4,6 @@
 
 #include <stdlib.h>
 #include <assert.h>
-#include <ncurses.h>
 #include "../include/map.h"
 #include "../include/component.h"
 
@@ -22,17 +21,18 @@ static int rand_int(int n){
 		return r % n;
 	}
 }
+
 /*------ Find the largest of two integers ------------------------------------------------------------------------------------*/
 static int max_int(int a, int b){
 	if (a > b) return a; else return b;
 }
+
 /*------ Find the smallest of two integers -----------------------------------------------------------------------------------*/
 static int min_int(int a, int b){
 	if (a < b) return a; else return b;
 }
 
-/*---------------------- Init a map that is all walls --------------------------------------------*/
-
+/*---------------------- Init a map that is all walls ------------------------------------------------------------------------*/
 void map_init(char *map_array, int map_width, int map_height){
 
 	for ( int i = 0; i < map_height; i++){
@@ -70,7 +70,6 @@ size_t map_lookup_draw_index(Component *c, int x, int y){
 			id = c->position[i].id;
 		}	
 	}
-
 	for(size_t j = 0; j < c->size_draw; j++){
 		if( c->draw[j].id == id ){
 			index = j;
@@ -80,8 +79,9 @@ size_t map_lookup_draw_index(Component *c, int x, int y){
 	return index;
 }
 
-/*---------------------- Randomly Placed Rooms ---------------------------------------------------*/
-void map_generate_rooms(char *map_array, int map_width, int map_height, int number_of_rooms, int room_min_width, int room_min_height, int room_max_width, int room_max_height){
+/*---------------------- Map Generation: Simple Room Placement -----------------------------------*/
+/* Rooms are added one at a time wherever they will fit, then hallways are created between them.  */
+void map_generate_srp(char *map_array, int map_width, int map_height, int number_of_rooms, int room_min_width, int room_min_height, int room_max_width, int room_max_height){
 	int room_x,room_y, room_x2, room_y2;
 	int rooms_added = 0;
 	int padding = 2;
@@ -98,7 +98,6 @@ void map_generate_rooms(char *map_array, int map_width, int map_height, int numb
 		room_x2 = min_int(map_width - 2, room_x2);
 		room_y2 = rand_int(room_max_height) + room_y + room_min_height;
 		room_y2 = min_int(map_height - 2, room_y2);
-
 		/* Check for collisions with existing rooms */
 		for(int i = 0; i < rooms_added; ++i){
 			if(room_x <= rooms[i].x2 &&
@@ -130,24 +129,25 @@ void map_generate_rooms(char *map_array, int map_width, int map_height, int numb
 	}
 
 	int xa,xb,ya,yb;
-	Hall halls[number_of_rooms];
+	Hall halls[number_of_rooms - 1];
 
 	/* Create hallways in between rooms */ 
+	/* Hall coords start at random points within a
+	 * room and end randomly within the next room. */
 	for(int i = 0; i < (number_of_rooms - 1); ++i){
-		/* Hall coords start at middle of rooms. Dividing 2 
-		 * int coords gives us uneven but usable results. */
-		halls[i].x = rooms[i].x + rand_int(rooms[i].x2 - rooms[i].x);  //(rooms[i].x + rooms[i].x2)/2;		
-		halls[i].y = rooms[i].y + rand_int(rooms[i].y2 - rooms[i].y);  //rooms[i].y + rooms[i].y2)/2;
-		halls[i].x2 = rooms[i + 1].x + rand_int(rooms[i + 1].x2 - rooms[i + 1].x); //rooms[i + 1].x + rooms[i + 1].x2)/2;		
-		halls[i].y2 = rooms[i + 1].y + rand_int(rooms[i + 1].y2 - rooms[i + 1].y); //(rooms[i + 1].y + rooms[i + 1].y2)/2;
+		halls[i].x = rooms[i].x + rand_int(rooms[i].x2 - rooms[i].x);  
+		halls[i].y = rooms[i].y + rand_int(rooms[i].y2 - rooms[i].y);  
+		halls[i].x2 = rooms[i + 1].x + rand_int(rooms[i + 1].x2 - rooms[i + 1].x); 
+		halls[i].y2 = rooms[i + 1].y + rand_int(rooms[i + 1].y2 - rooms[i + 1].y); 
 	}	
 	/* "Carve" hallways in the map array */
 	for(int i = 0; i < (number_of_rooms - 1); ++i){
-
+		/* define hallway endpoints */
 		xa = min_int(halls[i].x,halls[i].x2);
 		xb = max_int(halls[i].x,halls[i].x2);
 		ya = min_int(halls[i].y,halls[i].y2);
 		yb = max_int(halls[i].y,halls[i].y2);
+
 		/* horizontal portions of hallways */
 		for(int j = xa; j <= xb; ++j){
 			map_array[ (halls[i].y * map_width) + j ] = '.';
@@ -158,4 +158,3 @@ void map_generate_rooms(char *map_array, int map_width, int map_height, int numb
 		}
 	}
 }
-

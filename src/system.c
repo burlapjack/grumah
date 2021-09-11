@@ -2,6 +2,8 @@
  *
  * System functions run continuously, 
  * taking in entity components.
+ * These systems require the use of 
+ * the Ncurses library.  
  */
 
 #include <stdlib.h>

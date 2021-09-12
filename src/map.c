@@ -32,6 +32,20 @@ static int min_int(int a, int b){
 	if (a < b) return a; else return b;
 }
 
+/*------ "Carve" a horizontal hallway int the map array ----------------------------------------------------------------------*/
+static void carve_hallway_horizontally(char *map_array, Hall *halls_array, int hall_index, int map_width, int xstart, int xend){
+	for(int j = xstart; j <= xend; ++j){
+		map_array[ (halls_array[hall_index].y * map_width) + j ] = '.';
+	}
+}
+
+/*------ "Carve" a verticle hallway int the map array ------------------------------------------------------------------------*/
+static void carve_hallway_vertically(char *map_array, Hall *halls_array, int hall_index, int map_width, int ystart, int yend){
+	for(int j = ystart; j <= yend; ++j){
+		map_array[ (j * map_width) + halls_array[hall_index].x2 ] = '.';
+	}
+}
+
 /*---------------------- Init a map that is all walls ------------------------------------------------------------------------*/
 void map_init(char *map_array, int map_width, int map_height){
 
@@ -86,6 +100,8 @@ void map_generate_srp(char *map_array, int map_width, int map_height, int number
 	int rooms_added = 0;
 	int padding = 2;
 	int collision_detected = 0;
+	int fails = 0;         /* number of times in a row a new random room has collided with other room positions */
+	int fail_limit = 100;  /* prevents an endless loop */
 	Room rooms[number_of_rooms];	
 	/* Room Creation */
 	while(rooms_added < number_of_rooms){
@@ -106,6 +122,7 @@ void map_generate_srp(char *map_array, int map_width, int map_height, int number
 			room_y2 >= rooms[i].y){
 			/* Collision detected */
 				collision_detected = 1;
+				++fails;
 				break;	
 			}		
 		}
@@ -116,11 +133,13 @@ void map_generate_srp(char *map_array, int map_width, int map_height, int number
 			rooms[rooms_added].x2 = room_x2;
 			rooms[rooms_added].y2 = room_y2;
 			++rooms_added;
+			fails = 0;
 		}
 		collision_detected = 0;
+		if(fails == fail_limit) break;
 	}
 	/* "Carve" rooms into the map array */ 
-	for(int i = 0; i < number_of_rooms; ++i){
+	for(int i = 0; i < rooms_added; ++i){
 		for(int j = rooms[i].y; j < rooms[i].y2; ++j){
 			for(int k = rooms[i].x; k < rooms[i].x2; ++k){
 				map_array[ j * map_width + k ] = '.';	
@@ -129,32 +148,44 @@ void map_generate_srp(char *map_array, int map_width, int map_height, int number
 	}
 
 	int xa,xb,ya,yb;
-	Hall halls[number_of_rooms - 1];
+	int random_direction;
+	Hall halls[rooms_added - 1];
 
 	/* Create hallways in between rooms */ 
 	/* Hall coords start at random points within a
 	 * room and end randomly within the next room. */
-	for(int i = 0; i < (number_of_rooms - 1); ++i){
+	for(int i = 0; i < (rooms_added - 1); ++i){
 		halls[i].x = rooms[i].x + rand_int(rooms[i].x2 - rooms[i].x);  
 		halls[i].y = rooms[i].y + rand_int(rooms[i].y2 - rooms[i].y);  
 		halls[i].x2 = rooms[i + 1].x + rand_int(rooms[i + 1].x2 - rooms[i + 1].x); 
 		halls[i].y2 = rooms[i + 1].y + rand_int(rooms[i + 1].y2 - rooms[i + 1].y); 
 	}	
 	/* "Carve" hallways in the map array */
-	for(int i = 0; i < (number_of_rooms - 1); ++i){
+	for(int i = 0; i < (rooms_added - 1); ++i){
 		/* define hallway endpoints */
 		xa = min_int(halls[i].x,halls[i].x2);
 		xb = max_int(halls[i].x,halls[i].x2);
 		ya = min_int(halls[i].y,halls[i].y2);
 		yb = max_int(halls[i].y,halls[i].y2);
 
+		random_direction = rand_int(10);	
+		if(random_direction >= 6){
+			carve_hallway_horizontally(map_array, halls, i, map_width, xa, xb);
+			carve_hallway_vertically(map_array, halls, i, map_width, ya, yb);
+		}
+		else{
+			carve_hallway_vertically(map_array, halls, i, map_width, ya, yb);
+			carve_hallway_horizontally(map_array, halls, i, map_width, xa, xb);
+		}
+
 		/* horizontal portions of hallways */
-		for(int j = xa; j <= xb; ++j){
-			map_array[ (halls[i].y * map_width) + j ] = '.';
-		}
+		//for(int j = xa; j <= xb; ++j){
+		//	map_array[ (halls[i].y * map_width) + j ] = '.';
+		//}
 		/* verticle portions of hallways */
-		for(int j = ya; j <= yb; ++j){
-			map_array[ (j * map_width) + halls[i].x2 ] = '.';
-		}
+		//for(int j = ya; j <= yb; ++j){
+		//	map_array[ (j * map_width) + halls[i].x2 ] = '.';
+		//}
 	}
 }
+

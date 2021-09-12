@@ -33,14 +33,14 @@ static int min_int(int a, int b){
 }
 
 /*------ "Carve" a horizontal hallway int the map array ----------------------------------------------------------------------*/
-static void carve_hallway_horizontally(char *map_array, Hall *halls_array, int hall_index, int map_width, int xstart, int xend){
+static void carve_hall_horizontally(char *map_array, Hall *halls_array, int hall_index, int map_width, int xstart, int xend){
 	for(int j = xstart; j <= xend; ++j){
 		map_array[ (halls_array[hall_index].y * map_width) + j ] = '.';
 	}
 }
 
 /*------ "Carve" a verticle hallway int the map array ------------------------------------------------------------------------*/
-static void carve_hallway_vertically(char *map_array, Hall *halls_array, int hall_index, int map_width, int ystart, int yend){
+static void carve_hall_vertically(char *map_array, Hall *halls_array, int hall_index, int map_width, int ystart, int yend){
 	for(int j = ystart; j <= yend; ++j){
 		map_array[ (j * map_width) + halls_array[hall_index].x2 ] = '.';
 	}
@@ -56,7 +56,7 @@ void map_init(char *map_array, int map_width, int map_height){
 	}	
 }
 
-/*---------------------- Replace symbol at map location ---------------------------------------------*/
+/*---------------------- Replace symbol at map location ----------------------------------------------------------------------*/
 void map_replace_symbol(Component *c, int x, int y, char char_old, char char_new){
 	int id = 0;
 	for(size_t i = 0; i < (c->size_position); i++){
@@ -75,7 +75,7 @@ void map_replace_symbol(Component *c, int x, int y, char char_old, char char_new
 	}
 }
 
-/*---------------------- Find draw component index for map location ------------------------------*/
+/*---------------------- Find draw component index for map location ----------------------------------------------------------*/
 size_t map_lookup_draw_index(Component *c, int x, int y){
 	size_t index;
 	int id = 0;
@@ -93,7 +93,7 @@ size_t map_lookup_draw_index(Component *c, int x, int y){
 	return index;
 }
 
-/*---------------------- Map Generation: Simple Room Placement -----------------------------------*/
+/*---------------------- Map Generation: Simple Room Placement ---------------------------------------------------------------*/
 /* Rooms are added one at a time wherever they will fit, then hallways are created between them.  */
 void map_generate_srp(char *map_array, int map_width, int map_height, int number_of_rooms, int room_min_width, int room_min_height, int room_max_width, int room_max_height){
 	int room_x,room_y, room_x2, room_y2;
@@ -103,6 +103,7 @@ void map_generate_srp(char *map_array, int map_width, int map_height, int number
 	int fails = 0;         /* number of times in a row a new random room has collided with other room positions */
 	int fail_limit = 100;  /* prevents an endless loop */
 	Room rooms[number_of_rooms];	
+
 	/* Room Creation */
 	while(rooms_added < number_of_rooms){
 		/* Propose random room coordinates */
@@ -146,7 +147,6 @@ void map_generate_srp(char *map_array, int map_width, int map_height, int number
 			}
 		}
 	}
-
 	int xa,xb,ya,yb;
 	int random_direction;
 	Hall halls[rooms_added - 1];
@@ -170,22 +170,12 @@ void map_generate_srp(char *map_array, int map_width, int map_height, int number
 
 		random_direction = rand_int(10);	
 		if(random_direction >= 6){
-			carve_hallway_horizontally(map_array, halls, i, map_width, xa, xb);
-			carve_hallway_vertically(map_array, halls, i, map_width, ya, yb);
+			carve_hall_horizontally(map_array, halls, i, map_width, xa, xb);
+			carve_hall_vertically(map_array, halls, i, map_width, ya, yb);
 		}
 		else{
-			carve_hallway_vertically(map_array, halls, i, map_width, ya, yb);
-			carve_hallway_horizontally(map_array, halls, i, map_width, xa, xb);
+			carve_hall_vertically(map_array, halls, i, map_width, ya, yb);
+			carve_hall_horizontally(map_array, halls, i, map_width, xa, xb);
 		}
-
-		/* horizontal portions of hallways */
-		//for(int j = xa; j <= xb; ++j){
-		//	map_array[ (halls[i].y * map_width) + j ] = '.';
-		//}
-		/* verticle portions of hallways */
-		//for(int j = ya; j <= yb; ++j){
-		//	map_array[ (j * map_width) + halls[i].x2 ] = '.';
-		//}
 	}
 }
-

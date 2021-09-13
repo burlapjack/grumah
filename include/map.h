@@ -17,10 +17,12 @@ typedef struct{
 	int room_min_width;
 	int room_min_height;	
 
+	char door_horizontal_closed;
+	char door_horizontal_open;
+	char door_vertical_closed;
+	char door_vertical_open;
 	char entrance;
 	char exit;	
-	char door_horizontal;
-	char door_vertical;
 	char floor;	
 	char wall;
 

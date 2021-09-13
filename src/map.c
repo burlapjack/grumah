@@ -69,8 +69,10 @@ void map_init(MapData *m, int map_width, int map_height){
 
 	m->entrance = '.';
 	m->exit = '<';	
-	m->door_horizontal = '-';
-	m->door_vertical = '|';
+	m->door_horizontal_closed = '-';
+	m->door_horizontal_open = '/';
+	m->door_vertical_closed = '|';
+	m->door_vertical_open= '-';
 	m->floor = '.';	
 	m->wall = '#';
 
@@ -81,6 +83,7 @@ void map_init(MapData *m, int map_width, int map_height){
 	m->color_floor = 1;
 	m->color_wall = 1;	
 }
+
 
 
 /*---------------------- Map Generation: Simple Room Placement ---------------------------------------------------------------*/

@@ -99,17 +99,17 @@ void component_add_menu_option(Component *c, int id, char name[32], int parent_i
 void component_add_size(Component *c, int id, int width, int height);
 void component_add_trigger(Component *c, int id, int game_state);
 
-/*----------- Component deletion without deallocation ---------*/
-void component_delete_all_attributes(Component *c);
-void component_delete_all_draw(Component *c);
-void component_delete_all_hitpoints(Component *c);
-void component_delete_all_input(Component *c);
-void component_delete_all_menu_option(Component *c);
-void component_delete_all_menu_position(Component *c);
-void component_delete_all_size(Component *c);
-void component_delete_all_trigger(Component *c);
+/*----------- Clear components without deallocation ---------*/
+void component_clear_all_attributes(Component *c);
+void component_clear_all_draw(Component *c);
+void component_clear_all_hitpoints(Component *c);
+void component_clear_all_input(Component *c);
+void component_clear_all_menu_option(Component *c);
+void component_clear_all_menu_position(Component *c);
+void component_clear_all_size(Component *c);
+void component_clear_all_trigger(Component *c);
 
-void component_delete_all(Component *c);
+void component_clear_all(Component *c);
 
 /*----------- Component container free memory -----------------*/
 void component_free__all(Component *c);

@@ -8,7 +8,6 @@
 
 #include <ncurses.h>
 
-
 const char GRAPHICS_TITLE[12][61] = {
 	{'.','.','.','.','M','M','M','M','.','.','M','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','M','M','.','.','.','.','.','.'},
 	{'.','.','M','M','M','.','.','M','M','M','M','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','M','M','M','.','.','.','.','.','.'},
@@ -25,7 +24,7 @@ const char GRAPHICS_TITLE[12][61] = {
 };
 
 
-void graphics_draw_titlescreen(WINDOW *w,int x, int y){
+void graphics_draw_grumah(WINDOW *w,int x, int y){
 
 	/* Title Screen Graphic */
 		wattron(w,A_ALTCHARSET); 
@@ -50,3 +49,4 @@ void graphics_draw_titlescreen(WINDOW *w,int x, int y){
 		mvwprintw(w, y+20, x+7, "Use arrow keys to navigate and spacebar to select"); 
 
 }
+

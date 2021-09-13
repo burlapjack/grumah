@@ -8,6 +8,7 @@
 
 #include <stdlib.h>
 #include <ncurses.h>
+#include "../include/map.h"
 #include "../include/component.h"
 
 
@@ -81,11 +82,11 @@ void system_menu(WINDOW *w, Component *c, int *menu_visible, int input){
 	}
 }	
 /*------------------------------ Draw the map walls and rooms ------------------------------------*/
-void system_draw_map(WINDOW *w, char *map_array, int map_width, int map_height, int x_offset, int y_offset){
+void system_draw_map(WINDOW *w, MapData *m, int x_offset, int y_offset){
 	/*-- Will need to be edited later to accomodate colors --*/
-	for(int i = 0; i < map_height; i++){
-		for(int j = 0; j < map_width; j++){
-			mvwprintw( w, i + y_offset, j + x_offset, "%c", map_array[i * map_width + j] );
+	for(int i = 0; i < m->map_height; i++){
+		for(int j = 0; j < m->map_width; j++){
+			mvwprintw( w, i + y_offset, j + x_offset, "%c", m->map[i * m->map_width + j] );
 		}
 	}
 }

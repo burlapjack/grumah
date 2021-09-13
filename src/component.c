@@ -48,18 +48,18 @@ void component_init(Component *c, int size_lists){
 	c->size_trigger = size_lists;
 
 	for( int i = 0; i < size_lists; i++){
+		c->attributes[i].id = 0;
 		c->draw[i].id = 0;
 		c->menu_option[i].id = 0;
 		c->position[i].id = 0;
 		c->size[i].id = 0;
-		c->attributes[i].id = 0;
 		c->trigger[i].id = 0;
 	}
 }
 
-/*-------------- Delete Component list data (without deallocation) ----------------------------------*/
+/*-------------- Clear Component list data (without deallocation) ----------------------------------*/
 
-void component_delete_all_attributes(Component *c){
+void component_clear_all_attributes(Component *c){
 	for(int i = 0; i < (c->size_attributes); i++){
 		c->attributes[i].id = 0;
 		c->attributes[i].strength = 0;
@@ -68,7 +68,7 @@ void component_delete_all_attributes(Component *c){
 	}
 }
 
-void component_delete_all_draw(Component *c){
+void component_clear_all_draw(Component *c){
 	for(int i = 0; i < (c->size_draw); i++){
 		c->draw[i].id = 0;
 		c->draw[i].symbol = ' ';
@@ -76,21 +76,21 @@ void component_delete_all_draw(Component *c){
 	}	
 }
 
-void component_delete_all_hit_points(Component *c){
+void component_clear_all_hit_points(Component *c){
 	for(int i = 0; i < (c->size_hit_points); i++){
 		c->hit_points[i].id = 0;
 		c->hit_points[i].value = 0; 
 	}
 }
 
-void component_delete_all_input(Component *c){
+void component_clear_all_input(Component *c){
 	for(int i = 0; i < (c->size_input); i++){
 		c->input[i].id = 0;
 		c->input[i].key_pressed = 0; //This might need to change
 	}
 }
 
-void component_delete_all_menu_option(Component *c){
+void component_clear_all_menu_option(Component *c){
 	for(int i = 0; i < (c->size_menu_option); i++){
 		c->menu_option[i].id = 0;
 		c->menu_option[i].parent_id = 0;
@@ -99,7 +99,7 @@ void component_delete_all_menu_option(Component *c){
 	}	
 }
 
-void component_delete_all_position(Component *c){
+void component_clear_all_position(Component *c){
 	for(int i = 0; i < (c->size_position); i++){
 		c->position[i].id = 0;
 		c->position[i].x =  0;
@@ -107,7 +107,7 @@ void component_delete_all_position(Component *c){
 	}
 }
 
-void component_delete_all_size(Component *c){
+void component_clear_all_size(Component *c){
 	for(int i = 0; i < (c->size_size); i++){
 		c->size[i].id = 0;
 		c->size[i].width = 0;	
@@ -115,7 +115,7 @@ void component_delete_all_size(Component *c){
 	}
 }
 
-void component_delete_all_trigger(Component *c){
+void component_clear_all_trigger(Component *c){
 	for(int i = 0; i < (c->size_trigger); i++){
 		c->trigger[i].id = 0;
 		c->trigger[i].game_state = 0;
@@ -123,14 +123,14 @@ void component_delete_all_trigger(Component *c){
 	}
 }
 
-void component_delete_all(Component *c){
-	component_delete_all_attributes(c);	
-	component_delete_all_hit_points(c);
-	component_delete_all_draw(c);	
-	component_delete_all_menu_option(c);
-	component_delete_all_position(c);	
-	component_delete_all_size(c);	
-	component_delete_all_trigger(c);	
+void component_clear_all(Component *c){
+	component_clear_all_attributes(c);	
+	component_clear_all_hit_points(c);
+	component_clear_all_draw(c);	
+	component_clear_all_menu_option(c);
+	component_clear_all_position(c);	
+	component_clear_all_size(c);	
+	component_clear_all_trigger(c);	
 }
 
 /*-------------- Free all Component Lists -----------------------------------------------------------*/

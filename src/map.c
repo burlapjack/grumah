@@ -56,7 +56,7 @@ void map_fill(MapData *m){
 	}	
 }
 
-/*---------------------- Initialize map settings -----------------------------------------------------------------------------*/
+/*---------------------- Initialize map data ---------------------------------------------------------------------------------*/
 void map_init(MapData *m, int map_width, int map_height){
 	m->map = malloc( sizeof (*(m->map)) * map_width * map_height);
 	m->map_width = map_width;
@@ -84,7 +84,13 @@ void map_init(MapData *m, int map_width, int map_height){
 	m->color_wall = 1;	
 }
 
-
+/*---------------------- Deallocate map data ---------------------------------------------------------------------------------*/
+void map_free(MapData *m){
+	free(m->map);
+	m->map = NULL;
+	free(m);
+	m = NULL;
+}
 
 /*---------------------- Map Generation: Simple Room Placement ---------------------------------------------------------------*/
 /* Rooms are added one at a time wherever they will fit, then hallways are created between them.  */

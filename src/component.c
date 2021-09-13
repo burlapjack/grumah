@@ -3,10 +3,10 @@
 //by burlapjack 2021
 
 #include <stdlib.h>
-#include <ncurses.h>
+#include <stdio.h>
 #include <string.h>
 #include "../include/component.h"
-#include "../include/system.h"
+
 /*
  * All component types are structs that include an id 
  * and some related variables:

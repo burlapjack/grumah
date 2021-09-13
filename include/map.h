@@ -47,7 +47,7 @@ typedef struct{
 void map_generate_srp(MapData *m);
 
 void map_init(MapData *m, int map_width, int map_height);
-
+void map_free(MapData *m);
 void map_fill(MapData *m);
 
 int map_xy(int x, int y, int map_width);

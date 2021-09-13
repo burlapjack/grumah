@@ -43,8 +43,8 @@ typedef struct{
 	int x,y,x2,y2;
 }Hall;
 
-//void map_generate_srp(char *map_array, int map_width, int map_height, int number_of_rooms, int room_min_width, int room_min_height, int room_max_width, int room_max_height);
 void map_generate_srp(MapData *m);
+void map_generate_bsp(MapData *m);
 
 void map_init(MapData *m, int map_width, int map_height);
 void map_free(MapData *m);

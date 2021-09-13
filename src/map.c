@@ -197,7 +197,8 @@ void map_generate_bsp(MapData *m){
 
 	/* Start a fresh map, filled with all walls. */
 	map_fill(m);
-	
+
+	/* Room loop */	
 	while(rooms_added < m->number_of_rooms){
 		partition.x = 0;
 		partition.y = 0;
@@ -246,7 +247,7 @@ void map_generate_bsp(MapData *m){
 			rooms[rooms_added].x = room_x;
 			rooms[rooms_added].y = room_y;
 			rooms[rooms_added].x2 = room_x2;
-			rooms[rooms_added].y2 = room_x2;
+			rooms[rooms_added].y2 = room_y2;
 			++rooms_added;
 			fails = 0;
 		}
@@ -254,6 +255,7 @@ void map_generate_bsp(MapData *m){
 		if(fails == fail_limit) break;
 	}
 
+	/* carve rooms into the map array */
 	for(int i = 0; i < rooms_added; ++i){
 		for(int j = rooms[i].y; j < rooms[i].y2; ++j){
 			for(int k = rooms[i].x; k < rooms[i].x2; ++k){

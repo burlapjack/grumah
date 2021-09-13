@@ -1,13 +1,7 @@
-//component.c
-//Functions that manipulated entity lists
-//by burlapjack 2021
-
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include "../include/component.h"
-
 /*
+ * component.c
+ * by burlapjack 2021
+ *
  * All component types are structs that include an id 
  * and some related variables:
  *
@@ -17,18 +11,26 @@
  *		int y;
  * }ComponentPosition;
  *
- * Components then have to be add to arrays (lists). 
- * Optionally, the programmer can choose to initialize 
- * a container of type 'Component' that sets up all 
- * component lists automatically.
+ * A properly allocated 'Component' contains array pointers
+ * to all component types.  Use the component_init function
+ * with a reference to the allocated Component and an initial
+ * array size to get started.
  *
  * Component *c;
  * component_init(c, size_lists);
  *
+ * When the program ends,  deallocation the component with:
+ *
+ * component_free(c);
+ *
  */
 
-/*---------------Initialize Component Lists -----------------------------------------------------*/
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include "../include/component.h"
 
+/*---------------Initialize Component Lists -----------------------------------------------------*/
 // Init all component lists within a Component instance
 void component_init(Component *c, int size_lists){
 	c->attributes = malloc( sizeof (*(c->attributes)) * size_lists);
@@ -58,7 +60,6 @@ void component_init(Component *c, int size_lists){
 }
 
 /*-------------- Clear Component list data (without deallocation) ----------------------------------*/
-
 void component_clear_all_attributes(Component *c){
 	for(int i = 0; i < (c->size_attributes); i++){
 		c->attributes[i].id = 0;
@@ -134,24 +135,24 @@ void component_clear_all(Component *c){
 }
 
 /*-------------- Free all Component Lists -----------------------------------------------------------*/
-
-void component_free_all(Component *c){
+void component_free(Component *c){
 	free(c->attributes);
-	c->attributes = NULL;
 	free(c->draw);
-	c->draw = NULL;
 	free(c->hit_points);
-	c->hit_points = NULL;
 	//free(c->input);
 	//c->input = NULL;
 	free(c->menu_option);
-	c->menu_option = NULL;
 	free(c->position);
-	c->position = NULL;
 	free(c->size);
-	c->size = NULL;
 	free(c->trigger);
+
 	c->trigger = NULL;
+	c->attributes = NULL;
+	c->draw = NULL;
+	c->hit_points = NULL;
+	c->menu_option = NULL;
+	c->position = NULL;
+	c->size = NULL;
 	free(c);
 }
 
@@ -256,8 +257,6 @@ void component_list_double_menu_option(Component *c){
 	}
 	c->size_menu_option = c->size_menu_option * 2;
 }
-
-
 
 void component_list_double_trigger(Component *c){
 	//test the reallocation
@@ -444,7 +443,12 @@ int component_count_trigger(Component *c){
 
 int component_count_all(Component *c){
 	int total = 0;
-	total = component_count_attributes(c) + component_count_draw(c) + component_count_hit_points(c) + component_count_position(c) + component_count_menu_option(c) + total + total + component_count_trigger(c);
+	total = component_count_attributes(c) 
+		+ component_count_draw(c) 
+		+ component_count_hit_points(c) 
+		+ component_count_position(c) 
+		+ component_count_menu_option(c)  
+		+ component_count_trigger(c);
 	return total;	
 }
 
@@ -462,7 +466,6 @@ int component_count_invisible(Component *c){
 }
 
 /*-------------- Set Component Draw Layer --------------------------------------------------------*/
-
 void component_set_draw_layer(Component *c, int component_id, int draw_layer){
 	for(int i = 0; i < (c->size_draw); i++){
 		if(c->draw[i].id == component_id){

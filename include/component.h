@@ -77,7 +77,7 @@ typedef struct {
 void component_init(Component *c, int size_lists);
 
 /*----------- Deallocate Component List Memory ----------------*/
-void component_free_all(Component *c);
+void component_free(Component *c);
 
 /*----------- Component List Size-Doubling --------------------*/
 void component_list_double_attributes(Component *c);

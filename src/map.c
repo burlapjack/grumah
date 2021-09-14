@@ -9,9 +9,10 @@
 
 /*---------------------- Initialize map data ---------------------------------------------------------------------------------*/
 void map_init(MapData *m, int map_width, int map_height){
-	m->map = malloc( sizeof (*(m->map)) * map_width * map_height);
 	m->map_width = map_width;
 	m->map_height = map_height;
+	m->map = malloc( sizeof (*(m->map)) * m->map_width * m->map_height);
+
 	m->number_of_rooms = 12;
 	m->room_max_width = 7;
 	m->room_max_height = 7;
@@ -34,6 +35,7 @@ void map_init(MapData *m, int map_width, int map_height){
 	m->color_door_vertical = 1;
 	m->color_floor = 1;
 	m->color_wall = 1;	
+
 }
 
 /*---------------------- Deallocate map data ---------------------------------------------------------------------------------*/
@@ -94,6 +96,24 @@ void map_fill(MapData *m){
 	}	
 }
 
+
+void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms){
+	char top, bottom, left, right;
+	for(int i = 0; i < m->map_height; ++i){
+		for(int j = 0; j < m->map_width; ++j){
+			top = i * (m->map_width- 1) + j;
+			bottom = i * (m->map_width + 1) + j;
+			left = i * m->map_width + j - 1;
+			right = i * m->map_width + j + 1;
+				
+				/* room proximity */
+					
+		}
+	}
+
+}
+
+
 void map_generate_hallways(MapData *m, Room *rooms, int rooms_added){
 	int xa,xb,ya,yb;
 	int random_direction;
@@ -101,7 +121,8 @@ void map_generate_hallways(MapData *m, Room *rooms, int rooms_added){
 
 	Room temp;
 	/* sort rooms from right to left */
-	for(int i = 0; i < rooms_added; ++i){
+	/* this will prevent hallways from looking like a mess */
+	for(int i = 0; i < rooms_added-1; ++i){
 		for( int j = 0; j < rooms_added; ++j){
 			if (rooms[i].x > rooms[j].x){
 				temp = rooms[i];

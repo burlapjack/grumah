@@ -12,9 +12,9 @@ void map_init(MapData *m, int map_width, int map_height){
 	m->map = malloc( sizeof (*(m->map)) * map_width * map_height);
 	m->map_width = map_width;
 	m->map_height = map_height;
-	m->number_of_rooms = 8;
-	m->room_max_width = 10;
-	m->room_max_height = 10;
+	m->number_of_rooms = 12;
+	m->room_max_width = 7;
+	m->room_max_height = 7;
 	m->room_min_width = 4;
 	m->room_min_height = 4;	
 	m->room_padding = 2;
@@ -46,6 +46,7 @@ void map_free(MapData *m){
 
 /*--------------------- Pseudo-random number generator ----------------------------------------------------------------------*/
 static int rand_int(int n){
+	
 	if((n - 1) == RAND_MAX){
 		return rand();
 	} else {
@@ -56,6 +57,7 @@ static int rand_int(int n){
 		int r;
 		while ((r = rand()) >= end);
 		return r % n;
+		
 	}
 }
 
@@ -93,10 +95,22 @@ void map_fill(MapData *m){
 }
 
 void map_generate_hallways(MapData *m, Room *rooms, int rooms_added){
-
 	int xa,xb,ya,yb;
 	int random_direction;
 	Hall halls[rooms_added - 1];
+
+	Room temp;
+	/* sort rooms from right to left */
+	for(int i = 0; i < rooms_added; ++i){
+		for( int j = 0; j < rooms_added; ++j){
+			if (rooms[i].x > rooms[j].x){
+				temp = rooms[i];
+				rooms[i] = rooms[j];
+				rooms[j] = temp;			
+			}
+		}	
+
+	}
 
 	/* Create hallways in between rooms */ 
 	/* Hall coords start at random points within a
@@ -116,8 +130,8 @@ void map_generate_hallways(MapData *m, Room *rooms, int rooms_added){
 		yb = max_int(halls[i].y,halls[i].y2);
 
 		/* Randomly pick the horizontal and verticle carve order of hallway. */
-		random_direction = rand_int(3);	
-		if(random_direction == 1){
+		random_direction = rand_int(4);	
+		if(random_direction > 2){
 			map_carve_hall_horizontally(m, halls, i, xa, xb);
 			map_carve_hall_vertically(m, halls, i, ya, yb);
 		}
@@ -221,23 +235,21 @@ void map_generate_bsp(MapData *m){
 		split_y = 0;
 		int w = partition.x2 - partition.x;
 		int h = partition.y2 - partition.y;
-	
 		/* partitioning loop */	
 		while(1){
-			div = rand_int(3); /* randomly split vertically or horizontally */		
-
-			if(div == 2 ){ /* horizontal split */
+			div = rand_int(3);
+			if(div == 1){ /* horizontal split */
 				split_y = rand_int(partition.y2 - partition.y);
-				if(max_int(split_y,(partition.y2 - split_y)) > part_min_h){
-					/* choose the largest section */
+				if(max_int(split_y, (partition.y2 - split_y)) > part_min_h){
+					/* choose the smaller section */
 					if(split_y > (partition.y2 - split_y)) partition.y2 = split_y;	
 					else partition.y = split_y;
 				}
 			} 
-			else if(div == 1){ /* verticle split */
+			else{ /* verticle split */
 				split_x = rand_int(partition.x2 - partition.x);
-				if(max_int(split_x,(partition.x2 - split_x)) > part_min_w){
-					/* choose the largest section */
+				if(max_int(split_x, (partition.x2 - split_x)) > part_min_w){
+					/* choose the smaller section */
 					if(split_x > (partition.x2 - split_x)) partition.x2 = split_x;	
 					else partition.x = split_x;
 				}
@@ -276,11 +288,9 @@ void map_generate_bsp(MapData *m){
 			++rooms_added;
 			fails = 0;
 		}
-
 		collision_detected = 0;
 		if(fails == fail_limit) break;
 	}
-
 	/* carve rooms into the map array */
 	for(int i = 0; i < rooms_added; ++i){
 		for(int j = rooms[i].y; j < rooms[i].y2; ++j){
@@ -289,4 +299,5 @@ void map_generate_bsp(MapData *m){
 			}
 		}
 	}
+	map_generate_hallways(m, rooms, rooms_added);
 }

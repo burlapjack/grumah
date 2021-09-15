@@ -118,22 +118,24 @@ void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms){
 			bottom = m->map[(i + 1) * m->map_width + j];
 			left = m->map[ i * m->map_width + j - 1];
 			right = m->map[i * m->map_width + j + 1];
-			
-			/* horizontal doors */
-			if( top == m->floor && bottom ==  m->floor && left == m->wall && right == m->wall){
-				for(int k = 0; k < number_of_rooms; ++k){
-					if(rooms[k].x <= j && rooms[k].x2 >= j && (rooms[k].y == i + 1 || rooms[k].y2 == i - 1)){
-						m->map[i * m->map_width + j] = m->door_horizontal_closed;
-					}	
+		
+			if( m->map[i * m->map_width + j] == m->floor){	
+				/* horizontal doors */
+				if( top == m->floor && bottom ==  m->floor && left == m->wall && right == m->wall){
+					for(int k = 0; k < number_of_rooms; ++k){
+						if(rooms[k].x <= j && rooms[k].x2 >= j && (rooms[k].y == i + 1 || rooms[k].y2 == i - 1)){
+							m->map[i * m->map_width + j] = m->door_horizontal_closed;
+						}	
+					}
+				}
+				else if( top == m->wall && bottom == m->wall && left == m->floor && right == m->floor){
+					for(int k = 0; k < number_of_rooms; ++k){
+						if((rooms[k].x == j + 1 || rooms[k].x2 == j - 1) && rooms[k].y <= i && rooms[k].y2 >= i){
+							m->map[i * m->map_width + j] = m->door_vertical_closed;;
+						}	
+					}
 				}
 			}
-			else if( top == m->wall && bottom == m->wall && left == m->floor && right == m->floor){
-				for(int k = 0; k < number_of_rooms; ++k){
-					if((rooms[k].x == j + 1 || rooms[k].x2 == j - 1) && rooms[k].y <= i && rooms[k].y2 >= i){
-						m->map[i * m->map_width + j] = m->door_vertical_closed;;
-					}	
-				}
-			}	
 		}
 	}
 
@@ -204,9 +206,9 @@ void map_generate_srp(MapData *m){
 	/* Room Creation */
 	while(rooms_added < m->number_of_rooms){
 		/* Propose random room coordinates */
-		room_x = rand_int(m->map_width - m->room_max_width - m->room_padding);
+		room_x = rand_int(m->map_width - m->room_max_width - (m->room_padding * 2));
 		room_x = max_int(2, room_x);
-		room_y = rand_int(m->map_height - m->room_max_height - m->room_padding);
+		room_y = rand_int(m->map_height - m->room_max_height - (m->room_padding * 2));
 		room_y = max_int(2, room_y);
 		room_x2 = rand_int(m->room_max_width) + room_x + m->room_min_width;
 		room_x2 = min_int(m->map_width - 2, room_x2);
@@ -239,7 +241,7 @@ void map_generate_srp(MapData *m){
 	}
 	map_carve_room(m, rooms, rooms_added);
 	map_generate_hallways(m, rooms, rooms_added);
-//	map_generate_doors(m, rooms, rooms_added);
+	map_generate_doors(m, rooms, rooms_added);
 }
 
 void map_generate_bsp(MapData *m){

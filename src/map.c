@@ -18,7 +18,7 @@ void map_init(MapData *m, int map_width, int map_height){
 	m->room_max_height = 7;
 	m->room_min_width = 4;
 	m->room_min_height = 4;	
-	m->room_padding = 2;
+	m->room_padding = 3;
 
 	m->entrance = '.';
 	m->exit = '<';	
@@ -109,14 +109,31 @@ static void map_carve_room(MapData *m, Room *rooms, int rooms_added){
 
 void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms){
 	char top, bottom, left, right;
-	for(int i = 0; i < m->map_height; ++i){
-		for(int j = 0; j < m->map_width; ++j){
-			top = i * (m->map_width- 1) + j;
-			bottom = i * (m->map_width + 1) + j;
-			left = i * m->map_width + j - 1;
-			right = i * m->map_width + j + 1;
-				
-				/* room proximity */
+	/* y coord */
+	for(int i = 1; i < m->map_height-1; ++i){
+		/* x coord */
+		for(int j = 1; j < m->map_width-1; ++j){
+			/* surrounding tiles */
+			top = m->map[(i - 1) * m->map_width + j];
+			bottom = m->map[(i + 1) * m->map_width + j];
+			left = m->map[ i * m->map_width + j - 1];
+			right = m->map[i * m->map_width + j + 1];
+			
+			/* horizontal doors */
+			if( top == m->floor && bottom ==  m->floor && left == m->wall && right == m->wall){
+				for(int k = 0; k < number_of_rooms; ++k){
+					if(rooms[k].x <= j && rooms[k].x2 >= j && (rooms[k].y == i + 1 || rooms[k].y2 == i - 1)){
+						m->map[i * m->map_width + j] = m->door_horizontal_closed;
+					}	
+				}
+			}
+			else if( top == m->wall && bottom == m->wall && left == m->floor && right == m->floor){
+				for(int k = 0; k < number_of_rooms; ++k){
+					if((rooms[k].x == j + 1 || rooms[k].x2 == j - 1) && rooms[k].y <= i && rooms[k].y2 >= i){
+						m->map[i * m->map_width + j] = m->door_vertical_closed;;
+					}	
+				}
+			}	
 		}
 	}
 
@@ -222,6 +239,7 @@ void map_generate_srp(MapData *m){
 	}
 	map_carve_room(m, rooms, rooms_added);
 	map_generate_hallways(m, rooms, rooms_added);
+//	map_generate_doors(m, rooms, rooms_added);
 }
 
 void map_generate_bsp(MapData *m){

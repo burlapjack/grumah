@@ -43,6 +43,14 @@ typedef struct{
 	int x,y,x2,y2;
 }Hall;
 
+
+ struct Node{
+	int x,y,x2,y2;
+	struct Node *parent;
+	struct Node *child1;
+	struct Node *child2;
+};
+
 void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms);
 void map_generate_hallways(MapData *m, Room *rooms, int rooms_added);
 void map_generate_srp(MapData *m);

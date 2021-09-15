@@ -96,6 +96,16 @@ void map_fill(MapData *m){
 	}	
 }
 
+static void map_carve_room(MapData *m, Room *rooms, int rooms_added){
+	/* "Carve" rooms into the map array */ 
+	for(int i = 0; i < rooms_added; ++i){
+		for(int j = rooms[i].y; j < rooms[i].y2; ++j){
+			for(int k = rooms[i].x; k < rooms[i].x2; ++k){
+				m->map[ j * m->map_width + k ] = m->floor;	
+			}
+		}
+	}
+}
 
 void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms){
 	char top, bottom, left, right;
@@ -107,12 +117,10 @@ void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms){
 			right = i * m->map_width + j + 1;
 				
 				/* room proximity */
-					
 		}
 	}
 
 }
-
 
 void map_generate_hallways(MapData *m, Room *rooms, int rooms_added){
 	int xa,xb,ya,yb;
@@ -163,8 +171,6 @@ void map_generate_hallways(MapData *m, Room *rooms, int rooms_added){
 	}
 }
 
-
-
 /*---------------------- Map Generation: Simple Room Placement ---------------------------------------------------------------*/
 /* Rooms are added one at a time wherever they will fit, then hallways are created between them. */
 void map_generate_srp(MapData *m){
@@ -214,17 +220,8 @@ void map_generate_srp(MapData *m){
 		collision_detected = 0;
 		if(fails == fail_limit) break;
 	}
-	/* "Carve" rooms into the map array */ 
-	for(int i = 0; i < rooms_added; ++i){
-		for(int j = rooms[i].y; j < rooms[i].y2; ++j){
-			for(int k = rooms[i].x; k < rooms[i].x2; ++k){
-				m->map[ j * m->map_width + k ] = m->floor;	
-			}
-		}
-	}
-
+	map_carve_room(m, rooms, rooms_added);
 	map_generate_hallways(m, rooms, rooms_added);
-
 }
 
 void map_generate_bsp(MapData *m){
@@ -312,13 +309,7 @@ void map_generate_bsp(MapData *m){
 		collision_detected = 0;
 		if(fails == fail_limit) break;
 	}
-	/* carve rooms into the map array */
-	for(int i = 0; i < rooms_added; ++i){
-		for(int j = rooms[i].y; j < rooms[i].y2; ++j){
-			for(int k = rooms[i].x; k < rooms[i].x2; ++k){
-				m->map[ j * m->map_width + k ] = m->floor;	
-			}
-		}
-	}
+
+	map_carve_room(m, rooms, rooms_added);
 	map_generate_hallways(m, rooms, rooms_added);
 }

@@ -9,7 +9,8 @@
 #include "../include/grumah.h"
 
 
-void grumah_init(){
+void grumah_init(WINDOW *w){
+	
 	
 	setlocale(LC_ALL,"");		
 	time_t t;
@@ -22,5 +23,6 @@ void grumah_init(){
 	noecho();
 	curs_set(0);
 
+	w = newwin(24, 80, 0, 0);
 }
 

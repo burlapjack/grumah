@@ -9,5 +9,6 @@
 #include "map.h"
 
 void grumah_init();
+void grumah_init(WINDOW *w);
 
 #endif /* GRUMAH_H */

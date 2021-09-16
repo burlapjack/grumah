@@ -1,5 +1,5 @@
 Makefile
-src/grumah.c
+src/main.c
 grumah
 *.swp
 bin/

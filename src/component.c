@@ -23,6 +23,21 @@
  *
  * component_free(c);
  *
+ * FOR GRUMAH PROGRAMMERS:
+ * for each addition component type added, makes sure to 
+ * add the following related functions:
+ * 
+ * component_clear_all_...
+ * component_list_double_...
+ * component_add_...
+ * component_count...
+ *
+ * Also, add the new component type to these functions:
+ *
+ * component_init
+ * component_clear_all
+ * component_free
+ * component_count_all
  */
 
 #include <stdlib.h>

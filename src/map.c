@@ -338,3 +338,4 @@ void map_generate_bsp(MapData *m){
 	map_carve_room(m, rooms, rooms_added);
 	map_generate_hallways(m, rooms, rooms_added);
 }
+

@@ -8,7 +8,6 @@
 #include "component.h"
 
 typedef struct{
-	char *map;
 	int map_width;
 	int map_height;
 	int number_of_rooms;
@@ -24,6 +23,7 @@ typedef struct{
 	char entrance;
 	char exit;	
 	char floor;	
+	char hallway;
 	char wall;
 
 	int color_entrance;
@@ -32,7 +32,9 @@ typedef struct{
 	int color_door_vertical;
 	int color_floor;
 	int color_wall;	
-	
+
+	char *map;
+
 }MapData;
 
 typedef struct{
@@ -44,19 +46,13 @@ typedef struct{
 }Hall;
 
 
- struct Node{
-	int x,y,x2,y2;
-	struct Node *parent;
-	struct Node *child1;
-	struct Node *child2;
-};
-
 void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms);
 void map_generate_hallways(MapData *m, Room *rooms, int rooms_added);
 void map_generate_srp(MapData *m);
 void map_generate_bsp(MapData *m);
 
 void map_init(MapData *m, int map_width, int map_height);
+
 void map_free(MapData *m);
 void map_fill(MapData *m);
 

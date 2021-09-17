@@ -3,6 +3,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include "../include/map.h"
 #include "../include/component.h"
@@ -339,3 +340,41 @@ void map_generate_bsp(MapData *m){
 	map_generate_hallways(m, rooms, rooms_added);
 }
 
+void map_generate_ca(MapData *m){
+	int iterations = 4;
+	int rand_tile;
+	int neighbor_walls;
+	char map_copy[m->map_width * m->map_height];
+
+	/* generate random noise (wall and floor tiles) on the map copy */	
+	for(int i = 0; i < m->map_height; ++i){
+		for(int j = 0; j < m->map_width; ++j){
+			/* everything  is random - wall or floor */	
+			rand_tile = rand_int(10);
+			if(rand_tile > 3) map_copy[ i * m->map_width + j ] = m->floor;
+			else map_copy[ i * m->map_width + j ] = m->wall;
+		}
+	}
+	int n = 0;
+	while(n < iterations){	
+		for(int i = 1; i < m->map_height - 1; ++i){
+			for(int j = 1; j < m->map_width - 1; ++j){
+				neighbor_walls = 0;
+				if( map_copy[ i * m->map_width + j - 1 ] == m->wall) ++neighbor_walls; /* left */	
+				if( map_copy[ i * m->map_width + j + 1 ] == m->wall) ++neighbor_walls; /* right */	
+				if( map_copy[ (i - 1) * m->map_width + j ] == m->wall) ++neighbor_walls; /* top */	
+				if( map_copy[ (i + 1) * m->map_width + j ] == m->wall) ++neighbor_walls; /* bottom */	
+				if( map_copy[ (i - 1) * m->map_width + j - 1 ] == m->wall) ++neighbor_walls; /* top-left */	
+				if( map_copy[ (i - 1) * m->map_width + j + 1 ] == m->wall) ++neighbor_walls; /* top-right */	
+				if( map_copy[ (i + 1) * m->map_width + j + 1 ] == m->wall) ++neighbor_walls; /* bottom-right */	
+				if( map_copy[ (i + 1) * m->map_width + j - 1 ] == m->wall) ++neighbor_walls; /* bottom-left */	
+				
+				if( m->map[ i * m->map_width + j ] == m->wall && neighbor_walls >= 4) m->map[ i * m->map_width + j] = m->wall;
+				else if( m->map[ i * m->map_width + j ] == m->floor && neighbor_walls >= 5) m->map[ i * m->map_width + j] = m->wall;
+				else m->map[ i * m->map_width + j] = m->floor;
+			}
+		}	
+		memcpy(map_copy, m->map, m->map_width * m->map_height);
+		++n;
+	}
+}

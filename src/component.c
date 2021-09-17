@@ -30,7 +30,6 @@
  * component_clear_all_...
  * component_list_double_...
  * component_add_...
- * component_count...
  *
  * Also, add the new component type to these functions:
  *
@@ -38,6 +37,7 @@
  * component_clear_all
  * component_free
  * component_count_all
+ *
  */
 
 #include <stdlib.h>
@@ -95,7 +95,9 @@ void component_clear_all_draw(Component *c){
 void component_clear_all_hit_points(Component *c){
 	for(int i = 0; i < (c->size_hit_points); i++){
 		c->hit_points[i].id = 0;
-		c->hit_points[i].value = 0; 
+		c->hit_points[i].current = 0; 
+		c->hit_points[i].max = 0; 
+
 	}
 }
 
@@ -325,7 +327,8 @@ void component_add_hit_points(Component *c, int id) {
 			component_list_double_hit_points(c);
 		}
 		else if (c->hit_points[i].id == 0){
-			c->hit_points[i].value = 0;
+			c->hit_points[i].max = 0;
+			c->hit_points[i].current = 0;
 			break;
 		}
 	}

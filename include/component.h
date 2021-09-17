@@ -15,7 +15,8 @@ typedef struct{
 
 typedef struct{
 	int id;
-	int value;
+	int max;
+	int current;
 }ComponentHitPoints;
 
 typedef struct {

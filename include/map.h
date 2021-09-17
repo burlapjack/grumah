@@ -50,6 +50,7 @@ void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms);
 void map_generate_hallways(MapData *m, Room *rooms, int rooms_added);
 void map_generate_srp(MapData *m);
 void map_generate_bsp(MapData *m);
+void map_generate_ca(MapData *m);
 
 void map_init(MapData *m, int map_width, int map_height);
 

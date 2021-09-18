@@ -3,6 +3,7 @@
  */
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <assert.h>
 #include "../include/map.h"
@@ -251,94 +252,6 @@ void map_generate_srp(MapData *m){
 	map_generate_doors(m, rooms, rooms_added);
 }
 
-void map_generate_bsp(MapData *m){
-	int room_x,room_y, room_x2, room_y2;
-	Room partition;
-	int split_x, split_y;
-	int div; /* 1=horizontal, 2=verticle */
-	int rooms_added = 0;
-	int collision_detected = 0;
-	int fails = 0;         /* number of times in a row a new random room has collided with other room positions */
-	int fail_limit = 100;  /* prevents an endless loop */
-	int part_min_w = m->room_min_width + m->room_padding * 2;
-	int part_min_h = m->room_min_height + m->room_padding * 2;
-	int part_max_w = m->room_max_width + m->room_padding * 2;
-	int part_max_h = m->room_max_height + m->room_padding * 2;
-	Room rooms[m->number_of_rooms];	
-
-	/* Start a fresh map, filled with all walls. */
-	map_fill(m);
-
-	/* Room loop */	
-	while(rooms_added < m->number_of_rooms){
-		partition.x = 0;
-		partition.y = 0;
-		partition.x2 = m->map_width;
-		partition.y2 = m->map_height;
-		split_x = 0;
-		split_y = 0;
-		int w = partition.x2 - partition.x;
-		int h = partition.y2 - partition.y;
-		/* partitioning loop */	
-		while(1){
-			div = rand_int(3);
-			if(div == 1){ /* horizontal split */
-				split_y = rand_int(partition.y2 - partition.y);
-				if(max_int(split_y, (partition.y2 - split_y)) > part_min_h){
-					/* choose the smaller section */
-					if(split_y > (partition.y2 - split_y)) partition.y2 = split_y;	
-					else partition.y = split_y;
-				}
-			} 
-			else{ /* verticle split */
-				split_x = rand_int(partition.x2 - partition.x);
-				if(max_int(split_x, (partition.x2 - split_x)) > part_min_w){
-					/* choose the smaller section */
-					if(split_x > (partition.x2 - split_x)) partition.x2 = split_x;	
-					else partition.x = split_x;
-				}
-			}
-			w = partition.x2 - partition.x;
-			h = partition.y2 - partition.y;
-
-			/* Determine if the partition is large enough to hold a room */
-			if(w <= part_max_w &&  w >= part_min_w && h <= part_max_h && h >= part_min_h){
-				room_x = partition.x + m->room_padding;
-				room_y = partition.y + m->room_padding;
-				room_x2 = partition.x2 - m->room_padding;
-				room_y2 = partition.y2 - m->room_padding;
-				break;
-			}
-		}
-
-		/* check collisions with existing rooms */
-		for(int i = 0; i < rooms_added; ++i){
-			if(room_x <= rooms[i].x2 &&
-			room_x2 >= rooms[i].x &&
-			room_y <= rooms[i].y2 &&
-			room_y2 >= rooms[i].y){
-			/* Collision detected */
-				collision_detected = 1;
-				++fails;
-				break;	
-			}		
-		}
-		/* store map coordinates */
-		if(collision_detected == 0){
-			rooms[rooms_added].x = room_x;
-			rooms[rooms_added].y = room_y;
-			rooms[rooms_added].x2 = room_x2;
-			rooms[rooms_added].y2 = room_y2;
-			++rooms_added;
-			fails = 0;
-		}
-		collision_detected = 0;
-		if(fails == fail_limit) break;
-	}
-
-	map_carve_room(m, rooms, rooms_added);
-	map_generate_hallways(m, rooms, rooms_added);
-}
 
 void map_generate_ca(MapData *m){
 	int iterations = 4;

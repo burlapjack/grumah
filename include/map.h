@@ -55,14 +55,26 @@ struct node {
 };
 typedef struct node Node;
 
+
 void map_init(MapData *m, int map_width, int map_height);
 void map_free(MapData *m);
 
+bool map_a_to_b_possible(MapData *m, int a, int b);
+void map_carve_hallways(MapData *m, Room *rooms, int rooms_added);
+void map_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend);
+void map_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend);
+void map_carve_room(MapData *m, Room *rooms, int rooms_added);
 void map_fill(MapData *m);
+float  map_get_distance(MapData *m, int ax, int ay, int bx, int by);
 void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms);
-void map_generate_hallways(MapData *m, Room *rooms, int rooms_added);
 void map_generate_srp(MapData *m);
 void map_generate_ca(MapData *m);
 int map_xy(int x, int y, int map_width);
+double max_double(double a, double b);
+double min_double(double a, double  b);
+int max_int(int a, int b);
+int min_int(int a, int b);
+int rand_int(int n);
+
 
 #endif /* MAP_H */

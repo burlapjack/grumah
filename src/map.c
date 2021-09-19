@@ -55,27 +55,27 @@ void map_free(MapData *m){
 }
 
 /*------ Find the largest of two doubles -------------------------------------------------------------------------------------*/
-static double max_double(double a, double b){
+double max_double(double a, double b){
 	if (a > b) return a; else return b;
 }
 
 /*------ Find the smallest of two integers -----------------------------------------------------------------------------------*/
-static int min_double(double a, double  b){
+double min_double(double a, double  b){
 	if (a < b) return a; else return b;
 }
 
 /*------ Find the largest of two integers ------------------------------------------------------------------------------------*/
-static int max_int(int a, int b){
+int max_int(int a, int b){
 	if (a > b) return a; else return b;
 }
 
 /*------ Find the smallest of two integers -----------------------------------------------------------------------------------*/
-static int min_int(int a, int b){
+int min_int(int a, int b){
 	if (a < b) return a; else return b;
 }
 
 /*--------------------- Pseudo-random number generator ----------------------------------------------------------------------*/
-static int rand_int(int n){
+int rand_int(int n){
 	if((n - 1) == RAND_MAX) return rand(); 
 	else {
 		assert(n <= RAND_MAX);
@@ -88,26 +88,22 @@ static int rand_int(int n){
 	}
 }
 
-static int square(int num){
-	return num * num;	
-}
-
 /*------ "Carve" a horizontal hallway int the map array ----------------------------------------------------------------------*/
-static void map_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend){
+void map_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend){
 	for(int j = xstart; j <= xend; j++){
 		m->map[ (halls_array[hall_index].y * m->map_width) + j ] = '.';
 	}
 }
 
 /*------ "Carve" a verticle hallway int the map array ------------------------------------------------------------------------*/
-static void map_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend){
+void map_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend){
 	for(int j = ystart; j <= yend; j++){
 		m->map[ (j * m->map_width) + halls_array[hall_index].x2 ] = '.';
 	}
 }
 
 /*---------------------- Carve rooms -----------------------------------------------------------------------------------------*/
-static void map_carve_room(MapData *m, Room *rooms, int rooms_added){
+void map_carve_room(MapData *m, Room *rooms, int rooms_added){
 	/* "Carve" rooms into the map array */ 
 	for(int i = 0; i < rooms_added; i++){
 		for(int j = rooms[i].y; j < rooms[i].y2; j++){
@@ -119,7 +115,7 @@ static void map_carve_room(MapData *m, Room *rooms, int rooms_added){
 }
 
 /*---------------------- Generate doors on the edges of each room ------------------------------------------------------------*/
-void map_generate_hallways(MapData *m, Room *rooms, int rooms_added){
+void map_carve_hallways(MapData *m, Room *rooms, int rooms_added){
 	int xa,xb,ya,yb;
 	int random_direction;
 	Hall halls[rooms_added - 1];
@@ -261,7 +257,7 @@ void map_generate_srp(MapData *m){
 		if(fails == fail_limit) break;
 	}
 	map_carve_room(m, rooms, rooms_added);
-	map_generate_hallways(m, rooms, rooms_added);
+	map_carve_hallways(m, rooms, rooms_added);
 	map_generate_doors(m, rooms, rooms_added);
 }
 
@@ -318,14 +314,16 @@ void map_generate_ca(MapData *m){
 
 }
 
-static float  map_get_distance(MapData *m, int ax, int ay, int bx, int by){
+float  map_get_distance(MapData *m, int ax, int ay, int bx, int by){
 	return sqrt(pow( (float)ax - (float)bx, 2) + pow( (float)ay - (float)by, 2) * 1.0);
 }
 
-static bool map_a_to_b_possible(MapData *m, int a, int b){
+bool map_a_to_b_possible(MapData *m, int a, int b){
 	int n_floor = 0;
 	for (int i = 0; i < m->map_height; i++){
 		for ( int j = 0; j < m->map_width; j++){
+
+			/* count floor tiles */
 			if( m->map[i * m->map_width + j] == m->floor){
 				n_floor ++;		
 			}

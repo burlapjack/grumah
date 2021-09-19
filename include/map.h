@@ -45,27 +45,24 @@ typedef struct{
 	int x,y,x2,y2;
 }Hall;
 
-struct Node {
+struct node {
 	int x,y;
-	bool visited;
-	int f; // g + h
-	int g; // distance taken so far
-	int h; // distance to end node
+	float f; // g + h
+	float g; // distance taken so far
+	float h; // distance to end node
 	struct Node *neighbor[4];
 	struct Node *parent;
 };
+typedef struct node Node;
 
+void map_init(MapData *m, int map_width, int map_height);
+void map_free(MapData *m);
 
+void map_fill(MapData *m);
 void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms);
 void map_generate_hallways(MapData *m, Room *rooms, int rooms_added);
 void map_generate_srp(MapData *m);
 void map_generate_ca(MapData *m);
-
-void map_init(MapData *m, int map_width, int map_height);
-
-void map_free(MapData *m);
-void map_fill(MapData *m);
-
 int map_xy(int x, int y, int map_width);
 
 #endif /* MAP_H */

@@ -3,6 +3,7 @@
  */
 
 #include <stdlib.h>
+#include <math.h>
 #include <stdbool.h>
 #include <string.h>
 #include <assert.h>
@@ -53,21 +54,14 @@ void map_free(MapData *m){
 	m = NULL;
 }
 
-/*--------------------- Pseudo-random number generator ----------------------------------------------------------------------*/
-static int rand_int(int n){
-	
-	if((n - 1) == RAND_MAX){
-		return rand();
-	} else {
-		assert(n <= RAND_MAX);
-		int end = RAND_MAX / n;
-		assert (end > 0);
-		end *= n;
-		int r;
-		while ((r = rand()) >= end);
-		return r % n;
-		
-	}
+/*------ Find the largest of two doubles -------------------------------------------------------------------------------------*/
+static double max_double(double a, double b){
+	if (a > b) return a; else return b;
+}
+
+/*------ Find the smallest of two integers -----------------------------------------------------------------------------------*/
+static int min_double(double a, double  b){
+	if (a < b) return a; else return b;
 }
 
 /*------ Find the largest of two integers ------------------------------------------------------------------------------------*/
@@ -80,35 +74,44 @@ static int min_int(int a, int b){
 	if (a < b) return a; else return b;
 }
 
+/*--------------------- Pseudo-random number generator ----------------------------------------------------------------------*/
+static int rand_int(int n){
+	if((n - 1) == RAND_MAX) return rand(); 
+	else {
+		assert(n <= RAND_MAX);
+		int end = RAND_MAX / n;
+		assert (end > 0);
+		end *= n;
+		int r;
+		while ((r = rand()) >= end);
+		return r % n;
+	}
+}
+
+static int square(int num){
+	return num * num;	
+}
+
 /*------ "Carve" a horizontal hallway int the map array ----------------------------------------------------------------------*/
 static void map_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend){
-	for(int j = xstart; j <= xend; ++j){
+	for(int j = xstart; j <= xend; j++){
 		m->map[ (halls_array[hall_index].y * m->map_width) + j ] = '.';
 	}
 }
 
 /*------ "Carve" a verticle hallway int the map array ------------------------------------------------------------------------*/
 static void map_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend){
-	for(int j = ystart; j <= yend; ++j){
+	for(int j = ystart; j <= yend; j++){
 		m->map[ (j * m->map_width) + halls_array[hall_index].x2 ] = '.';
 	}
 }
 
-/*---------------------- Fill a map so that it is all walls ------------------------------------------------------------------*/
-void map_fill(MapData *m){
-	for ( int i = 0; i < m->map_height; i++){
-		for ( int j = 0; j < m->map_width; j++){
-			m->map[ i * m->map_width + j] = m->wall;
-		}
-	}	
-}
-
-/*---------------------- Carve doors -----------------------------------------------------------------------------------------*/
+/*---------------------- Carve rooms -----------------------------------------------------------------------------------------*/
 static void map_carve_room(MapData *m, Room *rooms, int rooms_added){
 	/* "Carve" rooms into the map array */ 
-	for(int i = 0; i < rooms_added; ++i){
-		for(int j = rooms[i].y; j < rooms[i].y2; ++j){
-			for(int k = rooms[i].x; k < rooms[i].x2; ++k){
+	for(int i = 0; i < rooms_added; i++){
+		for(int j = rooms[i].y; j < rooms[i].y2; j++){
+			for(int k = rooms[i].x; k < rooms[i].x2; k++){
 				m->map[ j * m->map_width + k ] = m->floor;	
 			}
 		}
@@ -116,40 +119,6 @@ static void map_carve_room(MapData *m, Room *rooms, int rooms_added){
 }
 
 /*---------------------- Generate doors on the edges of each room ------------------------------------------------------------*/
-void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms){
-	char top, bottom, left, right;
-	/* y coord */
-	for(int i = 1; i < (m->map_height-1); ++i){
-		/* x coord */
-		for(int j = 1; j < (m->map_width-1); ++j){
-			/* surrounding tiles */
-			top = m->map[(i - 1) * m->map_width + j];
-			bottom = m->map[(i + 1) * m->map_width + j];
-			left = m->map[ i * m->map_width + j - 1];
-			right = m->map[i * m->map_width + j + 1];
-			/* check surrounding area of each floor tile  */
-			if( m->map[i * m->map_width + j] == m->floor){	
-				/* horizontal doors */
-				if( top == m->floor && bottom ==  m->floor && left == m->wall && right == m->wall){
-					for(int k = 0; k < number_of_rooms; ++k){
-						if(rooms[k].x <= j && rooms[k].x2 >= j && (rooms[k].y == i + 1 || rooms[k].y2 == i)){
-							m->map[i * m->map_width + j] = m->door_horizontal_closed;
-						}	
-					}
-				}
-				/* vertical doors */
-				else if( top == m->wall && bottom == m->wall && left == m->floor && right == m->floor){
-					for(int k = 0; k < number_of_rooms; ++k){
-						if((rooms[k].x == j + 1 || rooms[k].x2 == j) && rooms[k].y <= i && rooms[k].y2 >= i){
-							m->map[i * m->map_width + j] = m->door_vertical_closed;
-						}	
-					}
-				}
-			}
-		}
-	}
-}
-
 void map_generate_hallways(MapData *m, Room *rooms, int rooms_added){
 	int xa,xb,ya,yb;
 	int random_direction;
@@ -158,8 +127,8 @@ void map_generate_hallways(MapData *m, Room *rooms, int rooms_added){
 	Room temp;
 	/* sort rooms from right to left */
 	/* this will prevent hallways from looking like a mess */
-	for(int i = 0; i < rooms_added-1; ++i){
-		for( int j = 0; j < rooms_added; ++j){
+	for(int i = 0; i < rooms_added-1; i++){
+		for( int j = 0; j < rooms_added; j++){
 			if (rooms[i].x > rooms[j].x){
 				temp = rooms[i];
 				rooms[i] = rooms[j];
@@ -171,14 +140,14 @@ void map_generate_hallways(MapData *m, Room *rooms, int rooms_added){
 	/* Create hallways in between rooms */ 
 	/* Hall coords start at random points within a
 	 * room and end randomly within the next room. */
-	for(int i = 0; i < (rooms_added - 1); ++i){
+	for(int i = 0; i < (rooms_added - 1); i++){
 		halls[i].x = rooms[i].x + rand_int(rooms[i].x2 - rooms[i].x);  
 		halls[i].y = rooms[i].y + rand_int(rooms[i].y2 - rooms[i].y);  
 		halls[i].x2 = rooms[i + 1].x + rand_int(rooms[i + 1].x2 - rooms[i + 1].x); 
 		halls[i].y2 = rooms[i + 1].y + rand_int(rooms[i + 1].y2 - rooms[i + 1].y); 
 	}	
 	/* "Carve" hallways in the map array */
-	for(int i = 0; i < (rooms_added - 1); ++i){
+	for(int i = 0; i < (rooms_added - 1); i++){
 		/* define hallway endpoints */
 		xa = min_int(halls[i].x,halls[i].x2);
 		xb = max_int(halls[i].x,halls[i].x2);
@@ -194,6 +163,50 @@ void map_generate_hallways(MapData *m, Room *rooms, int rooms_added){
 		else{
 			map_carve_hall_vertically(m, halls, i, ya, yb);
 			map_carve_hall_horizontally(m, halls, i, xa, xb);
+		}
+	}
+}
+
+/*---------------------- Fill a map so that it is all walls ------------------------------------------------------------------*/
+void map_fill(MapData *m){
+	for ( int i = 0; i < m->map_height; i++){
+		for ( int j = 0; j < m->map_width; j++){
+			m->map[ i * m->map_width + j] = m->wall;
+		}
+	}	
+}
+
+/*---------------------- Generate doors on the edges of each room ------------------------------------------------------------*/
+void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms){
+	char top, bottom, left, right;
+	/* y coord */
+	for(int i = 1; i < (m->map_height-1); i++){
+		/* x coord */
+		for(int j = 1; j < (m->map_width-1); j++){
+			/* surrounding tiles */
+			top = m->map[(i - 1) * m->map_width + j];
+			bottom = m->map[(i + 1) * m->map_width + j];
+			left = m->map[ i * m->map_width + j - 1];
+			right = m->map[i * m->map_width + j + 1];
+			/* check surrounding area of each floor tile  */
+			if( m->map[i * m->map_width + j] == m->floor){	
+				/* horizontal doors */
+				if( top == m->floor && bottom ==  m->floor && left == m->wall && right == m->wall){
+					for(int k = 0; k < number_of_rooms; k++){
+						if(rooms[k].x <= j && rooms[k].x2 >= j && (rooms[k].y == i + 1 || rooms[k].y2 == i)){
+							m->map[i * m->map_width + j] = m->door_horizontal_closed;
+						}	
+					}
+				}
+				/* vertical doors */
+				else if( top == m->wall && bottom == m->wall && left == m->floor && right == m->floor){
+					for(int k = 0; k < number_of_rooms; k++){
+						if((rooms[k].x == j + 1 || rooms[k].x2 == j) && rooms[k].y <= i && rooms[k].y2 >= i){
+							m->map[i * m->map_width + j] = m->door_vertical_closed;
+						}	
+					}
+				}
+			}
 		}
 	}
 }
@@ -224,14 +237,14 @@ void map_generate_srp(MapData *m){
 		room_y2 = min_int(m->map_height - 2, room_y2);
 
 		/* Check for collisions with existing rooms */
-		for(int i = 0; i < rooms_added; ++i){
+		for(int i = 0; i < rooms_added; i++){
 			if(room_x - m->room_padding <= rooms[i].x2 &&
 			room_x2 + m->room_padding  >= rooms[i].x &&
 			room_y - m->room_padding <= rooms[i].y2  &&
 			room_y2 + m->room_padding  >= rooms[i].y ){
 			/* Collision detected */
 				collision_detected = 1;
-				++fails;
+				fails++;
 				break;	
 			}		
 		}
@@ -241,7 +254,7 @@ void map_generate_srp(MapData *m){
 			rooms[rooms_added].y = room_y;
 			rooms[rooms_added].x2 = room_x2;
 			rooms[rooms_added].y2 = room_y2;
-			++rooms_added;
+			rooms_added++;
 			fails = 0;
 		}
 		collision_detected = 0;
@@ -252,7 +265,7 @@ void map_generate_srp(MapData *m){
 	map_generate_doors(m, rooms, rooms_added);
 }
 
-
+/*---------------------- Map Generation: Cellular Automata -------------------------------------------------------------------*/
 void map_generate_ca(MapData *m){
 	int iterations = 4;
 	int rand_tile;
@@ -260,8 +273,8 @@ void map_generate_ca(MapData *m){
 	char map_copy[m->map_width * m->map_height];
 
 	/* generate random noise (wall and floor tiles) on the map copy */	
-	for(int i = 0; i < m->map_height; ++i){
-		for(int j = 0; j < m->map_width; ++j){
+	for(int i = 0; i < m->map_height; i++){
+		for(int j = 0; j < m->map_width; j++){
 			/* everything  is random - wall or floor */	
 			rand_tile = rand_int(10);
 			if(rand_tile > 4) map_copy[ i * m->map_width + j ] = m->floor;
@@ -270,37 +283,63 @@ void map_generate_ca(MapData *m){
 	}
 	int n = 0;
 	while(n < iterations){	
-		for(int i = 1; i < m->map_height - 1; ++i){
-			for(int j = 1; j < m->map_width - 1; ++j){
+		for(int i = 1; i < m->map_height - 1; i++){
+			for(int j = 1; j < m->map_width - 1; j++){
 				neighbor_walls = 0;
-				if( map_copy[ i * m->map_width + j - 1 ] == m->wall ) ++neighbor_walls; /* left */	
-				if( map_copy[ i * m->map_width + j + 1 ] == m->wall ) ++neighbor_walls; /* right */	
-				if( map_copy[ (i - 1) * m->map_width + j ] == m->wall ) ++neighbor_walls; /* top */	
-				if( map_copy[ (i + 1) * m->map_width + j ] == m->wall ) ++neighbor_walls; /* bottom */	
-				if( map_copy[ (i - 1) * m->map_width + j - 1 ] == m->wall ) ++neighbor_walls; /* top-left */	
-				if( map_copy[ (i - 1) * m->map_width + j + 1 ] == m->wall ) ++neighbor_walls; /* top-right */	
-				if( map_copy[ (i + 1) * m->map_width + j + 1 ] == m->wall ) ++neighbor_walls; /* bottom-right */	
-				if( map_copy[ (i + 1) * m->map_width + j - 1 ] == m->wall ) ++neighbor_walls; /* bottom-left */	
-				
+				if( map_copy[ i * m->map_width + j - 1 ] == m->wall ) neighbor_walls++; /* left */	
+				if( map_copy[ i * m->map_width + j + 1 ] == m->wall ) neighbor_walls++; /* right */	
+				if( map_copy[ (i - 1) * m->map_width + j ] == m->wall ) neighbor_walls++; /* top */	
+				if( map_copy[ (i + 1) * m->map_width + j ] == m->wall ) neighbor_walls++; /* bottom */	
+				if( map_copy[ (i - 1) * m->map_width + j - 1 ] == m->wall ) neighbor_walls++; /* top-left */	
+				if( map_copy[ (i - 1) * m->map_width + j + 1 ] == m->wall ) neighbor_walls++; /* top-right */	
+				if( map_copy[ (i + 1) * m->map_width + j + 1 ] == m->wall ) neighbor_walls++; /* bottom-right */	
+				if( map_copy[ (i + 1) * m->map_width + j - 1 ] == m->wall ) neighbor_walls++; /* bottom-left */	
+
+				/* if 4 neighbor walls and current tile is a wall,  stay a wall */			
 				if( map_copy[ i * m->map_width + j ] == m->wall && neighbor_walls >= 4) m->map[ i * m->map_width + j] = m->wall;
 				else if( map_copy[ i * m->map_width + j ] == m->floor && neighbor_walls >= 5) m->map[ i * m->map_width + j] = m->wall;
 				else  m->map[ i * m->map_width + j] = m->floor;
 			}
 		}	
 		memcpy(map_copy, m->map, m->map_width * m->map_height);
-		++n;
+		n++;
 	}
+
 	n = 0;
 	int p = 0;
 	int entrance;
 	int exit;
 
-	while(n == 0){	
-		while(p == 0){
-			entrance = rand_int(m->map_width * m->map_height);
-			exit = rand_int(m->map_width * m->map_height);
-			if(map_copy[entrance] == m->floor && map_copy[exit] == m->floor) p = 1;
-		}
+	while(p == 0){
+		entrance = rand_int(m->map_width * m->map_height);
+		exit = rand_int(m->map_width * m->map_height);
+		if(map_copy[entrance] == m->floor && map_copy[exit] == m->floor) p = 1;
 	}
 
 }
+
+static float  map_get_distance(MapData *m, int ax, int ay, int bx, int by){
+	return sqrt(pow( (float)ax - (float)bx, 2) + pow( (float)ay - (float)by, 2) * 1.0);
+}
+
+static bool map_a_to_b_possible(MapData *m, int a, int b){
+	int n_floor = 0;
+	for (int i = 0; i < m->map_height; i++){
+		for ( int j = 0; j < m->map_width; j++){
+			if( m->map[i * m->map_width + j] == m->floor){
+				n_floor ++;		
+			}
+		}
+	}
+
+	Node nodes[n_floor];
+	for (int i = 0; i < m->map_height; i++){
+		for ( int j = 0; j < m->map_width; j++){
+			nodes[i * m->map_width + j ].x = j;
+			nodes[i * m->map_width + j ].y = i;
+			
+		}
+	}
+	return true;
+}
+

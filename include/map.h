@@ -46,12 +46,11 @@ typedef struct{
 }Hall;
 
 struct node {
-	int x,y;
-	float f; // g + h
-	float g; // distance taken so far
-	float h; // distance to end node
-	struct Node *neighbor[4];
-	struct Node *parent;
+	int id;
+	int heuristic; //distance from node to goal
+	int *weights;
+	int neighbors_count;  // number of neighbors
+	struct Node **neighbors;
 };
 typedef struct node Node;
 
@@ -65,10 +64,13 @@ void map_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, 
 void map_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend);
 void map_carve_room(MapData *m, Room *rooms, int rooms_added);
 void map_fill(MapData *m);
-float  map_get_distance(MapData *m, int ax, int ay, int bx, int by);
 void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms);
+
 void map_generate_srp(MapData *m);
 void map_generate_ca(MapData *m);
+
+/*--------------------------------------------------------*/
+float map_get_distance(MapData *m, int ax, int ay, int bx, int by);
 int map_xy(int x, int y, int map_width);
 double max_double(double a, double b);
 double min_double(double a, double  b);

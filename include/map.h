@@ -1,5 +1,5 @@
 /* map.h by burlapjack 2021
- * 
+ *
  */
 
 #ifndef MAP_H
@@ -14,15 +14,15 @@ typedef struct{
 	int room_max_width;
 	int room_max_height;
 	int room_min_width;
-	int room_min_height;	
+	int room_min_height;
 	int room_padding;
 	char door_horizontal_closed;
 	char door_horizontal_open;
 	char door_vertical_closed;
 	char door_vertical_open;
 	char entrance;
-	char exit;	
-	char floor;	
+	char exit;
+	char floor;
 	char hallway;
 	char wall;
 
@@ -31,7 +31,7 @@ typedef struct{
 	int color_door_horizontal;
 	int color_door_vertical;
 	int color_floor;
-	int color_wall;	
+	int color_wall;
 
 	char *map;
 
@@ -54,10 +54,15 @@ struct node {
 };
 typedef struct node Node;
 
-
+/*--------Map Init / Free from memory ----------------------------------------------------------------------------------------*/
 void map_init(MapData *m, int map_width, int map_height);
 void map_free(MapData *m);
 
+/*--------Map Generation Style -----------------------------------------------------------------------------------------------*/
+void map_generate_srp(MapData *m);
+void map_generate_ca(MapData *m);
+
+/*--------Map generation helper functions ------------------------------------------------------------------------------------*/
 bool map_a_to_b_possible(MapData *m, int a, int b);
 void map_carve_hallways(MapData *m, Room *rooms, int rooms_added);
 void map_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend);
@@ -66,10 +71,8 @@ void map_carve_room(MapData *m, Room *rooms, int rooms_added);
 void map_fill(MapData *m);
 void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms);
 
-void map_generate_srp(MapData *m);
-void map_generate_ca(MapData *m);
 
-/*--------------------------------------------------------*/
+/*--------Misc math functions ------------------------------------------------------------------------------------------------*/
 float map_get_distance(MapData *m, int ax, int ay, int bx, int by);
 int map_xy(int x, int y, int map_width);
 double max_double(double a, double b);

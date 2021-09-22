@@ -313,8 +313,29 @@ void map_generate_ca(MapData *m){
 
 }
 
-float  map_get_distance(MapData *m, int ax, int ay, int bx, int by){
-	return sqrt(pow( (float)ax - (float)bx, 2) + pow( (float)ay - (float)by, 2) * 1.0);
+int map_get_manhattan_distance(MapData *m, int x1, int y1, int x2, int y2){
+	return abs(x1 - x2) + abs(y1 - y2);
 }
 
+int map_count_floor(MapData *m){
+	int count = 0;
+	for(int i = 0; i < m->map_height; i++){
+		for(int j = 0; j < m->map_width; j++){
+			if(m->map[ (i * m->map_width) + j] == m->floor){
+				count++;
+			}
+		}
+	}
+	return count;
+}
 
+void map_find_path(MapData *m, int x1, int y1, int x2, int y2){
+
+	int n_nodes = map_count_floor(m);
+	PathNode nodes[ n_nodes ];
+	for(int i = 0; i < n_nodes; i++){
+		nodes[i].id = i;
+		nodes[i].f = max_int(m->map_width, m->map_height);
+		nodes[i].g = max_int(m->map_width, m->map_height);
+	}
+}

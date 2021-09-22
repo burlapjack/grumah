@@ -45,14 +45,12 @@ typedef struct{
 	int x,y,x2,y2;
 }Hall;
 
-struct node {
+struct pathnode {
 	int id;
-	int heuristic; //distance from node to goal
-	int *weights;
-	int neighbors_count;  // number of neighbors
-	struct Node **neighbors;
+	int f,g,h;
+	struct PathNode **neighbors;
 };
-typedef struct node Node;
+typedef struct pathnode PathNode;
 
 /*--------Map Init / Free from memory ----------------------------------------------------------------------------------------*/
 void map_init(MapData *m, int map_width, int map_height);
@@ -63,7 +61,6 @@ void map_generate_srp(MapData *m);
 void map_generate_ca(MapData *m);
 
 /*--------Map generation helper functions ------------------------------------------------------------------------------------*/
-bool map_a_to_b_possible(MapData *m, int a, int b);
 void map_carve_hallways(MapData *m, Room *rooms, int rooms_added);
 void map_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend);
 void map_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend);
@@ -71,15 +68,17 @@ void map_carve_room(MapData *m, Room *rooms, int rooms_added);
 void map_fill(MapData *m);
 void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms);
 
+/*-------- Pathfinding-related functions -------------------------------------------------------------------------------------*/
+int map_count_floor(MapData *m);
+int map_get_manhattan_distance(MapData *m, int x1, int y1, int x2, int y2);
+void map_find_path(MapData *m, int x1, int y1, int x2, int y2);
 
 /*--------Misc math functions ------------------------------------------------------------------------------------------------*/
-float map_get_distance(MapData *m, int ax, int ay, int bx, int by);
 int map_xy(int x, int y, int map_width);
 double max_double(double a, double b);
 double min_double(double a, double  b);
 int max_int(int a, int b);
 int min_int(int a, int b);
 int rand_int(int n);
-
 
 #endif /* MAP_H */

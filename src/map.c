@@ -338,7 +338,15 @@ void free_node(){}
 
 
 /*---------------------- Graph functions -------------------------------------------------------------------------------------*/
-PathNode new_graph(PathGraph *g){}
+PathGraph* new_graph(PathGraph *g, MapData *m){
+	g->node_count = map_count_floor(m);
+	g->iterations = 0; /* number of times the loop has run */
+	g->unvisited_nodes = malloc( sizeof (*g->unvisited_nodes) * map_count_floor(m) ); /* ordered array of PathNode pointers on the graph */
+	g->visited_nodes = malloc( sizeof (*g->visited_nodes) * map_count_floor(m) );  /* array of pointers to PathNodes marked as "visited".  Empty by default */
+	g->parents = malloc( sizeof (*g->parents) * map_count_floor(m) ); /* array of pointers to each node's parent node which creates  the shortest distance from origin */
+	g->distances = malloc( sizeof (*g->distances) * map_count_floor(m) ); /* array that represents the total distance from an origin node to every other node */
+	return g;
+}
 void add_to_graph(PathGraph *g){}
 void free_graph(PathGraph *g){}
 
@@ -346,11 +354,6 @@ void free_graph(PathGraph *g){}
 void map_find_path(MapData *m, int x1, int y1, int x2, int y2){
 	/* determine how many floor tiles exist on the map
 	 * in order to create a node list of the correct size. */
-	int n_nodes = map_count_floor(m);
-	PathNode nodes[ n_nodes ];
-
+	PathGraph *g = new_graph(g, m);
 	/* initialize a list of unvisited nodes */
-	for(int i = 0; i < n_nodes; i++){
-		nodes[i].id = i;
-	}
 }

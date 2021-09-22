@@ -47,6 +47,7 @@ typedef struct{
 
 struct pathnode{
 	int id;
+	int x,y;
 	int number_of_neighbors;
 	struct PathNode **neighbors; /* array of pointers to neighboring nodes */
 	int heuristic; /* distance from the node to goal */

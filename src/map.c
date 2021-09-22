@@ -329,12 +329,40 @@ int map_count_floor(MapData *m){
 	return count;
 }
 
-void map_find_path(MapData *m, int x1, int y1, int x2, int y2){
+/*---------------------- PathNode functions ----------------------------------------------------------------------------------*/
+PathNode new_node(){}
+PathNode new_node_with_heuristic(){}
+void add_neighbor(){}
+void free_node(){}
 
+
+
+/*---------------------- Graph functions -------------------------------------------------------------------------------------*/
+PathNode new_graph(){}
+void add_to_graph(){}
+void free_graph(){}
+
+/*---------------------- A* Pathfinding --------------------------------------------------------------------------------------*/
+void map_find_path(MapData *m, int x1, int y1, int x2, int y2){
+	/* determine how many floor tiles exist on the map
+	 * in order to create a node list of the correct size. */
 	int n_nodes = map_count_floor(m);
 	PathNode nodes[ n_nodes ];
+
+	/* Graph */
+	int node_count; /* Number of nodes on the graph */
+	int iterations; /* number of times the loop has run */
+	PathNode **unvisited_nodes; /* ordered array of PathNode pointers on the graph */
+	PathNode **visited_nodes; /* array of pointers to PathNodes marked as "visited".  Empty by default */
+	PathNode **parents; /* array of pointers to each node's parent node which creates  the shortest distance from origin */
+	int *distances; /* array that represents the total distance from an origin node to every other node */
+
+
+	/* initialize a list of nodes */
 	for(int i = 0; i < n_nodes; i++){
 		nodes[i].id = i;
+		/* f and g are initiated at the largest distances possible.
+		 * Usually,  these are initiated at infinity in textbooks. */
 		nodes[i].f = max_int(m->map_width, m->map_height);
 		nodes[i].g = max_int(m->map_width, m->map_height);
 	}

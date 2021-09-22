@@ -48,6 +48,7 @@ typedef struct{
 struct pathnode {
 	int id;
 	int f,g,h;
+	int number_of_neighbors;
 	struct PathNode **neighbors;
 };
 typedef struct pathnode PathNode;

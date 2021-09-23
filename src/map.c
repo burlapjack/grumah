@@ -365,4 +365,8 @@ void add_to_graph(PathGraph *g){} /* adds a node to a graph, adjusting the graph
 void map_find_path(MapData *m, int x1, int y1, int x2, int y2){
 	PathGraph g;
 	graph_init(&g, m);
+	int origin = m->map[ y1 * m->map_width + x1 ];
+	int goal = m->map[ y2 * m->map_width + x2 ];
+	
+
 }

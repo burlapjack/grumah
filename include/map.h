@@ -50,6 +50,7 @@ struct pathnode{
 	int x,y;
 	int number_of_neighbors;
 	struct PathNode **neighbors; /* array of pointers to neighboring nodes */
+	int *weights; /* array of neighbor weights in the same order that neighbors array is in */
 	int heuristic; /* distance from the node to goal */
 };
 typedef struct pathnode PathNode;

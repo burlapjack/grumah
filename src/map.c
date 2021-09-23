@@ -335,25 +335,34 @@ PathNode new_node_with_heuristic(){}
 void add_neighbor(){}
 void free_node(){}
 
-
-
 /*---------------------- Graph functions -------------------------------------------------------------------------------------*/
-PathGraph* new_graph(PathGraph *g, MapData *m){
+void free_graph(PathGraph *g){
+	free(g->unvisited_nodes);
+	free(g->visited_nodes);
+	free(g->parents);
+	free(g->distances);
+}
+
+void graph_init(PathGraph *g, MapData *m){
 	g->node_count = map_count_floor(m);
 	g->iterations = 0; /* number of times the loop has run */
-	g->unvisited_nodes = malloc( sizeof (*g->unvisited_nodes) * map_count_floor(m) ); /* ordered array of PathNode pointers on the graph */
-	g->visited_nodes = malloc( sizeof (*g->visited_nodes) * map_count_floor(m) );  /* array of pointers to PathNodes marked as "visited".  Empty by default */
-	g->parents = malloc( sizeof (*g->parents) * map_count_floor(m) ); /* array of pointers to each node's parent node which creates  the shortest distance from origin */
-	g->distances = malloc( sizeof (*g->distances) * map_count_floor(m) ); /* array that represents the total distance from an origin node to every other node */
-	return g;
+	g->unvisited_nodes = malloc( sizeof (g->unvisited_nodes) * g->node_count ); /* ordered array of PathNode pointers on the graph */
+	g->visited_nodes = malloc( sizeof (g->visited_nodes) * g->node_count );  /* array of pointers to PathNodes marked as "visited".  Empty by default */
+	g->parents = malloc( sizeof (g->parents) * g->node_count ); /* array of pointers to each node's parent node which creates  the shortest distance from origin */
+	g->distances = malloc( sizeof (*g->distances) * g->node_count ); /* array that represents the total distance from an origin node to every other node */
+
+	int n = 0;
+	for(int i = 0; i < m->map_height; i++){
+		for(int j = 0; j < m->map_width; j++){
+			if( m->map[(i * m->map_width) + j] == m->floor){			
+			}
+		}
+	}
 }
-void add_to_graph(PathGraph *g){}
-void free_graph(PathGraph *g){}
+void add_to_graph(PathGraph *g){} /* adds a node to a graph, adjusting the graph's member values as necessary */
 
 /*---------------------- A* Pathfinding --------------------------------------------------------------------------------------*/
 void map_find_path(MapData *m, int x1, int y1, int x2, int y2){
-	/* determine how many floor tiles exist on the map
-	 * in order to create a node list of the correct size. */
-	PathGraph *g = new_graph(g, m);
-	/* initialize a list of unvisited nodes */
+	PathGraph g;
+	graph_init(&g, m);
 }

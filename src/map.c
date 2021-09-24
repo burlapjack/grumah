@@ -329,40 +329,25 @@ int map_count_floor(MapData *m){
 	return count;
 }
 
-/*---------------------- PathNode functions ----------------------------------------------------------------------------------*/
-PathNode new_node(){}
-PathNode new_node_with_heuristic(){}
-void add_neighbor(){}
-void free_node(){}
+int pathfind_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
+	int n_nodes = map_count_floor(m);	
+	PathNode open_list [n_nodes];
+	PathNode closed_list [n_nodes];
 
-/*---------------------- Graph functions -------------------------------------------------------------------------------------*/
-void free_graph(PathGraph *g){
-	free(g->unvisited_nodes);
-	free(g->visited_nodes);
-	free(g->parents);
-	free(g->distances);
-}
-
-void graph_init(PathGraph *g, MapData *m){
-	g->node_count = map_count_floor(m);
-	g->iterations = 0; /* number of times the loop has run */
-	g->unvisited_nodes = malloc( sizeof (g->unvisited_nodes) * g->node_count ); /* ordered array of PathNode pointers on the graph */
-	g->visited_nodes = malloc( sizeof (g->visited_nodes) * g->node_count );  /* array of pointers to PathNodes marked as "visited".  Empty by default */
-	g->parents = malloc( sizeof (g->parents) * g->node_count ); /* array of pointers to each node's parent node which creates  the shortest distance from origin */
-	g->distances = malloc( sizeof (*g->distances) * g->node_count ); /* array that represents the total distance from an origin node to every other node */
-
-	int n = 0;
-	for(int i = 0; i < m->map_height; i++){
-		for(int j = 0; j < m->map_width; j++){
-			if( m->map[(i * m->map_width) + j] == m->floor){			
-			}
+	open_list[0].x = ax;
+	open_list[0].y = ay;
+	open_list[0].g = 0;
+	open_list[0].h = map_get_manhattan_distance(m, ax, ay, bx, by);
+	open_list[0].f = open_list[0].g + open_list[0].h;
+	int n;	
+	for( int i = 0; i < m->map_height; i++){
+		for( int j = 0; j < m->map_width; i++){
+			open_list[n].x = ax;
+			open_list[n].y = ay;
+//			open_list[n].g = map_get_manhattan_distance(ax, ay, j, i );
+			open_list[n].h = map_get_manhattan_distance(m, ax, ay, bx, by);
+			open_list[n].f = open_list[n].g + open_list[n].h;
 		}
 	}
-}
-void add_to_graph(PathGraph *g){} /* adds a node to a graph, adjusting the graph's member values as necessary */
 
-/*---------------------- A* Pathfinding --------------------------------------------------------------------------------------*/
-void map_find_path(MapData *m, int x1, int y1, int x2, int y2){
-	PathGraph g;
-	graph_init(&g, m);
 }

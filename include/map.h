@@ -45,24 +45,11 @@ typedef struct{
 	int x,y,x2,y2;
 }Hall;
 
-struct pathnode{
-	int id;
+typedef struct {
 	int x,y;
-	int number_of_neighbors;
-	struct PathNode **neighbors; /* array of pointers to neighboring nodes */
-	int *weights; /* array of neighbor weights in the same order that neighbors array is in */
-	int heuristic; /* distance from the node to goal */
-};
-typedef struct pathnode PathNode;
-
-typedef struct{
-	int node_count; /* Number of nodes on the graph */
-	int iterations; /* number of times the loop has run */
-	PathNode **unvisited_nodes; /* ordered array of PathNode pointers on the graph */
-	PathNode **visited_nodes; /* array of pointers to PathNodes marked as "visited".  Empty by default */
-	PathNode **parents; /* array of pointers to each node's parent node which creates  the shortest distance from origin */
-	int *distances; /* array that represents the total distance from an origin node to every other node */
-}PathGraph;
+	int f,g,h;	
+	int parent_index;	
+}PathNode;
 
 /*--------Map Init / Free from memory ----------------------------------------------------------------------------------------*/
 void map_init(MapData *m, int map_width, int map_height);

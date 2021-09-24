@@ -4,27 +4,24 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include <stdbool.h>
+//#include <stdbool.h>
 #include <string.h>
 #include <assert.h>
+#include <limits.h>
 #include "../include/map.h"
 #include "../include/component.h"
 
 /*---------------------- Initialize map data ---------------------------------------------------------------------------------*/
 void map_init(MapData *m, int map_width, int map_height){
-
 	m->map_width = map_width;
 	m->map_height = map_height;
-
 	m->map = malloc( sizeof (*(m->map)) * (map_width * map_height));
-
 	m->number_of_rooms = 12;
 	m->room_max_width = 7;
 	m->room_max_height = 7;
 	m->room_min_width = 4;
 	m->room_min_height = 4;
 	m->room_padding = 2;
-
 	m->entrance = '.';
 	m->exit = '<';
 	m->door_horizontal_closed = '-';
@@ -34,14 +31,12 @@ void map_init(MapData *m, int map_width, int map_height){
 	m->floor = '.';
 	m->hallway = '.';
 	m->wall = '#';
-
 	m->color_entrance = 1;
 	m->color_exit = 1;
 	m->color_door_horizontal = 1;
 	m->color_door_vertical = 1;
 	m->color_floor = 1;
 	m->color_wall = 1;
-
 	map_fill(m);
 }
 
@@ -329,24 +324,41 @@ int map_count_floor(MapData *m){
 	return count;
 }
 
-int pathfind_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
-	int n_nodes = map_count_floor(m);	
-	PathNode open_list [n_nodes];
-	PathNode closed_list [n_nodes];
+/*
+typedef struct {
+	int number_of_nodes;
+	int startx,starty;
+	int endx, endy;
+	int number_of_open_nodes;
+	int number_of_closed_nodes;
+	MapNode *open_list;
+	MapNode *closed_list;
+}MapGraph;
+*/
 
-	open_list[0].x = ax;
-	open_list[0].y = ay;
-	open_list[0].g = 0;
-	open_list[0].h = map_get_manhattan_distance(m, ax, ay, bx, by);
-	open_list[0].f = open_list[0].g + open_list[0].h;
-	int n;	
-	for( int i = 0; i < m->map_height; i++){
-		for( int j = 0; j < m->map_width; i++){
-			open_list[n].x = ax;
-			open_list[n].y = ay;
-//			open_list[n].g = map_get_manhattan_distance(ax, ay, j, i );
-			open_list[n].h = map_get_manhattan_distance(m, ax, ay, bx, by);
-			open_list[n].f = open_list[n].g + open_list[n].h;
+void map_path_init_open_list(MapData *m, MapGraph *g){
+	for ( int n = 0; n < g->number_of_nodes; n++){
+		for( int i = 0; i < m->map_height; i++){
+			for( int j = 0; j < m->map_width; j++){
+				if(m->map[ (i * m->map_width) * j] == m->floor){
+					g->open_list[n].parent_index = -1; /* -1 is impossible */
+					g->open_list[n].x = j;
+					g->open_list[n].y = i;
+					g->open_list[n].g = INT_MAX; /* initial value should be infinity, but the integer max will suffice */
+					g->open_list[n].h = map_get_manhattan_distance(m, j, i, g->endx, g->endy); /* Distance from b */
+					g->open_list[n].f = INT_MAX;
+				}
+			}
 		}
 	}
+}
+
+int map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
+	MapGraph *g = malloc( sizeof (*g) );
+	g->number_of_nodes = map_count_floor(m);
+	g->number_of_open_nodes = 0;
+	g->number_of_closed_nodes = 0;
+	g->open_list = malloc( sizeof (*(g->open_list)) * g->number_of_nodes );
+	g->closed_list = malloc( sizeof (*(g->open_list)) * g->number_of_nodes );
+	map_path_init_open_list(m, g);
 }

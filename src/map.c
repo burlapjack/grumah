@@ -347,18 +347,42 @@ void map_path_init_open_list(MapData *m, MapGraph *g){
 					g->open_list[n].g = INT_MAX; /* initial value should be infinity, but the integer max will suffice */
 					g->open_list[n].h = map_get_manhattan_distance(m, j, i, g->endx, g->endy); /* Distance from b */
 					g->open_list[n].f = INT_MAX;
+					for(int k = 0; k < 4; k++){
+						g->open_list[n].neighbor_index[k] = -1;
+					}
 				}
 			}
 		}
 	}
 }
 
+void map_path_node_get_neighbors(MapGraph *g, int node_index){
+	int nx = g->open_list[node_index].x;
+	int ny = g->open_list[node_index].y;
+	
+	for(int i = 0; i < g->number_of_open_nodes; i ++){
+		if(g->open_list[i].x == nx && g->open_list[i].y - 1 == ny){ g->open_list[node_index].neighbor_index[0] = i;} /* North */ 
+		else if(g->open_list[i].x == nx && g->open_list[i].y + 1 == ny){ g->open_list[node_index].neighbor_index[1] = i;} /* South */ 
+		else if(g->open_list[i].x + 1 == nx && g->open_list[i].y == ny){g->open_list[node_index].neighbor_index[2] = i;} /* East */ 
+		else if(g->open_list[i].x - 1 == nx && g->open_list[i].y == ny){g->open_list[node_index].neighbor_index[3] = i;}; /* West */ 
+	}
+}
+
 int map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	MapGraph *g = malloc( sizeof (*g) );
 	g->number_of_nodes = map_count_floor(m);
-	g->number_of_open_nodes = 0;
+	g->number_of_open_nodes = g->number_of_nodes;
 	g->number_of_closed_nodes = 0;
 	g->open_list = malloc( sizeof (*(g->open_list)) * g->number_of_nodes );
 	g->closed_list = malloc( sizeof (*(g->open_list)) * g->number_of_nodes );
 	map_path_init_open_list(m, g);
+
+	int index_start_node;
+	int index_end_node;
+
+	for( int i = 0; i < g->number_of_nodes; i++){
+		if (g->open_list[i].x == ax && g->open_list[i].y == ay) index_start_node = i;
+		if (g->open_list[i].x == bx && g->open_list[i].y == by) index_end_node = i;
+	}
+
 }

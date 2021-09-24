@@ -349,5 +349,4 @@ int pathfind_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 			open_list[n].f = open_list[n].g + open_list[n].h;
 		}
 	}
-
 }

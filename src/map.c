@@ -336,6 +336,7 @@ typedef struct {
 }MapGraph;
 */
 
+/*---------------------- Pathfindinding --------------------------------------------------------------------------------------*/
 void map_path_init_open_list(MapData *m, MapGraph *g){
 	for ( int n = 0; n < g->number_of_nodes; n++){
 		for( int i = 0; i < m->map_height; i++){
@@ -356,6 +357,7 @@ void map_path_init_open_list(MapData *m, MapGraph *g){
 	}
 }
 
+/*-------- A* pathfinding node neighbor checker -------------*/
 void map_path_node_get_neighbors(MapGraph *g, int node_index){
 	int nx = g->open_list[node_index].x;
 	int ny = g->open_list[node_index].y;
@@ -368,6 +370,7 @@ void map_path_node_get_neighbors(MapGraph *g, int node_index){
 	}
 }
 
+/*--------Determine if entrance and exit are accessible -----*/
 int map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	MapGraph *g = malloc( sizeof (*g) );
 	g->number_of_nodes = map_count_floor(m);

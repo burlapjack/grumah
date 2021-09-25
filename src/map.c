@@ -362,6 +362,7 @@ void map_path_node_get_neighbors(MapGraph *g, int node_index){
 	int nx = g->open_list[node_index].x;
 	int ny = g->open_list[node_index].y;
 	
+	/* look for neighboring nodes in the open_list */	
 	for(int i = 0; i < g->number_of_open_nodes; i ++){
 		if(g->open_list[i].x == nx && g->open_list[i].y - 1 == ny){ g->open_list[node_index].neighbor_index[0] = i;} /* North */ 
 		else if(g->open_list[i].x == nx && g->open_list[i].y + 1 == ny){ g->open_list[node_index].neighbor_index[1] = i;} /* South */ 
@@ -383,9 +384,9 @@ int map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	int index_start_node;
 	int index_end_node;
 
+	/* Look for the index of the starting node */
 	for( int i = 0; i < g->number_of_nodes; i++){
 		if (g->open_list[i].x == ax && g->open_list[i].y == ay) index_start_node = i;
 		if (g->open_list[i].x == bx && g->open_list[i].y == by) index_end_node = i;
 	}
-
 }

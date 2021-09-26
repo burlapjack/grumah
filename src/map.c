@@ -336,6 +336,7 @@ typedef struct {
 }MapGraph;
 */
 
+/*---------------------- Pathfindinding --------------------------------------------------------------------------------------*/
 void map_path_init_open_list(MapData *m, MapGraph *g){
 	for ( int n = 0; n < g->number_of_nodes; n++){
 		for( int i = 0; i < m->map_height; i++){
@@ -360,7 +361,7 @@ void map_path_init_open_list(MapData *m, MapGraph *g){
 void map_path_node_get_neighbors(MapGraph *g, int node_index){
 	int nx = g->open_list[node_index].x;
 	int ny = g->open_list[node_index].y;
-
+	/* look for neighboring nodes in the open_list */	
 	for(int i = 0; i < g->number_of_open_nodes; i ++){
 		if(g->open_list[i].x == nx && g->open_list[i].y - 1 == ny){ g->open_list[node_index].neighbor_index[0] = i;} /* North */
 		else if(g->open_list[i].x == nx && g->open_list[i].y + 1 == ny){ g->open_list[node_index].neighbor_index[1] = i;} /* South */
@@ -379,7 +380,7 @@ int map_path_node_get_list_index_open(MapGraph *g, int x, int y){
 		}
 	}
 	return index;
-};
+}
 
 /*---------------------- Get the closed_list[] index via map coords ----------------------------------------------------------*/
 int map_path_node_get_list_index_closed(MapGraph *g, int x, int y){
@@ -391,7 +392,7 @@ int map_path_node_get_list_index_closed(MapGraph *g, int x, int y){
 		}
 	}
 	return index;
-};
+}
 
 /*---------------------- Check to see if it is possible to go from point a to b ----------------------------------------------*/
 int map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
@@ -411,5 +412,4 @@ int map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 		if (g->open_list[i].x == ax && g->open_list[i].y == ay) index_start_node = i;
 		if (g->open_list[i].x == bx && g->open_list[i].y == by) index_end_node = i;
 	}
-
 }

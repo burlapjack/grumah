@@ -336,8 +336,10 @@ typedef struct {
 }MapGraph;
 */
 
-/*---------------------- Pathfindinding --------------------------------------------------------------------------------------*/
-void map_path_init_open_list(MapData *m, MapGraph *g){
+/*====================== Pathfindinding ======================================================================================*/
+
+/*---------------------- Initialize the open_list array ----------------------------------------------------------------------*/
+void map_path_init_lists(MapData *m, MapGraph *g){
 	for ( int n = 0; n < g->number_of_nodes; n++){
 		for( int i = 0; i < m->map_height; i++){
 			for( int j = 0; j < m->map_width; j++){
@@ -346,10 +348,17 @@ void map_path_init_open_list(MapData *m, MapGraph *g){
 					g->open_list[n].x = j;
 					g->open_list[n].y = i;
 					g->open_list[n].g = INT_MAX; /* initial value should be infinity, but the integer max will suffice */
-					g->open_list[n].h = map_path_get_manhattan_distance(m, j, i, g->endx, g->endy); /* Distance from b */
+					g->open_list[n].h = INT_MAX;
 					g->open_list[n].f = INT_MAX;
+					g->closed_list[n].parent_index = -1;
+					g->closed_list[n].x = j;
+					g->closed_list[n].y = i;
+					g->closed_list[n].g = INT_MAX;
+					g->closed_list[n].h = INT_MAX;
+					g->closed_list[n].f = INT_MAX;
 					for(int k = 0; k < 4; k++){
 						g->open_list[n].neighbor_index[k] = -1;
+						g->closed_list[n].neighbor_index[k] = -1;
 					}
 				}
 			}
@@ -361,7 +370,7 @@ void map_path_init_open_list(MapData *m, MapGraph *g){
 void map_path_node_get_neighbors(MapGraph *g, int node_index){
 	int nx = g->open_list[node_index].x;
 	int ny = g->open_list[node_index].y;
-	/* look for neighboring nodes in the open_list */	
+	/* look for neighboring nodes in the open_list */
 	for(int i = 0; i < g->number_of_open_nodes; i ++){
 		if(g->open_list[i].x == nx && g->open_list[i].y - 1 == ny){ g->open_list[node_index].neighbor_index[0] = i;} /* North */
 		else if(g->open_list[i].x == nx && g->open_list[i].y + 1 == ny){ g->open_list[node_index].neighbor_index[1] = i;} /* South */
@@ -371,7 +380,7 @@ void map_path_node_get_neighbors(MapGraph *g, int node_index){
 }
 
 /*---------------------- Get the open_list[] index via map coords ------------------------------------------------------------*/
-int map_path_node_get_list_index_open(MapGraph *g, int x, int y){
+int map_path_node_get_index_open_list(MapGraph *g, int x, int y){
 	int index;
 	for( int i = 0; i < g->number_of_open_nodes; i++){
 		if (g->open_list[i].x == x && g->open_list[i].y == y){
@@ -383,7 +392,7 @@ int map_path_node_get_list_index_open(MapGraph *g, int x, int y){
 }
 
 /*---------------------- Get the closed_list[] index via map coords ----------------------------------------------------------*/
-int map_path_node_get_list_index_closed(MapGraph *g, int x, int y){
+int map_path_node_get_index_closed_list(MapGraph *g, int x, int y){
 	int index;
 	for( int i = 0; i < g->number_of_closed_nodes; i++){
 		if (g->closed_list[i].x == x && g->closed_list[i].y == y){
@@ -394,22 +403,26 @@ int map_path_node_get_list_index_closed(MapGraph *g, int x, int y){
 	return index;
 }
 
+/*---------------------- Deallocate MapGraph memory --------------------------------------------------------------------------*/
+void map_path_free_graph(MapGraph *g){
+	free(g->open_list);
+	free(g->closed_list);
+	free(g);
+}
+
+
 /*---------------------- Check to see if it is possible to go from point a to b ----------------------------------------------*/
 int map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	MapGraph *g = malloc( sizeof (*g) );
 	g->number_of_nodes = map_count_floor(m);
-	g->number_of_open_nodes = g->number_of_nodes;
+	g->number_of_open_nodes = 0;
 	g->number_of_closed_nodes = 0;
 	g->open_list = malloc( sizeof (*(g->open_list)) * g->number_of_nodes );
 	g->closed_list = malloc( sizeof (*(g->open_list)) * g->number_of_nodes );
-	map_path_init_open_list(m, g);
 
-	int index_start_node;
-	int index_end_node;
+	int index_start;
+	int index_end;
+	int index_current;
 
-	/* find the starting and the ending nodes */
-	for( int i = 0; i < g->number_of_nodes; i++){
-		if (g->open_list[i].x == ax && g->open_list[i].y == ay) index_start_node = i;
-		if (g->open_list[i].x == bx && g->open_list[i].y == by) index_end_node = i;
-	}
+
 }

@@ -80,7 +80,9 @@ void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms);
 
 /*-------- Pathfinding-related functions -------------------------------------------------------------------------------------*/
 int map_count_floor(MapData *m);
-int map_get_manhattan_distance(MapData *m, int x1, int y1, int x2, int y2);
+int map_path_get_manhattan_distance(MapData *m, int x1, int y1, int x2, int y2);
+int map_path_node_get_list_index_closed(MapGraph *g, int x, int y);
+int map_path_node_get_list_index_open(MapGraph *g, int x, int y);
 void map_path_node_get_neighbors(MapGraph *g, int node_index);
 int map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by);
 

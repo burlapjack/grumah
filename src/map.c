@@ -308,7 +308,7 @@ void map_generate_ca(MapData *m){
 
 }
 
-int map_get_manhattan_distance(MapData *m, int x1, int y1, int x2, int y2){
+int map_path_get_manhattan_distance(MapData *m, int x1, int y1, int x2, int y2){
 	return abs(x1 - x2) + abs(y1 - y2);
 }
 
@@ -345,7 +345,7 @@ void map_path_init_open_list(MapData *m, MapGraph *g){
 					g->open_list[n].x = j;
 					g->open_list[n].y = i;
 					g->open_list[n].g = INT_MAX; /* initial value should be infinity, but the integer max will suffice */
-					g->open_list[n].h = map_get_manhattan_distance(m, j, i, g->endx, g->endy); /* Distance from b */
+					g->open_list[n].h = map_path_get_manhattan_distance(m, j, i, g->endx, g->endy); /* Distance from b */
 					g->open_list[n].f = INT_MAX;
 					for(int k = 0; k < 4; k++){
 						g->open_list[n].neighbor_index[k] = -1;
@@ -356,18 +356,44 @@ void map_path_init_open_list(MapData *m, MapGraph *g){
 	}
 }
 
+/*---------------------- Record neighbor information  ------------------------------------------------------------------------*/
 void map_path_node_get_neighbors(MapGraph *g, int node_index){
 	int nx = g->open_list[node_index].x;
 	int ny = g->open_list[node_index].y;
-	
+
 	for(int i = 0; i < g->number_of_open_nodes; i ++){
-		if(g->open_list[i].x == nx && g->open_list[i].y - 1 == ny){ g->open_list[node_index].neighbor_index[0] = i;} /* North */ 
-		else if(g->open_list[i].x == nx && g->open_list[i].y + 1 == ny){ g->open_list[node_index].neighbor_index[1] = i;} /* South */ 
-		else if(g->open_list[i].x + 1 == nx && g->open_list[i].y == ny){g->open_list[node_index].neighbor_index[2] = i;} /* East */ 
-		else if(g->open_list[i].x - 1 == nx && g->open_list[i].y == ny){g->open_list[node_index].neighbor_index[3] = i;}; /* West */ 
+		if(g->open_list[i].x == nx && g->open_list[i].y - 1 == ny){ g->open_list[node_index].neighbor_index[0] = i;} /* North */
+		else if(g->open_list[i].x == nx && g->open_list[i].y + 1 == ny){ g->open_list[node_index].neighbor_index[1] = i;} /* South */
+		else if(g->open_list[i].x + 1 == nx && g->open_list[i].y == ny){g->open_list[node_index].neighbor_index[2] = i;} /* East */
+		else if(g->open_list[i].x - 1 == nx && g->open_list[i].y == ny){g->open_list[node_index].neighbor_index[3] = i;}; /* West */
 	}
 }
 
+/*---------------------- Get the open_list[] index via map coords ------------------------------------------------------------*/
+int map_path_node_get_list_index_open(MapGraph *g, int x, int y){
+	int index;
+	for( int i = 0; i < g->number_of_open_nodes; i++){
+		if (g->open_list[i].x == x && g->open_list[i].y == y){
+			index = i;
+			break;
+		}
+	}
+	return index;
+};
+
+/*---------------------- Get the closed_list[] index via map coords ----------------------------------------------------------*/
+int map_path_node_get_list_index_closed(MapGraph *g, int x, int y){
+	int index;
+	for( int i = 0; i < g->number_of_closed_nodes; i++){
+		if (g->closed_list[i].x == x && g->closed_list[i].y == y){
+			index = i;
+			break;
+		}
+	}
+	return index;
+};
+
+/*---------------------- Check to see if it is possible to go from point a to b ----------------------------------------------*/
 int map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	MapGraph *g = malloc( sizeof (*g) );
 	g->number_of_nodes = map_count_floor(m);
@@ -380,6 +406,7 @@ int map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	int index_start_node;
 	int index_end_node;
 
+	/* find the starting and the ending nodes */
 	for( int i = 0; i < g->number_of_nodes; i++){
 		if (g->open_list[i].x == ax && g->open_list[i].y == ay) index_start_node = i;
 		if (g->open_list[i].x == bx && g->open_list[i].y == by) index_end_node = i;

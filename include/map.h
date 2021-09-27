@@ -47,8 +47,9 @@ typedef struct{
 
 typedef struct {
 	int x,y;
-	int f,g,h;	
-	int parent_index;	
+	int f,g,h;
+	int parent_index;
+	int number_of_neighbors;
 	int neighbor_index[4];
 }MapNode;
 
@@ -80,13 +81,14 @@ void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms);
 
 /*-------- Pathfinding-related functions -------------------------------------------------------------------------------------*/
 int map_count_floor(MapData *m);
-void map_path_free_graph(MapGraph *g);
+int map_path_closed_list_get_index(MapGraph *g, int x, int y);
 int map_path_get_manhattan_distance(MapData *m, int x1, int y1, int x2, int y2);
+void map_path_free_graph(MapGraph *g);
 void map_path_init_lists(MapData *m, MapGraph *g);
-int map_path_node_get_index_closed_list(MapGraph *g, int x, int y);
-int map_path_node_get_index_open_list(MapGraph *g, int x, int y);
+bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by);
+bool map_path_node_exists_in_lists(MapGraph *g, int x, int y);
 void map_path_node_get_neighbors(MapGraph *g, int node_index);
-int map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by);
+int map_path_open_list_get_index(MapGraph *g, int x, int y);
 
 /*--------Misc math functions ------------------------------------------------------------------------------------------------*/
 int map_xy(int x, int y, int map_width);

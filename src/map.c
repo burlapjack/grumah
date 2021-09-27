@@ -355,28 +355,36 @@ void map_path_init_lists(MapData *m, MapGraph *g){
 }
 
 /*---------------------- Record neighbor information  ------------------------------------------------------------------------*/
-void map_path_node_get_neighbors(MapGraph *g, int node_index){
+void map_path_node_get_neighbors(MapData *m, MapGraph *g, int node_index){
 	int nx = g->open_list[node_index].x;
 	int ny = g->open_list[node_index].y;
 	g->open_list[node_index].number_of_neighbors = 0; /* initialize number_of_neighbors value */
-	/* look for neighboring nodes in the open_list */
-	for(int i = 0; i < g->number_of_open_nodes; i ++){ /* North */
-		if(g->open_list[i].x == nx && g->open_list[i].y - 1 == ny){
-			g->open_list[node_index].neighbor_index[0] = i;
-			g->open_list[node_index].number_of_neighbors += 1;
-		}
-		else if(g->open_list[i].x == nx && g->open_list[i].y + 1 == ny){ /* South */
-			g->open_list[node_index].neighbor_index[1] = i;
-			g->open_list[node_index].number_of_neighbors += 1;
-		}
-		else if(g->open_list[i].x + 1 == nx && g->open_list[i].y == ny){ /* East */
-			g->open_list[node_index].neighbor_index[2] = i;
-			g->open_list[node_index].number_of_neighbors += 1;}
-		else if(g->open_list[i].x - 1 == nx && g->open_list[i].y == ny){ /* West */
-			g->open_list[node_index].neighbor_index[3] = i;
-			g->open_list[node_index].number_of_neighbors += 1;
-		};
+
+	/* check the map for neighboring nodes */
+	if( m->map[(ny - 1) * m->map_width + nx] == m->floor ){ /* North */
+		g->open_list[node_index].neighbor_index[0] = g->number_of_open_nodes; /* add neighbor index to current node */	
+		g->open_list[g->number_of_open_nodes].x = nx - 1;	
+		g->open_list[g->number_of_open_nodes].y = ny;	
+		g->number_of_open_nodes++;
 	}
+	else if( m->map[(ny + 1) * m->map_width + nx] == m->floor ){ /* South */
+		g->open_list[node_index].neighbor_index[1] = g->number_of_open_nodes; /* add neighbor index to current node */	
+		g->open_list[g->number_of_open_nodes].x = nx;	
+		g->open_list[g->number_of_open_nodes].y = ny + 1;	
+		g->number_of_open_nodes++;
+	}
+	else if( m->map[ny * m->map_width + (nx + 1)] == m->floor ){ /* East */
+		g->open_list[node_index].neighbor_index[2] = g->number_of_open_nodes; /* add neighbor index to current node */	
+		g->open_list[g->number_of_open_nodes].x = nx + 1;	
+		g->open_list[g->number_of_open_nodes].y = ny;	
+		g->number_of_open_nodes++;
+	}
+	else if( m->map[(ny + 1) * m->map_width + (nx - 1)] == m->floor ){ /* West */
+		g->open_list[node_index].neighbor_index[3] = g->number_of_open_nodes; /* add neighbor index to current node */	
+		g->open_list[g->number_of_open_nodes].x = nx - 1;	
+		g->open_list[g->number_of_open_nodes].y = ny + 1;	
+		g->number_of_open_nodes++;
+	};
 }
 
 /*---------------------- Get the open_list[] index via map coords ------------------------------------------------------------*/
@@ -470,10 +478,11 @@ bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	g->number_of_open_nodes = 1;
 	int current_index = 0;
 
+	/* The main loop */
 	while(g->open_list[current_index].x != bx && g->open_list[current_index].y != by){
-		map_path_node_get_neighbors(g, current_index);
+		/*get current node's neighbors and calculate their h and g values */
+		map_path_node_get_neighbors(m, g, current_index);
 		for(int i = 0; i < g->open_list[current_index].number_of_neighbors; i++){
-
 		}
 	}
 	return contiguous;

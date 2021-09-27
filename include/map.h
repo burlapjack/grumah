@@ -87,7 +87,7 @@ void map_path_free_graph(MapGraph *g);
 void map_path_init_lists(MapData *m, MapGraph *g);
 bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by);
 bool map_path_node_exists_in_lists(MapGraph *g, int x, int y);
-void map_path_node_get_neighbors(MapGraph *g, int node_index);
+void map_path_node_get_neighbors(MapData *m, MapGraph *g, int node_index);
 int map_path_open_list_get_index(MapGraph *g, int x, int y);
 
 /*--------Misc math functions ------------------------------------------------------------------------------------------------*/

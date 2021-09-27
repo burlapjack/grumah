@@ -371,12 +371,7 @@ void map_path_node_get_neighbors(MapData *m, MapGraph *g, int node_index){
 		g->open_list[node_index].number_of_neighbors++; /* iterate node neigbor count */
 
 		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
-		if(map_path_node_exists_in_lists(g, nx, ny-1) == false){
-			g->open_list[g->number_of_open_nodes].x = nx - 1; /*add node x and y */
-			g->open_list[g->number_of_open_nodes].y = ny;
-			g->open_list[g->number_of_open_nodes].parent_index = node_index;
-			g->number_of_open_nodes++; /* iterate open_node count */
-		}
+		if(map_path_node_exists_in_lists(g, nx, ny-1) == false) map_path_open_list_add_node(g, node_index, nx, ny - 1);
 	}
 
 	if( m->map[south] == m->floor ){ /* South */
@@ -384,37 +379,31 @@ void map_path_node_get_neighbors(MapData *m, MapGraph *g, int node_index){
 		g->open_list[node_index].number_of_neighbors++;
 
 		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
-		if( map_path_node_exists_in_lists(g, nx, ny+1) == false ){
-			g->open_list[g->number_of_open_nodes].x = nx;
-			g->open_list[g->number_of_open_nodes].y = ny + 1;
-			g->open_list[g->number_of_open_nodes].parent_index = node_index;
-			g->number_of_open_nodes++; /* iterate open_node count */
-		}
+		if( map_path_node_exists_in_lists(g, nx, ny+1) == false ) map_path_open_list_add_node(g, node_index, nx, ny + 1);
 	}
 	if( m->map[east] == m->floor ){ /* East */
 		g->open_list[node_index].neighbor_index[2] = g->number_of_open_nodes; /* add neighbor index to current node */
 		g->open_list[node_index].number_of_neighbors++;
 
 		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
-		if(map_path_node_exists_in_lists(g, nx + 1, ny) == false ){
-			g->open_list[g->number_of_open_nodes].x = nx + 1;
-			g->open_list[g->number_of_open_nodes].y = ny;
-			g->open_list[g->number_of_open_nodes].parent_index = node_index;
-			g->number_of_open_nodes++; /* iterate open_node count */
-		}
+		if(map_path_node_exists_in_lists(g, nx + 1, ny) == false ) map_path_open_list_add_node(g, node_index, nx + 1, ny);
 	}
 	if( m->map[west] == m->floor ){ /* West */
 		g->open_list[node_index].neighbor_index[3] = g->number_of_open_nodes; /* add neighbor index to current node */
 		g->open_list[node_index].number_of_neighbors++;
 
 		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
-		if(map_path_node_exists_in_lists(g, nx - 1, ny) == false ){
-			g->open_list[g->number_of_open_nodes].x = nx - 1;
-			g->open_list[g->number_of_open_nodes].y = ny;
-			g->open_list[g->number_of_open_nodes].parent_index = node_index;
-			g->number_of_open_nodes++; /* iterate open_node count */
-		}
+		if(map_path_node_exists_in_lists(g, nx - 1, ny) == false ) map_path_open_list_add_node(g, node_index, nx - 1, ny);
 	}
+}
+
+/*---------------------- Add new node to open_list ---------------------------------------------------------------------------*/
+void map_path_open_list_add_node(MapGraph *g, int parent_index, int x, int y){
+	g->open_list[g->number_of_open_nodes].x = x;
+	g->open_list[g->number_of_open_nodes].y = y;
+	g->open_list[g->number_of_open_nodes].parent_index = parent_index;
+	g->number_of_open_nodes++; /* iterate open_node count */
+
 }
 
 /*---------------------- Get the open_list[] index via map coords ------------------------------------------------------------*/
@@ -467,10 +456,6 @@ bool map_path_node_exists_in_lists(MapGraph *g, int x, int y){
 		}
 	}
 	return exists;
-}
-
-void map_path_open_list_add_node(MapData *m, int x, int y){
-
 }
 
 /*

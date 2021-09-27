@@ -37,7 +37,7 @@ void map_init(MapData *m, int map_width, int map_height){
 	m->color_door_vertical = 1;
 	m->color_floor = 1;
 	m->color_wall = 1;
-	map_fill(m);
+	map_gen_fill(m);
 }
 
 /*---------------------- Deallocate map data ---------------------------------------------------------------------------------*/
@@ -46,16 +46,6 @@ void map_free(MapData *m){
 	m->map = NULL;
 	free(m);
 	m = NULL;
-}
-
-/*------ Find the largest of two doubles -------------------------------------------------------------------------------------*/
-double max_double(double a, double b){
-	if (a > b) return a; else return b;
-}
-
-/*------ Find the smallest of two integers -----------------------------------------------------------------------------------*/
-double min_double(double a, double  b){
-	if (a < b) return a; else return b;
 }
 
 /*------ Find the largest of two integers ------------------------------------------------------------------------------------*/
@@ -83,21 +73,21 @@ int rand_int(int n){
 }
 
 /*------ "Carve" a horizontal hallway int the map array ----------------------------------------------------------------------*/
-void map_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend){
+void map_gen_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend){
 	for(int j = xstart; j <= xend; j++){
 		m->map[ (halls_array[hall_index].y * m->map_width) + j ] = '.';
 	}
 }
 
 /*------ "Carve" a verticle hallway int the map array ------------------------------------------------------------------------*/
-void map_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend){
+void map_gen_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend){
 	for(int j = ystart; j <= yend; j++){
 		m->map[ (j * m->map_width) + halls_array[hall_index].x2 ] = '.';
 	}
 }
 
 /*---------------------- Carve rooms -----------------------------------------------------------------------------------------*/
-void map_carve_room(MapData *m, Room *rooms, int rooms_added){
+void map_gen_carve_room(MapData *m, Room *rooms, int rooms_added){
 	/* "Carve" rooms into the map array */
 	for(int i = 0; i < rooms_added; i++){
 		for(int j = rooms[i].y; j < rooms[i].y2; j++){
@@ -109,7 +99,7 @@ void map_carve_room(MapData *m, Room *rooms, int rooms_added){
 }
 
 /*---------------------- Generate doors on the edges of each room ------------------------------------------------------------*/
-void map_carve_hallways(MapData *m, Room *rooms, int rooms_added){
+void map_gen_carve_hallways(MapData *m, Room *rooms, int rooms_added){
 	int xa,xb,ya,yb;
 	int random_direction;
 	Hall halls[rooms_added - 1];
@@ -147,18 +137,18 @@ void map_carve_hallways(MapData *m, Room *rooms, int rooms_added){
 		/* Randomly pick the horizontal and verticle carve order of hallway. */
 		random_direction = rand_int(4);
 		if(random_direction > 2){
-			map_carve_hall_horizontally(m, halls, i, xa, xb);
-			map_carve_hall_vertically(m, halls, i, ya, yb);
+			map_gen_carve_hall_horizontally(m, halls, i, xa, xb);
+			map_gen_carve_hall_vertically(m, halls, i, ya, yb);
 		}
 		else{
-			map_carve_hall_vertically(m, halls, i, ya, yb);
-			map_carve_hall_horizontally(m, halls, i, xa, xb);
+			map_gen_carve_hall_vertically(m, halls, i, ya, yb);
+			map_gen_carve_hall_horizontally(m, halls, i, xa, xb);
 		}
 	}
 }
 
 /*---------------------- Fill a map so that it is all walls ------------------------------------------------------------------*/
-void map_fill(MapData *m){
+void map_gen_fill(MapData *m){
 	for ( int i = 0; i < m->map_height; i++){
 		for ( int j = 0; j < m->map_width; j++){
 			m->map[ i * m->map_width + j] = m->wall;
@@ -167,7 +157,7 @@ void map_fill(MapData *m){
 }
 
 /*---------------------- Generate doors on the edges of each room ------------------------------------------------------------*/
-void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms){
+void map_gen_doors(MapData *m, Room *rooms, int number_of_rooms){
 	char top, bottom, left, right;
 	/* y coord */
 	for(int i = 1; i < (m->map_height-1); i++){
@@ -203,7 +193,7 @@ void map_generate_doors(MapData *m, Room *rooms, int number_of_rooms){
 
 /*---------------------- Map Generation: Simple Room Placement ---------------------------------------------------------------*/
 /* Rooms are added one at a time wherever they will fit, then hallways are created between them. */
-void map_generate_srp(MapData *m){
+void map_gen_srp(MapData *m){
 	int room_x,room_y, room_x2, room_y2;
 	int rooms_added = 0;
 	int collision_detected = 0;
@@ -212,7 +202,7 @@ void map_generate_srp(MapData *m){
 	Room rooms[m->number_of_rooms];
 
 	/* Start a fresh map, filled with all walls. */
-	map_fill(m);
+	map_gen_fill(m);
 
 	/* Room Creation */
 	while(rooms_added < m->number_of_rooms){
@@ -250,13 +240,13 @@ void map_generate_srp(MapData *m){
 		collision_detected = 0;
 		if(fails == fail_limit) break;
 	}
-	map_carve_room(m, rooms, rooms_added);
-	map_carve_hallways(m, rooms, rooms_added);
-	map_generate_doors(m, rooms, rooms_added);
+	map_gen_carve_room(m, rooms, rooms_added);
+	map_gen_carve_hallways(m, rooms, rooms_added);
+	map_gen_doors(m, rooms, rooms_added);
 }
 
 /*---------------------- Map Generation: Cellular Automata -------------------------------------------------------------------*/
-void map_generate_ca(MapData *m){
+void map_gen_ca(MapData *m){
 	int iterations = 4;
 	int rand_tile;
 	int neighbor_walls;
@@ -308,7 +298,7 @@ void map_generate_ca(MapData *m){
 
 }
 
-int map_path_get_manhattan_distance(MapData *m, int x1, int y1, int x2, int y2){
+int map_path_get_manhattan_distance(int x1, int y1, int x2, int y2){
 	return abs(x1 - x2) + abs(y1 - y2);
 }
 
@@ -365,33 +355,27 @@ void map_path_node_get_neighbors(MapData *m, MapGraph *g, int node_index){
 	g->open_list[node_index].number_of_neighbors = 0; /* initialize number_of_neighbors value */
 
 	/* check the map for neighboring nodes */
-//bool map_path_node_exists_in_lists(MapGraph *g, int x, int y){
 	if( m->map[north] == m->floor ){ /* North */
 		g->open_list[node_index].neighbor_index[0] = g->number_of_open_nodes; /* add neighbor index to current node */
 		g->open_list[node_index].number_of_neighbors++; /* iterate node neigbor count */
-
 		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
 		if(map_path_node_exists_in_lists(g, nx, ny-1) == false) map_path_open_list_add_node(g, node_index, nx, ny - 1);
 	}
-
 	if( m->map[south] == m->floor ){ /* South */
 		g->open_list[node_index].neighbor_index[1] = g->number_of_open_nodes; /* add neighbor index to current node */
 		g->open_list[node_index].number_of_neighbors++;
-
 		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
 		if( map_path_node_exists_in_lists(g, nx, ny+1) == false ) map_path_open_list_add_node(g, node_index, nx, ny + 1);
 	}
 	if( m->map[east] == m->floor ){ /* East */
 		g->open_list[node_index].neighbor_index[2] = g->number_of_open_nodes; /* add neighbor index to current node */
 		g->open_list[node_index].number_of_neighbors++;
-
 		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
 		if(map_path_node_exists_in_lists(g, nx + 1, ny) == false ) map_path_open_list_add_node(g, node_index, nx + 1, ny);
 	}
 	if( m->map[west] == m->floor ){ /* West */
 		g->open_list[node_index].neighbor_index[3] = g->number_of_open_nodes; /* add neighbor index to current node */
 		g->open_list[node_index].number_of_neighbors++;
-
 		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
 		if(map_path_node_exists_in_lists(g, nx - 1, ny) == false ) map_path_open_list_add_node(g, node_index, nx - 1, ny);
 	}
@@ -399,11 +383,38 @@ void map_path_node_get_neighbors(MapData *m, MapGraph *g, int node_index){
 
 /*---------------------- Add new node to open_list ---------------------------------------------------------------------------*/
 void map_path_open_list_add_node(MapGraph *g, int parent_index, int x, int y){
-	g->open_list[g->number_of_open_nodes].x = x;
-	g->open_list[g->number_of_open_nodes].y = y;
-	g->open_list[g->number_of_open_nodes].parent_index = parent_index;
+	int i = g->number_of_open_nodes;
+	g->open_list[i].x = x;
+	g->open_list[i].y = y;
+	g->open_list[i].g = map_path_get_manhattan_distance(x, y, g->startx, g->starty);
+	g->open_list[i].h = map_path_get_manhattan_distance(x, y, g->endx, g->endy);
+	/* if f is less than the existing f value, then update */
+	if( (g->open_list[i].g + g->open_list[i].h) < g->open_list[i].f){
+		g->open_list[i].parent_index = parent_index;
+		g->open_list[i].f = g->open_list[i].g + g->open_list[i].h;
+	}
 	g->number_of_open_nodes++; /* iterate open_node count */
+}
 
+/*---------------------- "Clear" open_list node by giving it values that won't be prioritized --------------------------------*/
+void map_path_open_list_clear_node(MapGraph *g, int node_index){
+	g->open_list[node_index].x = -1; /* this might get me in trouble */
+	g->open_list[node_index].y = -1; /* this also might get me in trouble */
+	g->open_list[node_index].g = INT_MAX;
+	g->open_list[node_index].h = INT_MAX;
+	g->open_list[node_index].f = INT_MAX;
+}
+
+/*---------------------- Copy contents of indicated open_list node into closed_list ------------------------------------------*/
+void map_path_closed_list_add_node(MapGraph *g, int open_list_index){
+	/* I could use memcpy, but I hate surprises. */
+	g->closed_list[g->number_of_closed_nodes].x = g->open_list[open_list_index].x;
+	g->closed_list[g->number_of_closed_nodes].y = g->open_list[open_list_index].y;
+	g->closed_list[g->number_of_closed_nodes].g = g->open_list[open_list_index].g;
+	g->closed_list[g->number_of_closed_nodes].h = g->open_list[open_list_index].h;
+	g->closed_list[g->number_of_closed_nodes].f = g->open_list[open_list_index].f;
+	g->closed_list[g->number_of_closed_nodes].parent_index = g->open_list[open_list_index].parent_index;
+	map_path_open_list_clear_node(g, open_list_index);
 }
 
 /*---------------------- Get the open_list[] index via map coords ------------------------------------------------------------*/
@@ -437,6 +448,7 @@ void map_path_free_graph(MapGraph *g){
 	free(g);
 }
 
+/*---------------------- Check to see if the given criteria are matched by a node in any list  -------------------------------*/
 bool map_path_node_exists_in_lists(MapGraph *g, int x, int y){
 	bool exists = false;
 	/* checked open_list */
@@ -497,7 +509,7 @@ bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	g->open_list[0].x = ax;
 	g->open_list[0].y = ay;
 	g->open_list[0].parent_index = 0;
-	g->open_list[0].h = map_path_get_manhattan_distance(m, ax, ay, bx, by);
+	g->open_list[0].h = map_path_get_manhattan_distance(ax, ay, bx, by);
 	g->open_list[0].f = g->open_list[0].h;
 	g->number_of_open_nodes = 1;
 	int current_index = 0;
@@ -506,6 +518,7 @@ bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	while(g->open_list[current_index].x != bx && g->open_list[current_index].y != by){ /* "while the current node is not the final node " */
 		/*get current node's neighbors and calculate their h and g values */
 		map_path_node_get_neighbors(m, g, current_index);
+
 	}
 	return contiguous;
 }

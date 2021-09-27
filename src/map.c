@@ -358,33 +358,63 @@ void map_path_init_lists(MapData *m, MapGraph *g){
 void map_path_node_get_neighbors(MapData *m, MapGraph *g, int node_index){
 	int nx = g->open_list[node_index].x;
 	int ny = g->open_list[node_index].y;
+	int north = (ny - 1) * m->map_width + nx;
+	int south = (ny + 1) * m->map_width + nx;
+	int east = ny * m->map_width + nx + 1;
+	int west = ny * m->map_width + nx - 1;
 	g->open_list[node_index].number_of_neighbors = 0; /* initialize number_of_neighbors value */
 
 	/* check the map for neighboring nodes */
-	if( m->map[(ny - 1) * m->map_width + nx] == m->floor ){ /* North */
-		g->open_list[node_index].neighbor_index[0] = g->number_of_open_nodes; /* add neighbor index to current node */	
-		g->open_list[g->number_of_open_nodes].x = nx - 1;	
-		g->open_list[g->number_of_open_nodes].y = ny;	
-		g->number_of_open_nodes++;
+//bool map_path_node_exists_in_lists(MapGraph *g, int x, int y){
+	if( m->map[north] == m->floor ){ /* North */
+		g->open_list[node_index].neighbor_index[0] = g->number_of_open_nodes; /* add neighbor index to current node */
+		g->open_list[node_index].number_of_neighbors++; /* iterate node neigbor count */
+
+		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
+		if(map_path_node_exists_in_lists(g, nx, ny-1) == false){
+			g->open_list[g->number_of_open_nodes].x = nx - 1; /*add node x and y */
+			g->open_list[g->number_of_open_nodes].y = ny;
+			g->open_list[g->number_of_open_nodes].parent_index = node_index;
+			g->number_of_open_nodes++; /* iterate open_node count */
+		}
 	}
-	else if( m->map[(ny + 1) * m->map_width + nx] == m->floor ){ /* South */
-		g->open_list[node_index].neighbor_index[1] = g->number_of_open_nodes; /* add neighbor index to current node */	
-		g->open_list[g->number_of_open_nodes].x = nx;	
-		g->open_list[g->number_of_open_nodes].y = ny + 1;	
-		g->number_of_open_nodes++;
+
+	if( m->map[south] == m->floor ){ /* South */
+		g->open_list[node_index].neighbor_index[1] = g->number_of_open_nodes; /* add neighbor index to current node */
+		g->open_list[node_index].number_of_neighbors++;
+
+		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
+		if( map_path_node_exists_in_lists(g, nx, ny+1) == false ){
+			g->open_list[g->number_of_open_nodes].x = nx;
+			g->open_list[g->number_of_open_nodes].y = ny + 1;
+			g->open_list[g->number_of_open_nodes].parent_index = node_index;
+			g->number_of_open_nodes++; /* iterate open_node count */
+		}
 	}
-	else if( m->map[ny * m->map_width + (nx + 1)] == m->floor ){ /* East */
-		g->open_list[node_index].neighbor_index[2] = g->number_of_open_nodes; /* add neighbor index to current node */	
-		g->open_list[g->number_of_open_nodes].x = nx + 1;	
-		g->open_list[g->number_of_open_nodes].y = ny;	
-		g->number_of_open_nodes++;
+	if( m->map[east] == m->floor ){ /* East */
+		g->open_list[node_index].neighbor_index[2] = g->number_of_open_nodes; /* add neighbor index to current node */
+		g->open_list[node_index].number_of_neighbors++;
+
+		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
+		if(map_path_node_exists_in_lists(g, nx + 1, ny) == false ){
+			g->open_list[g->number_of_open_nodes].x = nx + 1;
+			g->open_list[g->number_of_open_nodes].y = ny;
+			g->open_list[g->number_of_open_nodes].parent_index = node_index;
+			g->number_of_open_nodes++; /* iterate open_node count */
+		}
 	}
-	else if( m->map[(ny + 1) * m->map_width + (nx - 1)] == m->floor ){ /* West */
-		g->open_list[node_index].neighbor_index[3] = g->number_of_open_nodes; /* add neighbor index to current node */	
-		g->open_list[g->number_of_open_nodes].x = nx - 1;	
-		g->open_list[g->number_of_open_nodes].y = ny + 1;	
-		g->number_of_open_nodes++;
-	};
+	if( m->map[west] == m->floor ){ /* West */
+		g->open_list[node_index].neighbor_index[3] = g->number_of_open_nodes; /* add neighbor index to current node */
+		g->open_list[node_index].number_of_neighbors++;
+
+		/* if this neigbor doesn't exist in any of the lists, add it to open_list */
+		if(map_path_node_exists_in_lists(g, nx - 1, ny) == false ){
+			g->open_list[g->number_of_open_nodes].x = nx - 1;
+			g->open_list[g->number_of_open_nodes].y = ny;
+			g->open_list[g->number_of_open_nodes].parent_index = node_index;
+			g->number_of_open_nodes++; /* iterate open_node count */
+		}
+	}
 }
 
 /*---------------------- Get the open_list[] index via map coords ------------------------------------------------------------*/
@@ -453,6 +483,15 @@ typedef struct {
 	MapNode *open_list;
 	MapNode *closed_list;
 }MapGraph;
+
+
+typedef struct {
+	int x,y;
+	int f,g,h;
+	int parent_index;
+	int number_of_neighbors;
+	int neighbor_index[4];
+}MapNode;
 */
 
 /*---------------------- Check to see if it is possible to go from point a to b ----------------------------------------------*/
@@ -469,7 +508,7 @@ bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	g->endx = bx;
 	g->endy = by;
 
-	/* add the starting node */
+	/* add the starting node to open_list */
 	g->open_list[0].x = ax;
 	g->open_list[0].y = ay;
 	g->open_list[0].parent_index = 0;
@@ -479,11 +518,9 @@ bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	int current_index = 0;
 
 	/* The main loop */
-	while(g->open_list[current_index].x != bx && g->open_list[current_index].y != by){
+	while(g->open_list[current_index].x != bx && g->open_list[current_index].y != by){ /* "while the current node is not the final node " */
 		/*get current node's neighbors and calculate their h and g values */
 		map_path_node_get_neighbors(m, g, current_index);
-		for(int i = 0; i < g->open_list[current_index].number_of_neighbors; i++){
-		}
 	}
 	return contiguous;
 }

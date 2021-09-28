@@ -386,7 +386,8 @@ void map_path_open_list_add_node(MapGraph *g, int parent_index, int x, int y){
 	int i = g->number_of_open_nodes;
 	g->open_list[i].x = x;
 	g->open_list[i].y = y;
-	g->open_list[i].g = map_path_get_manhattan_distance(x, y, g->startx, g->starty);
+	/* g value = distance between this node and parent + parent g value. */
+	g->open_list[i].g = map_path_get_manhattan_distance(x, y, g->open_list[parent_index].x, g->open_list[parent_index].y) + g->open_list[parent_index].g;
 	g->open_list[i].h = map_path_get_manhattan_distance(x, y, g->endx, g->endy);
 	/* if f is less than the existing f value, then update */
 	if( (g->open_list[i].g + g->open_list[i].h) < g->open_list[i].f){
@@ -518,7 +519,7 @@ bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	while(g->open_list[current_index].x != bx && g->open_list[current_index].y != by){ /* "while the current node is not the final node " */
 		/*get current node's neighbors and calculate their h and g values */
 		map_path_node_get_neighbors(m, g, current_index);
-
+		map_path_closed_list_add_node(g, current_index);
 	}
 	return contiguous;
 }

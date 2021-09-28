@@ -7,39 +7,12 @@
 
 #include "component.h"
 
-typedef struct{
-	int map_width;
-	int map_height;
-	int number_of_rooms;
-	int room_max_width;
-	int room_max_height;
-	int room_min_width;
-	int room_min_height;
-	int room_padding;
-	char door_horizontal_closed;
-	char door_horizontal_open;
-	char door_vertical_closed;
-	char door_vertical_open;
-	char entrance;
-	char exit;
-	char floor;
-	char hallway;
-	char wall;
-
-	int color_entrance;
-	int color_exit;
-	int color_door_horizontal;
-	int color_door_vertical;
-	int color_floor;
-	int color_wall;
-
-	char *map;
-
-}MapData;
 
 typedef struct{
 	int x,y,x2,y2;
 }Room;
+
+typedef struct data MapData;
 
 typedef struct{
 	int x,y,x2,y2;
@@ -53,15 +26,17 @@ typedef struct {
 	int neighbor_index[4];
 }MapNode;
 
-typedef struct {
-	int number_of_nodes;
-	int startx,starty;
-	int endx, endy;
-	int number_of_open_nodes;
-	int number_of_closed_nodes;
-	MapNode *open_list;
-	MapNode *closed_list;
-}MapGraph;
+//typedef struct {
+//	int number_of_nodes;
+//	int startx,starty;
+//	int endx, endy;
+//	int number_of_open_nodes;
+//	int number_of_closed_nodes;
+//	MapNode *open_list;
+//	MapNode *closed_list;
+//}MapGraph;
+//
+typedef struct graph MapGraph;
 
 /*--------Map Init / Free from memory ----------------------------------------------------------------------------------------*/
 void   map_init(MapData *m, int map_width, int map_height); /* Initializes a MapData struct. */

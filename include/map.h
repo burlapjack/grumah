@@ -45,7 +45,7 @@ void   map_path_free_graph(MapGraph *g); /* Deallocates a MapGraph struct. */
 void   map_path_init_lists(MapData *m, MapGraph *g); /* Initializes MapGraph open_list and closed_list. */
 bool   map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by); /* Returns true if point a and point b share contiguous floor space. */
 bool   map_path_node_exists_in_lists(MapGraph *g, int x, int y); /* Returns true if the given coordinates exist as a node in open_list or closed_list. */
-void   map_path_node_get_neighbors(MapData *m, MapGraph *g, int node_index); /* Finds the neighboring nodes from the map, adds them to open_list and calculates their f,g,h. */
+void   map_path_node_get_neighbors(MapData *m, MapGraph *g, int current_index); /* Finds the neighboring nodes from the map, adds them to open_list and calculates their f,g,h. */
 void   map_path_open_list_add_node(MapGraph *g, int parent_index, int x, int y); /* Adds a new node to open_list given the parent index, and coordinates on the map. */
 void   map_path_open_list_clear_node(MapGraph *g, int node_index); /* "Clears" a node from the open_list by giving the indicated node index garbage data that won't be queried. */
 int    map_path_open_list_get_index(MapGraph *g, int x, int y); /* Returns the index of a node from open_list given the coordinates on the map. */

@@ -8,34 +8,17 @@
 #include "component.h"
 
 
+typedef struct data MapData;
+
 typedef struct{
 	int x,y,x2,y2;
 }Room;
-
-typedef struct data MapData;
 
 typedef struct{
 	int x,y,x2,y2;
 }Hall;
 
-typedef struct {
-	int x,y;
-	int f,g,h;
-	int parent_index;
-	int number_of_neighbors;
-	int neighbor_index[4];
-}MapNode;
-
-//typedef struct {
-//	int number_of_nodes;
-//	int startx,starty;
-//	int endx, endy;
-//	int number_of_open_nodes;
-//	int number_of_closed_nodes;
-//	MapNode *open_list;
-//	MapNode *closed_list;
-//}MapGraph;
-//
+typedef struct node MapNode;
 typedef struct graph MapGraph;
 
 /*--------Map Init / Free from memory ----------------------------------------------------------------------------------------*/

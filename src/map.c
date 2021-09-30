@@ -508,7 +508,6 @@ void map_path_closed_list_add_node(MapGraph *g, int open_list_index){
 	g->closed_list[g->number_of_closed_nodes].h = g->open_list[open_list_index].h;
 	g->closed_list[g->number_of_closed_nodes].f = g->open_list[open_list_index].f;
 	g->closed_list[g->number_of_closed_nodes].parent_index = g->open_list[open_list_index].parent_index;
-	map_path_open_list_clear_node(g, open_list_index);
 }
 
 /*---------------------- Get the open_list[] index via map coords ------------------------------------------------------------*/
@@ -599,7 +598,7 @@ bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	int current_index = 0;
 	int lowest_found_f;
 	int index_lowest_found_f;
-	
+
 	/* The main loop */
 	while(g->open_list[current_index].x != bx && g->open_list[current_index].y != by){ /* "while the current node is not the final node " */
 		/*get current node's neighbors and calculate their h and g values */
@@ -607,13 +606,23 @@ bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 
 		lowest_found_f = INT_MAX; /* resets to high number */
 		index_lowest_found_f = current_index; /* resets to current index */
-		for(int i = 0; i < g->number_of_open_nodes; i++){
+
+		for(int i = 0; i < g->number_of_open_nodes; i++){ /* look for lowest f value in the open_list */
 			if(i != current_index && g->open_list[i].f < lowest_found_f){
-				index_lowest_found_f = i;	
+				index_lowest_found_f = i;
 			}
 		}
-		current_index = index_lowest_found_f; /* assign the new current node to the best candidate */
-		map_path_closed_list_add_node(g, current_index);
+		if( index_lowest_found_f == current_index ){ /* fail condition: destination not reachable. */
+			contiguous = false;
+			break;
+		}
+		else{
+			map_path_closed_list_add_node(g, current_index); /* put the current node into closed_list */
+			map_path_open_list_clear_node(g, current_index); /* remove the current node from open_list */
+			current_index = index_lowest_found_f; /* assign the new current node to the best candidate */
+		}
 	}
+
+	if( g->open_list[current_index].x == bx && g->open_list[current_index].y == by ) contiguous = true; /* path is found, set contiguous to true */
 	return contiguous;
 }

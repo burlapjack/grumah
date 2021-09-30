@@ -318,12 +318,11 @@ void map_gen_ca(MapData *m){
 		exit_y = max_int( rand_int(m->map_height - 2), 2);
 
 		if(map_copy[entrance_y * m->map_width + entrance_x] == m->floor && map_copy[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
-		//	if( map_path_is_contiguous(m, entrance_x, entrance_y, exit_x, exit_y) ){ /* also check if the entrance and exit share contiguous floor space */
+//			if( map_path_is_contiguous(m, entrance_x, entrance_y, exit_x, exit_y) == true ){ /* also check if the entrance and exit share contiguous floor space */
 				p = 1; /* end while loop */
-		//	}
+//			}
 		}
 	}
-
 }
 
 int map_path_get_manhattan_distance(int x1, int y1, int x2, int y2){
@@ -445,8 +444,8 @@ void map_path_open_list_add_node(MapGraph *g, int parent_index, int x, int y){
 
 /*---------------------- "Clear" open_list node by giving it values that won't be prioritized --------------------------------*/
 void map_path_open_list_clear_node(MapGraph *g, int node_index){
-	g->open_list[node_index].x = -1; /* this might get me in trouble */
-	g->open_list[node_index].y = -1; /* this also might get me in trouble */
+	//g->open_list[node_index].x = -1; /* this might get me in trouble */
+	//g->open_list[node_index].y = -1; /* this also might get me in trouble */
 	g->open_list[node_index].g = INT_MAX;
 	g->open_list[node_index].h = INT_MAX;
 	g->open_list[node_index].f = INT_MAX;

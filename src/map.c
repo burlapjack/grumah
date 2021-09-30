@@ -341,6 +341,10 @@ void map_gen_ca(MapData *m){
 		entrance = rand_int(m->map_width * m->map_height);
 		exit = rand_int(m->map_width * m->map_height);
 		if(map_copy[entrance] == m->floor && map_copy[exit] == m->floor) p = 1;
+		//entrance = y * map_height + x
+		//entrance - x = y * map_height
+		//(entrance - x)/map_height = y
+//		map_path_is_contiguous(m, int ax, int ay, int bx, int by);
 	}
 
 }
@@ -622,7 +626,8 @@ bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 			current_index = index_lowest_found_f; /* assign the new current node to the best candidate */
 		}
 	}
-
 	if( g->open_list[current_index].x == bx && g->open_list[current_index].y == by ) contiguous = true; /* path is found, set contiguous to true */
+
+	map_path_free_graph(g); /* deallocate graph data */
 	return contiguous;
 }

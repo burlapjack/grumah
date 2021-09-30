@@ -7,7 +7,32 @@
 
 #include "component.h"
 
-typedef struct data MapData;
+typedef struct{
+	int map_width;
+	int map_height;
+	int number_of_rooms;
+	int room_max_width;
+	int room_max_height;
+	int room_min_width;
+	int room_min_height;
+	int room_padding;
+	char door_horizontal_closed;
+	char door_horizontal_open;
+	char door_vertical_closed;
+	char door_vertical_open;
+	char entrance;
+	char exit;
+	char floor;
+	char hallway;
+	char wall;
+	int color_entrance;
+	int color_exit;
+	int color_door_horizontal;
+	int color_door_vertical;
+	int color_floor;
+	int color_wall;
+	char *map;
+}MapData;
 
 typedef struct{
 	int x,y,x2,y2;
@@ -41,7 +66,6 @@ int    map_count_floor(MapData *m); /* Returns the number of floor tiles on a gi
 int    map_path_closed_list_get_index(MapGraph *g, int x, int y); /* Returns the closed_list node index given the map coords. */
 int    map_path_get_manhattan_distance(int x1, int y1, int x2, int y2); /* Returns the manhattan distance between two points. */
 void   map_path_free_graph(MapGraph *g); /* Deallocates a MapGraph struct. */
-void   map_path_init_lists(MapData *m, MapGraph *g); /* Initializes MapGraph open_list and closed_list. */
 bool   map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by); /* Returns true if point a and point b share contiguous floor space. */
 bool   map_path_node_exists_in_lists(MapGraph *g, int x, int y); /* Returns true if the given coordinates exist as a node in open_list or closed_list. */
 bool   map_path_node_exists_in_open_list(MapGraph *g, int x, int y);

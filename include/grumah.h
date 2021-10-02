@@ -1,3 +1,11 @@
+/* grumah.h
+ * by burlapjack 2021
+ *
+ * This header calls all of the necessary header files
+ * necessary to compile Grumah applications.
+ *
+ */
+
 #ifndef GRUMAH_H
 #define GRUMAH_H
 
@@ -7,8 +15,6 @@
 #include "entity.h"
 #include "system.h"
 #include "map.h"
-
-void grumah_init();
-void grumah_init(WINDOW *w);
+#include "path.h"
 
 #endif /* GRUMAH_H */

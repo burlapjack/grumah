@@ -214,7 +214,7 @@ void map_gen_doors(MapData *m, Room *rooms, int number_of_rooms){
 
 /*---------------------- Map Generation: Simple Room Placement ---------------------------------------------------------------*/
 /* Rooms are added one at a time wherever they will fit, then hallways are created between them. */
-void map_gen_srp(MapData *m){
+void map_gen_style_dungeon(MapData *m){
 	int room_x,room_y, room_x2, room_y2;
 	int rooms_added = 0;
 	int collision_detected = 0;
@@ -267,7 +267,7 @@ void map_gen_srp(MapData *m){
 }
 
 /*---------------------- Map Generation: Cellular Automata -------------------------------------------------------------------*/
-void map_gen_ca(MapData *m){
+void map_gen_style_caves(MapData *m){
 	int iterations = 4;
 	int rand_tile;
 	int neighbor_walls;

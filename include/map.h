@@ -50,8 +50,8 @@ void   map_init(MapData *m, int map_width, int map_height); /* Initializes a Map
 void   map_free(MapData *m); /* Deallocates MapData memory. */
 
 /*--------Map Generation Style -----------------------------------------------------------------------------------------------*/
-void   map_gen_srp(MapData *m); /* Simple-Room-Placement procedurally generated map. Rectangular rooms connected by hallways. */
-void   map_gen_ca(MapData *m); /* Cellular-Automata procedurally generated map.  Cave-like design. */
+void   map_gen_style_dungeon(MapData *m); /* Simple-Room-Placement procedurally generated map. Rectangular rooms connected by hallways. */
+void   map_gen_style_cave(MapData *m); /* Cellular-Automata procedurally generated map.  Cave-like design. */
 
 /*--------Map generation helper functions ------------------------------------------------------------------------------------*/
 void   map_gen_carve_hallways(MapData *m, Room *rooms, int rooms_added); /* Designates the carving of hallways for an srp map, connects rooms left to right. */

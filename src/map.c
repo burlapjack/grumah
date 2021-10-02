@@ -43,7 +43,7 @@ void map_init(MapData *m, int map_width, int map_height){
 	m->room_min_width = 4;
 	m->room_min_height = 4;
 	m->room_padding = 2;
-	m->entrance = '.';
+	m->entrance = '>';
 	m->exit = '<';
 	m->door_horizontal_closed = '-';
 	m->door_horizontal_open = '/';
@@ -267,7 +267,7 @@ void map_gen_style_dungeon(MapData *m){
 }
 
 /*---------------------- Map Generation: Cellular Automata -------------------------------------------------------------------*/
-void map_gen_style_caves(MapData *m){
+void map_gen_style_cave(MapData *m){
 	int iterations = 4;
 	int rand_tile;
 	int neighbor_walls;
@@ -276,16 +276,21 @@ void map_gen_style_caves(MapData *m){
 	/* generate random noise (wall and floor tiles) on the map copy */
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
-			/* everything  is random - wall or floor */
-			rand_tile = rand_int(10);
-			if(rand_tile > 4) map_copy[ i * m->map_width + j ] = m->floor;
-			else map_copy[ i * m->map_width + j ] = m->wall;
+			if( i == 0 || i == m->map_height || j == 0 || j == m->map_width){
+				map_copy[ i * m->map_width + j ] = m->wall;
+			}
+			else{
+				/* everything  is random - wall or floor */
+				rand_tile = rand_int(10);
+				if(rand_tile > 4) map_copy[ i * m->map_width + j ] = m->floor;
+				else map_copy[ i * m->map_width + j ] = m->wall;
+			}
 		}
 	}
 	int n = 0;
 	while(n < iterations){
-		for(int i = 1; i < m->map_height - 1; i++){
-			for(int j = 1; j < m->map_width - 1; j++){
+		for(int i = 2; i < m->map_height - 2; i++){
+			for(int j = 2; j < m->map_width - 2; j++){
 				neighbor_walls = 0;
 				if( map_copy[ i * m->map_width + j - 1 ] == m->wall ) neighbor_walls++; /* left */
 				if( map_copy[ i * m->map_width + j + 1 ] == m->wall ) neighbor_walls++; /* right */
@@ -319,6 +324,8 @@ void map_gen_style_caves(MapData *m){
 
 		if(map_copy[entrance_y * m->map_width + entrance_x] == m->floor && map_copy[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
 			if( map_path_is_contiguous(m, entrance_x, entrance_y, exit_x, exit_y) == true ){ /* also check if the entrance and exit share contiguous floor space */
+				m->map[entrance_y * m->map_width + entrance_x] = m->entrance;
+				m->map[exit_y * m->map_width + exit_x] = m->exit;
 				p = 1; /* end while loop */
 			}
 		}

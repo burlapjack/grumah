@@ -318,9 +318,9 @@ void map_gen_ca(MapData *m){
 		exit_y = max_int( rand_int(m->map_height - 2), 2);
 
 		if(map_copy[entrance_y * m->map_width + entrance_x] == m->floor && map_copy[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
-//			if( map_path_is_contiguous(m, entrance_x, entrance_y, exit_x, exit_y) == true ){ /* also check if the entrance and exit share contiguous floor space */
+			if( map_path_is_contiguous(m, entrance_x, entrance_y, exit_x, exit_y) == true ){ /* also check if the entrance and exit share contiguous floor space */
 				p = 1; /* end while loop */
-//			}
+			}
 		}
 	}
 }
@@ -360,7 +360,7 @@ void map_path_node_get_neighbors(MapData *m, MapGraph *g, int current_index){
 		g->open_list[current_index].neighbor_index[n_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
 		n_neighbors++; /* iterate node neighbor count */
 
-		if(map_path_node_exists_in_lists(g, nx, ny-1) == false){ /* if this neighbor doesn't exist in any of the lists, add it to open_list */
+		if(!map_path_node_exists_in_lists(g, nx, ny-1) ){ /* if this neighbor doesn't exist in any of the lists, add it to open_list */
 			map_path_open_list_add_node(g, current_index, nx, ny - 1);
 		}
 		else if(map_path_node_exists_in_open_list(g, nx, ny - 1)){ /* if this neighbor is already in the open_list */
@@ -377,10 +377,10 @@ void map_path_node_get_neighbors(MapData *m, MapGraph *g, int current_index){
 		n_neighbors++; /* iterate node neighbor count */
 
 		/* if this neighbor doesn't exist in any of the lists, add it to open_list */
-		if( map_path_node_exists_in_lists(g, nx, ny+1) == false ){
+		if( !map_path_node_exists_in_lists(g, nx, ny+1) ){
 			map_path_open_list_add_node(g, current_index, nx, ny + 1);
 		}
-		else if(map_path_node_exists_in_open_list(g, nx, ny + 1)){ /* if this neighbor is already in the open_list */
+		else if( map_path_node_exists_in_open_list(g, nx, ny + 1) ){ /* if this neighbor is already in the open_list */
 			nbr_index = map_path_open_list_get_index(g, nx, ny + 1);
 			/* if the updated neighbor f value is less than the one it had before, update f and parent of this neighbor */
 			if( g->open_list[nbr_index].f > (g->open_list[current_index].f + g->open_list[nbr_index].h) ){
@@ -394,7 +394,7 @@ void map_path_node_get_neighbors(MapData *m, MapGraph *g, int current_index){
 		n_neighbors++; /* iterate node neighbor count */
 
 		/* if this neighbor doesn't exist in any of the lists, add it to open_list */
-		if(map_path_node_exists_in_lists(g, nx + 1, ny) == false ) {
+		if( !map_path_node_exists_in_lists(g, nx + 1, ny) ) {
 			map_path_open_list_add_node(g, current_index, nx + 1, ny);
 		}
 		else if(map_path_node_exists_in_open_list(g, nx + 1, ny)){ /* if this neighbor is already in the open_list */
@@ -411,7 +411,7 @@ void map_path_node_get_neighbors(MapData *m, MapGraph *g, int current_index){
 		n_neighbors++; /* iterate node neighbor count */
 
 		/* if this neighbor doesn't exist in any of the lists, add it to open_list */
-		if(map_path_node_exists_in_lists(g, nx - 1, ny) == false ){
+		if( !map_path_node_exists_in_lists(g, nx - 1, ny) ){
 			map_path_open_list_add_node(g, current_index, nx - 1, ny);
 		}
 		else if(map_path_node_exists_in_open_list(g, nx - 1, ny )){ /* if this neighbor is already in the open_list */
@@ -431,11 +431,9 @@ void map_path_open_list_add_node(MapGraph *g, int parent_index, int x, int y){
 	int i = g->number_of_open_nodes;
 	g->open_list[i].x = x;
 	g->open_list[i].y = y;
-	/* g value = distance between this node and parent + parent g value. */
-	g->open_list[i].g = map_path_get_manhattan_distance(x, y, g->open_list[parent_index].x, g->open_list[parent_index].y) + g->open_list[parent_index].g;
-	g->open_list[i].h = map_path_get_manhattan_distance(x, y, g->endx, g->endy);
-	/* if f is less than the existing f value, then update */
-	if( (g->open_list[i].g + g->open_list[i].h) < g->open_list[i].f){
+	g->open_list[i].g = map_path_get_manhattan_distance(x, y, g->open_list[parent_index].x, g->open_list[parent_index].y) + g->open_list[parent_index].g; /* g value = distance between this node and parent + parent g value. */
+	g->open_list[i].h = map_path_get_manhattan_distance(x, y, g->endx, g->endy); /* h value: heuristic distance between this node and the final destination. */
+	if( (g->open_list[i].g + g->open_list[i].h) < g->open_list[i].f){ /* Update f value if a smaller one has been recalculated. */
 		g->open_list[i].parent_index = parent_index;
 		g->open_list[i].f = g->open_list[i].g + g->open_list[i].h;
 	}
@@ -529,13 +527,13 @@ bool map_path_node_exists_in_open_list(MapGraph *g, int x, int y){
 /*---------------------- Check to see if it is possible to go from point a to b ----------------------------------------------*/
 bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	bool contiguous = true;
-	MapGraph *g = malloc( sizeof (*g) );
-	g->number_of_nodes = map_count_floor(m);
+	MapGraph *g = malloc( sizeof (*g) ); /* allocate new graph */
+	g->number_of_nodes = map_count_floor(m); /* record the total number of possible nodes. In this case, the number of floor tiles on the map. */
 	g->number_of_open_nodes = 0;
 	g->number_of_closed_nodes = 0;
-	g->open_list = malloc( sizeof (*(g->open_list)) * g->number_of_nodes );
-	g->closed_list = malloc( sizeof (*(g->open_list)) * g->number_of_nodes );
-	g->startx = ax;
+	g->open_list = malloc( sizeof (*(g->open_list)) * g->number_of_nodes ); /* allocate open_list */
+	g->closed_list = malloc( sizeof (*(g->open_list)) * g->number_of_nodes ); /* allocate closed_list */
+	g->startx = ax; /* record starting and ending node positions in the graph. */
 	g->starty = ay;
 	g->endx = bx;
 	g->endy = by;
@@ -548,19 +546,16 @@ bool map_path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	g->open_list[0].f = g->open_list[0].h;
 	g->number_of_open_nodes = 1;
 	int current_index = 0;
-	int lowest_found_f;
-	int index_lowest_found_f;
+	int lowest_found_f = max_int(m->map_width, m->map_height); /* big number needed here. */
+	int index_lowest_found_f = current_index;
 
 	/* The main loop */
 	while(g->open_list[current_index].x != bx && g->open_list[current_index].y != by){ /* "while the current node is not the final node " */
-		/*get current node's neighbors and calculate their h and g values */
-		map_path_node_get_neighbors(m, g, current_index);
-
-		lowest_found_f = INT_MAX; /* resets to high number */
-		index_lowest_found_f = current_index; /* resets to current index */
+		map_path_node_get_neighbors(m, g, current_index); /*get current node's neighbors and calculate their h and g values. Then add those nodes to open_list. */
 
 		for(int i = 0; i < g->number_of_open_nodes; i++){ /* look for lowest f value in the open_list */
 			if(i != current_index && g->open_list[i].f < lowest_found_f){
+				lowest_found_f = g->open_list[i].f;
 				index_lowest_found_f = i;
 			}
 		}

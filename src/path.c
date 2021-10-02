@@ -138,78 +138,63 @@ bool path_node_exists_in_open_list(MapGraph *g, int x, int y){
 	return exists;
 }
 
-/*---------------------- Record neighbor information  ------------------------------------------------------------------------*/
-void path_node_get_neighbors(MapData *m, MapGraph *g, int current_index){
+void path_node_update_neighbor(MapGraph *g, int nx, int ny){
+	
+	g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors]  = path_open_list_get_index(g, nx, ny); /* assign pre-existing node to neighbor list */
+	g->open_list[g->current_index].number_of_neighbors++; /* increment current node neighbor counter */
+	int nbr_index = g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors];
+	/* if the updated neighbor f value is less than the one it had before, update f and parent of this neighbor */
+	if( g->open_list[nbr_index].f > (g->open_list[g->current_index].g + 1 + g->open_list[nbr_index].h) ){
+		g->open_list[nbr_index].f = (g->open_list[g->current_index].g + 1 + g->open_list[nbr_index].h);
+		g->open_list[nbr_index].parent_index = g->current_index;
+		g->open_list[nbr_index].g = g->open_list[g->current_index].g + 1;
+	}
+}
 
-	int nx = g->open_list[current_index].x; /* nx and ny = shorthand for current node x and y position */
-	int ny = g->open_list[current_index].y;
-	int nbr_index = 0;
+/*---------------------- Record neighbor information  ------------------------------------------------------------------------*/
+void path_node_get_neighbors(MapData *m, MapGraph *g){
+
+	int nx = g->open_list[g->current_index].x; /* nx and ny = shorthand for current node x and y position */
+	int ny = g->open_list[g->current_index].y;
 
 	/*---- check the map for neighboring nodes ---- */
 	if( m->map[(ny - 1) * m->map_width + nx] == m->floor ){ /* North */
-
 		if(!path_node_exists_in_lists(g, nx, ny-1) ){ /* if this neighbor doesn't exist in any of the lists, add it to open_list */
-			path_open_list_add_node(g, current_index, nx, ny - 1);
-			g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
+			path_open_list_add_node(g, g->current_index, nx, ny - 1);
+			g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
 		}
 		else if(path_node_exists_in_open_list(g, nx, ny - 1)){ /* if this neighbor is already in the open_list */
-			g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors]  = path_open_list_get_index(g, nx, ny - 1);
-			nbr_index = g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors];
-			/* if the updated neighbor f value is less than the one it had before, update f and parent of this neighbor */
-			if( g->open_list[nbr_index].f > (g->open_list[current_index].f + g->open_list[nbr_index].h) ){
-				g->open_list[nbr_index].f = (g->open_list[current_index].f + g->open_list[nbr_index].h);
-				g->open_list[nbr_index].parent_index = current_index;
-			}
+			path_node_update_neighbor(g, nx, ny - 1);
 		}
 	}
 	if( m->map[(ny + 1) * m->map_width + nx] == m->floor ){ /* South */
-
 		/* if this neighbor doesn't exist in any of the lists, add it to open_list */
 		if( !path_node_exists_in_lists(g, nx, ny+1) ){
-			path_open_list_add_node(g, current_index, nx, ny + 1);
-			g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
+			path_open_list_add_node(g, g->current_index, nx, ny + 1);
+			g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
 		}
 		else if( path_node_exists_in_open_list(g, nx, ny + 1) ){ /* if this neighbor is already in the open_list */
-			g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors] = path_open_list_get_index(g, nx, ny + 1);
-			nbr_index = g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors];
-			/* if the updated neighbor f value is less than the one it had before, update f and parent of this neighbor */
-			if( g->open_list[nbr_index].f > (g->open_list[current_index].f + g->open_list[nbr_index].h) ){
-				g->open_list[nbr_index].f = (g->open_list[current_index].f + g->open_list[nbr_index].h);
-				g->open_list[nbr_index].parent_index = current_index;
-			}
+			path_node_update_neighbor(g, nx, ny + 1);
 		}
 	}
 	if( m->map[ny * m->map_width + nx + 1] == m->floor ){ /* East */
 		/* if this neighbor doesn't exist in any of the lists, add it to open_list */
 		if( !path_node_exists_in_lists(g, nx + 1, ny) ) {
-			path_open_list_add_node(g, current_index, nx + 1, ny);
-			g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
+			path_open_list_add_node(g, g->current_index, nx + 1, ny);
+			g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
 		}
 		else if(path_node_exists_in_open_list(g, nx + 1, ny)){ /* if this neighbor is already in the open_list */
-			g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors] = path_open_list_get_index(g, nx, ny + 1);
-			nbr_index = g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors];
-			/* if the updated neighbor f value is less than the one it had before, update f and parent of this neighbor */
-			if( g->open_list[nbr_index].f > (g->open_list[current_index].f + g->open_list[nbr_index].h) ){
-				g->open_list[nbr_index].f = (g->open_list[current_index].f + g->open_list[nbr_index].h);
-				g->open_list[nbr_index].parent_index = current_index;
-			}
+			path_node_update_neighbor(g, nx + 1, ny);
 		}
 	}
 	if( m->map[ny * m->map_width + nx - 1] == m->floor ){ /* West */
-
 		/* if this neighbor doesn't exist in any of the lists, add it to open_list */
 		if( !path_node_exists_in_lists(g, nx - 1, ny) ){
-			path_open_list_add_node(g, current_index, nx - 1, ny);
-			g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
+			path_open_list_add_node(g, g->current_index, nx - 1, ny);
+			g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
 		}
 		else if(path_node_exists_in_open_list(g, nx - 1, ny )){ /* if this neighbor is already in the open_list */
-			g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors] = path_open_list_get_index(g, nx, ny - 1);
-			nbr_index = g->open_list[current_index].neighbor_index[g->open_list[current_index].number_of_neighbors];
-			/* if the updated neighbor f value is less than the one it had before, update f and parent of this neighbor */
-			if( g->open_list[nbr_index].f > (g->open_list[current_index].f + g->open_list[nbr_index].h) ){
-				g->open_list[nbr_index].f = (g->open_list[current_index].f + g->open_list[nbr_index].h);
-				g->open_list[nbr_index].parent_index = current_index;
-			}
+			path_node_update_neighbor(g, nx - 1, ny);
 		}
 	}
 }
@@ -242,7 +227,7 @@ bool path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	/* The main loop */
 	while(g->open_list[g->current_index].x != bx && g->open_list[g->current_index].y != by){ /* "while the current node is not the final node " */
 
-		path_node_get_neighbors(m, g, g->current_index); /* 1. get current node's neighbors and calculate their h and g values. Then add those nodes to open_list. */
+		path_node_get_neighbors(m, g); /* 1. get current node's neighbors and calculate their h and g values. Then add those nodes to open_list. */
 
 		for(int i = 0; i < g->number_of_open_nodes - 1; i++){ /* 2. look for lowest f value in the open_list */
 			if(i != g->current_index && g->open_list[i].f < g->lowest_found_f){

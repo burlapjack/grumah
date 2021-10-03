@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
+#include <math.h>
 #include "../include/path.h"
 #include "../include/map.h"
 
@@ -16,8 +17,8 @@ struct node{
 	int x,y;
 	int f,g,h;
 	int parent_index;
-	int number_of_neighbors;
-	int neighbor_index[4];
+//	int number_of_neighbors;
+//	int neighbor_index[4];
 };
 
 struct graph{
@@ -49,6 +50,23 @@ int path_count_floor(MapData *m){
 	return count;
 }
 
+/*---------------------- Copy contents of indicated open_list node into closed_list ------------------------------------------*/
+void path_closed_list_add_node(MapGraph *g, int open_list_index){
+	g->closed_list[g->number_of_closed_nodes] = g->open_list[open_list_index];
+	g->number_of_closed_nodes++;
+	for(int i = open_list_index - 1; i < g->number_of_open_nodes; i++){ /* remove target node by overwriting it. */
+		g->open_list[i] = g->open_list[i + 1];
+	}
+	if(g->number_of_open_nodes > 0) g->number_of_open_nodes--;
+}
+
+/*---------------------- Deallocate MapGraph memory --------------------------------------------------------------------------*/
+void path_free_graph(MapGraph *g){
+	free(g->open_list);
+	free(g->closed_list);
+	free(g);
+}
+
 /*---------------------- Add new node to open_list ---------------------------------------------------------------------------*/
 void path_open_list_add_node(MapGraph *g, int parent_index, int x, int y){
 	int i = g->number_of_open_nodes;
@@ -60,30 +78,8 @@ void path_open_list_add_node(MapGraph *g, int parent_index, int x, int y){
 		g->open_list[i].parent_index = parent_index;
 		g->open_list[i].f = g->open_list[i].g + g->open_list[i].h;
 	}
-	g->open_list[i].number_of_neighbors = 0;
+//	g->open_list[i].number_of_neighbors = 0;
 	g->number_of_open_nodes++; /* iterate open_node count */
-}
-
-/*---------------------- Copy contents of indicated open_list node into closed_list ------------------------------------------*/
-void path_closed_list_add_node(MapGraph *g, int open_list_index){
-	g->closed_list[g->number_of_closed_nodes] = g->open_list[open_list_index];
-	g->number_of_closed_nodes++;
-	for(int i = open_list_index; i < g->number_of_open_nodes - 1; i++){ /* remove target node by overwriting it. */
-		g->open_list[i] = g->open_list[i + 1];
-	}
-	if(g->number_of_open_nodes > 0) g->number_of_open_nodes--;
-}
-
-/*---------------------- Get the open_list[] index via map coords ------------------------------------------------------------*/
-int path_open_list_get_index(MapGraph *g, int x, int y){
-	int index;
-	for( int i = 0; i < g->number_of_open_nodes - 1; i++){
-		if (g->open_list[i].x == x && g->open_list[i].y == y){
-			index = i;
-			break;
-		}
-	}
-	return index;
 }
 
 /*---------------------- Get the closed_list[] index via map coords ----------------------------------------------------------*/
@@ -98,26 +94,51 @@ int path_closed_list_get_index(MapGraph *g, int x, int y){
 	return index;
 }
 
-/*---------------------- Deallocate MapGraph memory --------------------------------------------------------------------------*/
-void path_free_graph(MapGraph *g){
-	free(g->open_list);
-	free(g->closed_list);
-	free(g);
+int path_open_list_get_lowest_f(MapGraph *g){
+	int lowest = INT_MAX;
+	for( int i = 0; i < g->number_of_open_nodes; i++){
+		lowest = min_int(g->open_list[i].g, lowest);			
+	}
+	return lowest;
+}
+
+int path_open_list_get_index_lowest_f(MapGraph *g){
+	int lowest = INT_MAX;
+	int target_index = 0;
+	for( int i = 0; i < g->number_of_open_nodes; i++){
+		if( g->open_list[i].g < lowest) {
+			lowest = g->open_list[i].f;
+			target_index = i; 
+		}
+	}
+	return target_index;
+}
+
+/*---------------------- Get the open_list[] index via map coords ------------------------------------------------------------*/
+int path_open_list_get_index(MapGraph *g, int x, int y){
+	int index;
+	for( int i = 0; i < g->number_of_open_nodes; i++){
+		if (g->open_list[i].x == x && g->open_list[i].y == y){
+			index = i;
+			break;
+		}
+	}
+	return index;
 }
 
 /*---------------------- Check to see if the given criteria are matched by a node in any list  -------------------------------*/
 bool path_node_exists_in_lists(MapGraph *g, int x, int y){
 	bool exists = false;
 	/* checked open_list */
-	for(int i = 0; i < g->number_of_open_nodes - 1; i++){
+	for(int i = 0; i < g->number_of_open_nodes; i++){
 		if( g->open_list[i].x == x && g->open_list[i].y == y){
 			exists = true;
 			break;
 		}
 	}
-	if(exists == 0){
+	if(exists == false){
 		/* check closed_list */
-		for(int i = 0; i < g->number_of_closed_nodes - 1; i++){
+		for(int i = 0; i < g->number_of_closed_nodes; i++){
 			if( g->closed_list[i].x == x && g->closed_list[i].y == y){
 				exists = true;
 				break;
@@ -129,7 +150,7 @@ bool path_node_exists_in_lists(MapGraph *g, int x, int y){
 
 bool path_node_exists_in_open_list(MapGraph *g, int x, int y){
 	bool exists = false;
-	for(int i = 0; i < g->number_of_open_nodes - 1; i++){
+	for(int i = 0; i < g->number_of_open_nodes; i++){
 		if( g->open_list[i].x == x && g->open_list[i].y == y){
 			exists = true;
 			break;
@@ -138,16 +159,13 @@ bool path_node_exists_in_open_list(MapGraph *g, int x, int y){
 	return exists;
 }
 
-void path_node_update_neighbor(MapGraph *g, int nx, int ny){
-	
-	g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors]  = path_open_list_get_index(g, nx, ny); /* assign pre-existing node to neighbor list */
-	g->open_list[g->current_index].number_of_neighbors++; /* increment current node neighbor counter */
-	int nbr_index = g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors];
-	/* if the updated neighbor f value is less than the one it had before, update f and parent of this neighbor */
-	if( g->open_list[nbr_index].f > (g->open_list[g->current_index].g + 1 + g->open_list[nbr_index].h) ){
-		g->open_list[nbr_index].f = (g->open_list[g->current_index].g + 1 + g->open_list[nbr_index].h);
-		g->open_list[nbr_index].parent_index = g->current_index;
-		g->open_list[nbr_index].g = g->open_list[g->current_index].g + 1;
+void path_node_update(MapGraph *g, int nx, int ny){
+	int ni = path_open_list_get_index(g, nx, ny);
+	int nf = g->open_list[ni].f;
+	if(nf > g->open_list[g->current_index].g + 1 + g->open_list[ni].h){
+		g->open_list[ni].parent_index = g->current_index;
+		g->open_list[ni].g++;
+		g->open_list[ni].f = g->open_list[ni].g + g->open_list[ni].h;
 	}
 }
 
@@ -159,49 +177,30 @@ void path_node_get_neighbors(MapData *m, MapGraph *g){
 
 	/*---- check the map for neighboring nodes ---- */
 	if( m->map[(ny - 1) * m->map_width + nx] == m->floor ){ /* North */
-		if(!path_node_exists_in_lists(g, nx, ny-1) ){ /* if this neighbor doesn't exist in any of the lists, add it to open_list */
-			path_open_list_add_node(g, g->current_index, nx, ny - 1);
-			g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
-		}
-		else if(path_node_exists_in_open_list(g, nx, ny - 1)){ /* if this neighbor is already in the open_list */
-			path_node_update_neighbor(g, nx, ny - 1);
-		}
+		if(!path_node_exists_in_lists(g, nx, ny-1) )  path_open_list_add_node(g, g->current_index, nx, ny - 1); /* if this neighbor doesn't exist in any of the lists, add it to open_list */
+		else if(path_node_exists_in_open_list(g, nx, ny - 1)) path_node_update(g, nx, ny - 1); /* if this neighbor is already in the open_list */
 	}
 	if( m->map[(ny + 1) * m->map_width + nx] == m->floor ){ /* South */
-		/* if this neighbor doesn't exist in any of the lists, add it to open_list */
-		if( !path_node_exists_in_lists(g, nx, ny+1) ){
-			path_open_list_add_node(g, g->current_index, nx, ny + 1);
-			g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
-		}
-		else if( path_node_exists_in_open_list(g, nx, ny + 1) ){ /* if this neighbor is already in the open_list */
-			path_node_update_neighbor(g, nx, ny + 1);
-		}
+		if( !path_node_exists_in_lists(g, nx, ny+1) ) path_open_list_add_node(g, g->current_index, nx, ny + 1); /* if this neighbor doesn't exist in any of the lists, add it to open_list */
+		else if( path_node_exists_in_open_list(g, nx, ny + 1) ) path_node_update(g, nx, ny + 1);/* if this neighbor is already in the open_list */
 	}
+
 	if( m->map[ny * m->map_width + nx + 1] == m->floor ){ /* East */
-		/* if this neighbor doesn't exist in any of the lists, add it to open_list */
-		if( !path_node_exists_in_lists(g, nx + 1, ny) ) {
-			path_open_list_add_node(g, g->current_index, nx + 1, ny);
-			g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
-		}
-		else if(path_node_exists_in_open_list(g, nx + 1, ny)){ /* if this neighbor is already in the open_list */
-			path_node_update_neighbor(g, nx + 1, ny);
-		}
+		if( !path_node_exists_in_lists(g, nx + 1, ny) )  path_open_list_add_node(g, g->current_index, nx + 1, ny); /* if this neighbor doesn't exist in any of the lists, add it to open_list */
+		else if(path_node_exists_in_open_list(g, nx + 1, ny)) path_node_update(g, nx + 1, ny); /* if this neighbor is already in the open_list */
 	}
+
 	if( m->map[ny * m->map_width + nx - 1] == m->floor ){ /* West */
-		/* if this neighbor doesn't exist in any of the lists, add it to open_list */
-		if( !path_node_exists_in_lists(g, nx - 1, ny) ){
-			path_open_list_add_node(g, g->current_index, nx - 1, ny);
-			g->open_list[g->current_index].neighbor_index[g->open_list[g->current_index].number_of_neighbors] = g->number_of_open_nodes; /* add neighbor index to current node */
-		}
-		else if(path_node_exists_in_open_list(g, nx - 1, ny )){ /* if this neighbor is already in the open_list */
-			path_node_update_neighbor(g, nx - 1, ny);
-		}
+		if( !path_node_exists_in_lists(g, nx - 1, ny) ) path_open_list_add_node(g, g->current_index, nx - 1, ny); /* if this neighbor doesn't exist in any of the lists, add it to open_list */
+		else if(path_node_exists_in_open_list(g, nx - 1, ny )) path_node_update(g, nx - 1, ny); /* if this neighbor is already in the open_list */
 	}
 }
 
+
+
 /*---------------------- Check to see if it is possible to go from point a to b ----------------------------------------------*/
 bool path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
-	bool contiguous = true;
+	bool contiguous = false;
 	MapGraph *g = malloc( sizeof (*g) ); /* allocate new graph */
 	g->number_of_nodes = path_count_floor(m); /* record the total number of possible nodes. In this case, the number of floor tiles on the map. */
 	g->number_of_open_nodes = 0;
@@ -218,10 +217,11 @@ bool path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	g->open_list[0].y = ay;
 	g->open_list[0].parent_index = 0;
 	g->open_list[0].h = path_get_manhattan_distance(ax, ay, bx, by);
+	g->open_list[0].g = 0;
 	g->open_list[0].f = g->open_list[0].h;
 	g->number_of_open_nodes = 1;
 	g->current_index = 0;
-	g->lowest_found_f = INT_MAX; //max_int(m->map_width, m->map_height); /* big number needed here. */
+	g->lowest_found_f = g->open_list[g->current_index].f;
 	g->index_lowest_found_f = g->current_index;
 
 	/* The main loop */
@@ -229,7 +229,7 @@ bool path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 
 		path_node_get_neighbors(m, g); /* 1. get current node's neighbors and calculate their h and g values. Then add those nodes to open_list. */
 
-		for(int i = 0; i < g->number_of_open_nodes - 1; i++){ /* 2. look for lowest f value in the open_list */
+		for(int i = 0; i < g->number_of_open_nodes; i++){ /* 2. look for lowest f value in the open_list */
 			if(i != g->current_index && g->open_list[i].f < g->lowest_found_f){
 				g->lowest_found_f = g->open_list[i].f;
 				g->index_lowest_found_f = i;
@@ -240,17 +240,19 @@ bool path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 			break;
 		}
 		else{
-			path_closed_list_add_node(g, g->current_index); /* 2b. SUCCESS condition: put the current node into closed_list */
 			g->current_index = g->index_lowest_found_f; /* assign the new current node to the best candidate */
-		}
+			path_closed_list_add_node(g, g->current_index); /* 2b. SUCCESS condition: put the current node into closed_list */
+		//	g->index_lowest_found_f = path_open_list_get_index_lowest_f(g);
 
+		}
 	} /* end of main loop. */
+
 
 	if( g->open_list[g->current_index].x == bx && g->open_list[g->current_index].y == by ){ /* check to see if destination has been reached */
 		contiguous = true; /* path is found, set contiguous to true */
-		for(int i = 0; i < g->number_of_closed_nodes - 1; i++){
-			m->map[g->closed_list[i].y * m->map_width + g->closed_list[i].x] = 'X';
-		}
+	//	for(int i = 0; i < g->number_of_closed_nodes; i++){ /* for testing */
+	//		m->map[g->closed_list[i].y * m->map_width + g->closed_list[i].x] = 'P';
+	//	}
 	}
 	path_free_graph(g); /* deallocate graph data */
 	return contiguous;

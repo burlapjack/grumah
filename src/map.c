@@ -24,8 +24,8 @@ void map_init(MapData *m, int map_width, int map_height){
 	m->room_min_width = 4;
 	m->room_min_height = 4;
 	m->room_padding = 2;
-	m->entrance = '>';
-	m->exit = '<';
+	m->entrance = '<';
+	m->exit = '>';
 	m->door_horizontal_closed = '-';
 	m->door_horizontal_open = '/';
 	m->door_vertical_closed = '|';

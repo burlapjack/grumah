@@ -15,8 +15,10 @@ bool   path_is_contiguous(MapData *m, int ax, int ay, int bx, int by); /* Return
 bool   path_node_exists_in_lists(MapGraph *g, int x, int y); /* Returns true if the given coordinates exist as a node in open_list or closed_list. */
 bool   path_node_exists_in_open_list(MapGraph *g, int x, int y);
 void   path_node_get_neighbors(MapData *m, MapGraph *g); /* Finds the neighboring nodes from the map, adds them to open_list and calculates their f,g,h. */
-void   path_node_update_neighbor(MapGraph *g, int nx, int ny); /* Updates the f and g values of an open_list node and is added as a neighbor to g->current_node. */
+void   path_node_update(MapGraph *g, int nx, int ny);
 void   path_open_list_add_node(MapGraph *g, int parent_index, int x, int y); /* Adds a new node to open_list given the parent index, and coordinates on the map. */
 int    path_open_list_get_index(MapGraph *g, int x, int y); /* Returns the index of a node from open_list given the coordinates on the map. */
+int    path_open_list_get_index_lowest_f(MapGraph *g); /* finds the index of the node with the lowest f value in open_list. */
+int    path_open_list_get_lowest_f(MapGraph *g); /* finds the value of the node with the lowest f value in open_list. */
 
 #endif /* PATH_H */

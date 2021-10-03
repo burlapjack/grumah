@@ -1,8 +1,8 @@
 /* map.c * by burlapjack 2021
  * procedural map generation
  */
-
 #include <stdlib.h>
+#include <ncurses.h>
 #include <math.h>
 #include <stdbool.h>
 #include <string.h>
@@ -305,8 +305,10 @@ void map_gen_style_cave(MapData *m){
 
 		if(map_copy[entrance_y * m->map_width + entrance_x] == m->floor && map_copy[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
 			if( path_is_contiguous(m, entrance_x, entrance_y, exit_x, exit_y) ){ /* also check if the entrance and exit share contiguous floor space */
-				m->map[entrance_y * m->map_width + entrance_x] = m->entrance;
-				m->map[exit_y * m->map_width + exit_x] = m->exit;
+				m->map[(exit_y * m->map_width) + exit_x] = m->exit;
+				m->map[(entrance_y * m->map_width) + entrance_x] = m->entrance;
+				printw("exit: %d, %d \n", exit_x,  exit_y);
+				printw("entrance: %d, %d \n", entrance_x,  entrance_y);
 				p = 1; /* end while loop */
 			}
 		}

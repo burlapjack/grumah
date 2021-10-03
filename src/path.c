@@ -97,7 +97,7 @@ int path_closed_list_get_index(MapGraph *g, int x, int y){
 int path_open_list_get_lowest_f(MapGraph *g){
 	int lowest = INT_MAX;
 	for( int i = 0; i < g->number_of_open_nodes; i++){
-		lowest = min_int(g->open_list[i].g, lowest);			
+		lowest = min_int(g->open_list[i].g, lowest);
 	}
 	return lowest;
 }
@@ -108,7 +108,7 @@ int path_open_list_get_index_lowest_f(MapGraph *g){
 	for( int i = 0; i < g->number_of_open_nodes; i++){
 		if( g->open_list[i].g < lowest) {
 			lowest = g->open_list[i].f;
-			target_index = i; 
+			target_index = i;
 		}
 	}
 	return target_index;
@@ -201,6 +201,7 @@ void path_node_get_neighbors(MapData *m, MapGraph *g){
 /*---------------------- Check to see if it is possible to go from point a to b ----------------------------------------------*/
 bool path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	bool contiguous = false;
+	int prev_index = 0;
 	MapGraph *g = malloc( sizeof (*g) ); /* allocate new graph */
 	g->number_of_nodes = path_count_floor(m); /* record the total number of possible nodes. In this case, the number of floor tiles on the map. */
 	g->number_of_open_nodes = 0;
@@ -221,8 +222,6 @@ bool path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 	g->open_list[0].f = g->open_list[0].h;
 	g->number_of_open_nodes = 1;
 	g->current_index = 0;
-	g->lowest_found_f = g->open_list[g->current_index].f;
-	g->index_lowest_found_f = g->current_index;
 
 	/* The main loop */
 	while(g->open_list[g->current_index].x != bx && g->open_list[g->current_index].y != by){ /* "while the current node is not the final node " */
@@ -230,29 +229,30 @@ bool path_is_contiguous(MapData *m, int ax, int ay, int bx, int by){
 		path_node_get_neighbors(m, g); /* 1. get current node's neighbors and calculate their h and g values. Then add those nodes to open_list. */
 
 		for(int i = 0; i < g->number_of_open_nodes; i++){ /* 2. look for lowest f value in the open_list */
-			if(i != g->current_index && g->open_list[i].f < g->lowest_found_f){
-				g->lowest_found_f = g->open_list[i].f;
-				g->index_lowest_found_f = i;
+			if(i != g->current_index && g->open_list[i].f < g->open_list[g->current_index].f){
+				g->current_index = i;
 			}
 		}
-		if( g->index_lowest_found_f == g->current_index ){ /* 2a. FAIL condition: destination not reachable. */
+		
+		if(prev_index == g->current_index ){ /* 2a. FAIL condition: destination not reachable. */
 			contiguous = false;
 			break;
 		}
 		else{
-			g->current_index = g->index_lowest_found_f; /* assign the new current node to the best candidate */
 			path_closed_list_add_node(g, g->current_index); /* 2b. SUCCESS condition: put the current node into closed_list */
-		//	g->index_lowest_found_f = path_open_list_get_index_lowest_f(g);
-
+			g->current_index = path_open_list_get_index_lowest_f(g);
+			prev_index = g->current_index;
 		}
 	} /* end of main loop. */
 
 
 	if( g->open_list[g->current_index].x == bx && g->open_list[g->current_index].y == by ){ /* check to see if destination has been reached */
 		contiguous = true; /* path is found, set contiguous to true */
-	//	for(int i = 0; i < g->number_of_closed_nodes; i++){ /* for testing */
-	//		m->map[g->closed_list[i].y * m->map_width + g->closed_list[i].x] = 'P';
-	//	}
+
+		//for(int i = 0; i < g->number_of_closed_nodes; i++){ /* for testing */
+		//	m->map[g->closed_list[i].y * m->map_width + g->closed_list[i].x] = 'P';
+		//}
+
 	}
 	path_free_graph(g); /* deallocate graph data */
 	return contiguous;

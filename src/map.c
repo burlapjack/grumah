@@ -304,7 +304,7 @@ void map_gen_style_cave(MapData *m){
 		exit_y = max_int( rand_int(m->map_height - 2), 2);
 
 		if(map_copy[entrance_y * m->map_width + entrance_x] == m->floor && map_copy[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
-			if( path_is_contiguous(m, entrance_x, entrance_y, exit_x, exit_y) == true ){ /* also check if the entrance and exit share contiguous floor space */
+			if( path_is_contiguous(m, entrance_x, entrance_y, exit_x, exit_y) ){ /* also check if the entrance and exit share contiguous floor space */
 				m->map[entrance_y * m->map_width + entrance_x] = m->entrance;
 				m->map[exit_y * m->map_width + exit_x] = m->exit;
 				p = 1; /* end while loop */

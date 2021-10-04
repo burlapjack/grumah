@@ -7,10 +7,33 @@
 
 #include "map.h"
 
-typedef struct node_path PathNode;
-typedef struct node_flood FloodNode;
-typedef struct graph_path PathGraph;
-typedef struct graph_flood FloodGraph;
+typedef struct{
+	int x,y;
+}FloodNode;
+
+typedef struct{
+	int x,y;
+	int f,g,h;
+	int parent_index;
+}PathNode;
+
+typedef struct{
+	int current_index;
+	int size_node_list;
+	int number_of_nodes;
+	FloodNode *node_list;
+}FloodGraph;
+
+typedef struct{
+	int number_of_nodes;
+	int startx,starty;
+	int endx, endy;
+	int number_of_open_nodes;
+	int number_of_closed_nodes;
+	int current_index;
+	PathNode *open_list;
+	PathNode *closed_list;
+}PathGraph;
 
 int    path_count_floor(MapData *m); /* Returns the number of floor tiles on a given map. */
 int    path_closed_list_get_index(PathGraph *g, int x, int y); /* Returns the closed_list node index given the map coords. */

@@ -42,8 +42,6 @@ typedef struct{
 	int x,y,x2,y2;
 }Hall;
 
-typedef struct node MapNode;
-typedef struct graph MapGraph;
 
 /*--------Map Init / Free from memory ----------------------------------------------------------------------------------------*/
 void   map_init(MapData *m, int map_width, int map_height); /* Initializes a MapData struct. */

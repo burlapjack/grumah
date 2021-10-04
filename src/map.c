@@ -50,6 +50,16 @@ void map_free(MapData *m){
 	m = NULL;
 }
 
+int map_count_tile(MapData *m, char tile){
+	int count = 0;
+	for(int i = 0; i < m->map_height; i++){
+		for(int j = 0; j < m->map_width; j++){
+			if(m->map[ i * m->map_width + j ] == tile) count++;
+		}
+	}
+	return count;
+}
+
 /*------ Find the largest of two integers ------------------------------------------------------------------------------------*/
 int max_int(int a, int b){
 	if (a > b) return a; else return b;
@@ -292,25 +302,42 @@ void map_gen_style_cave(MapData *m){
 		n++;
 	}
 
-	n = 0;
-	int p = 0;
+	int rand_x, rand_y;
+	while(1){  /* remove disconnected caves. */
+		rand_x = max_int( rand_int(m->map_width - 2), 2);
+		rand_y = max_int( rand_int(m->map_height - 2), 2);
+		if(m->map[rand_y * m->map_width + rand_y] == m->floor){
+			path_flood_fill(m, rand_x, rand_y, 'o');
+			int number_of_floor_tiles = map_count_tile(m,m->floor);
+			int number_of_fill_tiles = map_count_tile(m,'o');
+			for(int i = 0; i < m->map_height; i++){
+				for(int j = 0; j < m->map_width; j++){
+			//		if(number_of_floor_tiles <= number_of_fill_tiles){
+						if(m->map[ i * m->map_width + j ] == m->floor) m->map[ i * m->map_width + j ] = m->wall;
+						if(m->map[ i * m->map_width + j ] == 'o') m->map[ i * m->map_width + j ] = m->floor;
+			//		}
+			//		else if(number_of_floor_tiles > number_of_fill_tiles){
+			//			if(m->map[ i * m->map_width + j ] == 'o') m->map[ i * m->map_width + j ] = m->wall;
+			//		}
+				}
+			}
+			break;
+		}
+	}
+
 	int entrance_x, entrance_y;
 	int exit_x, exit_y;
 
-	while(p == 0){
+	while(1){
 		entrance_x = max_int( rand_int(m->map_width - 2), 2); /* randomly place an entrance and an exit */
 		entrance_y = max_int( rand_int(m->map_height - 2), 2);
 		exit_x = max_int( rand_int(m->map_width - 2), 2);
 		exit_y = max_int( rand_int(m->map_height - 2), 2);
 
-		if(map_copy[entrance_y * m->map_width + entrance_x] == m->floor && map_copy[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
-			if( path_is_contiguous(m, entrance_x, entrance_y, exit_x, exit_y) ){ /* also check if the entrance and exit share contiguous floor space */
-				m->map[(exit_y * m->map_width) + exit_x] = m->exit;
-				m->map[(entrance_y * m->map_width) + entrance_x] = m->entrance;
-				printw("exit: %d, %d \n", exit_x,  exit_y);
-				printw("entrance: %d, %d \n", entrance_x,  entrance_y);
-				p = 1; /* end while loop */
-			}
+		if(m->map[entrance_y * m->map_width + entrance_x] == m->floor && m->map[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
+			m->map[(exit_y * m->map_width) + exit_x] = m->exit;
+			m->map[(entrance_y * m->map_width) + entrance_x] = m->entrance;
+			break; /* end while loop */
 		}
 	}
 }

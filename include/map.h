@@ -62,6 +62,7 @@ void   map_gen_fill(MapData *m); /* Fills a map entirely with walls. */
 void   map_gen_doors(MapData *m, Room *rooms, int number_of_rooms); /* For srp maps, creates doors where hallways meet rooms. */
 
 /*--------Misc math functions ------------------------------------------------------------------------------------------------*/
+int    map_count_tile(MapData *m, char tile);
 int    map_xy(int x, int y, int map_width); /* Returns a converted one-dimensional array index given the equivelent two-dimensional x and y coordinates. */
 int    max_int(int a, int b); /* returns the greater of two given integers. */
 int    min_int(int a, int b); /* returns the lesser of two given integers. */

@@ -298,7 +298,7 @@ void map_gen_style_cave(MapData *m){
 				else  m->map[ i * m->map_width + j] = m->floor;
 			}
 		}
-		memcpy(map_copy, m->map, m->map_width * m->map_height);
+		memcpy(map_copy, m->map, sizeof (char) * m->map_width * m->map_height);
 		n++;
 	}
 
@@ -306,24 +306,22 @@ void map_gen_style_cave(MapData *m){
 	while(1){  /* remove disconnected caves. */
 		rand_x = max_int( rand_int(m->map_width - 2), 2);
 		rand_y = max_int( rand_int(m->map_height - 2), 2);
-		if(m->map[rand_y * m->map_width + rand_y] == m->floor) break;
+		if(m->map[rand_y * m->map_width + rand_x] == m->floor) break;
 	}
-
 	path_flood_fill(m, rand_x, rand_y, 'o');
 	int number_of_floor_tiles = map_count_tile(m,m->floor);
 	int number_of_fill_tiles = map_count_tile(m,'o');
-	//for(int i = 0; i < m->map_height; i++){
-	//	for(int j = 0; j < m->map_width; j++){
+	for(int i = 0; i < m->map_height; i++){
+		for(int j = 0; j < m->map_width; j++){
 		//	if(number_of_floor_tiles < number_of_fill_tiles){
-		//		if(m->map[ i * m->map_width + j ] == m->floor) m->map[ i * m->map_width + j ] = m->wall;
-		//		if(m->map[ i * m->map_width + j ] == 'o') m->map[ i * m->map_width + j ] = m->floor;
+				if(m->map[ i * m->map_width + j ] == m->floor) m->map[ i * m->map_width + j ] = m->wall;
+				if(m->map[ i * m->map_width + j ] == 'o') m->map[ i * m->map_width + j ] = m->floor;
 		//	}
 		//	else{
-		//		if(m->map[ i * m->map_width + j ] == 'o') m->map[ i * m->map_width + j ] = m->wall;
+	//			if(m->map[ i * m->map_width + j ] == 'o') m->map[ i * m->map_width + j ] = m->wall;
 		//	}
-	//	}
-	//}
-
+		}
+	}
 	int entrance_x, entrance_y;
 	int exit_x, exit_y;
 

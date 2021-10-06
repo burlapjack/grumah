@@ -5,6 +5,7 @@
  */
 
 #include <stdlib.h>
+#include <ncurses.h>
 #include <stdbool.h>
 #include <limits.h>
 #include <math.h>
@@ -49,10 +50,9 @@ void path_free_graph(PathGraph *g){
 }
 
 /*---------------------- Add new node to open_list ---------------------------------------------------------------------------*/
-void path_flood_list_add_node(FloodGraph *g, int x, int y){
-		g->node_list[g->number_of_nodes].x = x;
-		g->node_list[g->number_of_nodes].y = y;
-		g->number_of_nodes += 1; /* iterate open_node count */
+void path_flood_list_add_node(FloodNode *list, int *list_size, int x, int y){
+		list[*list_size].x = x;
+		list[*list_size].y = y;
 }
 
 /*---------------------- Add new node to open_list ---------------------------------------------------------------------------*/
@@ -104,11 +104,11 @@ int path_open_list_get_index(PathGraph *g, int x, int y){
 }
 
 /*---------------------- Check to see if the given criteria are matched by a flood node --------------------------------------*/
-bool path_node_exists_in_flood_list(FloodGraph *g, int x, int y){
+bool path_node_exists_in_flood_list(FloodNode list[], int list_size, int x, int y){
 	bool exists = false;
-	int n = max_int(g->number_of_nodes - 1, 0);
-	for(int i = 0; i < n; i++){
-		if( g->node_list[i].x == x && g->node_list[i].y == y){
+//	int n = max_int(list_size - 1, 0);
+	for(int i = 0; i < list_size; i++){
+		if( list[i].x == x && list[i].y == y){
 			exists = true;
 			break;
 		}
@@ -166,111 +166,60 @@ void path_node_update(PathGraph *g, int nx, int ny){
 /*--------------------- Fill an area with a given symbol/tile. --------------------------------------------------------------*/
 void path_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 
-	//FloodGraph *g = malloc( sizeof (*g) ); /* allocate new graph */
-	FloodGraph g;
-	g.number_of_nodes = path_count_floor(m); /* record the total number of possible nodes. In this case, the number of floor tiles on the map. */
-	g.node_list = malloc( sizeof (*(g.node_list)) * g.number_of_nodes ); /* allocate open_list */
+	int current_index = 0;
+	int number_of_nodes = 1;
+	int list_size = path_count_floor(m);
+	FloodNode node_list[list_size];
 
-	for(int i = 0; i < g.number_of_nodes; i++){
-		g.node_list[i].x = 0;
-		g.node_list[i].y = 0;
-	}
-
-
+	for(int i = 0; i < list_size; i++){
+		node_list[i].x = -1;
+		node_list[i].y = -1;
+	};
 
 	/* Add the first node outside of the main loop. */
-	g.node_list[0].x = rand_x;
-	g.node_list[0].y = rand_y;
-	m->map[rand_y * m->map_width + rand_x] = symbol;
+	node_list[0].x = rand_x;
+	node_list[0].y = rand_y;
+	m->map[(rand_y * m->map_width) + rand_x] = symbol;
 
-	g.current_index = 0; /* initialize the current index. */
+	int nx = node_list[0].x;
+	int ny = node_list[0].y;
 
-	int nx = 0;
-	int ny = 0;
-	int north,northeast,east,southeast,south,southwest,west,northwest;
+	int d[8][2];
+	d[0][0] =  0;  d[0][1] = -1;   /* north     */
+	d[1][0] =  1;  d[1][1] = -1;   /* northeast */
+	d[2][0] =  1;  d[2][1] =  0;   /* east      */
+	d[3][0] =  1;  d[3][1] =  1;   /* southeast */
+	d[4][0] =  0;  d[4][1] =  1;   /* south     */
+	d[5][0] = -1;  d[5][1] =  1;   /* southwest */
+	d[6][0] = -1;  d[6][1] =  0;   /* west      */
+	d[7][0] = -1;  d[7][1] = -1;   /* northwest */
 
 	while(1){ /* main loop */
 
-		nx = g.node_list[g.current_index].x; /* the x coord of the current node */
-		ny = g.node_list[g.current_index].y; /* the y coord of the current node */
+		nx = node_list[current_index].x;
+		ny = node_list[current_index].y;
 
-		north      = (ny - 1) * m->map_width + nx;
-		northeast  = (ny - 1) * m->map_width + nx + 1;
-		east       = ny * m->map_width + nx + 1;
-		southeast  = (ny + 1) * m->map_width + nx + 1;
-		south      = (ny + 1) * m->map_width + nx;
-		southwest  = (ny + 1) * m->map_width + nx - 1;
-		west       = ny * m->map_width + nx - 1;
-		northwest  = (ny - 1) * m->map_width + nx - 1;
-
-
+		//printw("\n%2d %2d",nx, ny);
 		/*---- check the map for neighboring nodes ---- */
+		for(int i = 0; i < 8; i++){
+				if(m->map[ (ny + d[i][1]) * m->map_width + nx + d[i][0] ] == m->floor){ /* check for floor tile on the map. */
+					int exists = 0;
 
-		if(ny > 1){ /* North  ny - 1, nx*/
-			if(m->map[north] == m->floor ){
-				if(!path_node_exists_in_flood_list(&g, nx, ny-1) ){
-					path_flood_list_add_node(&g, nx, ny - 1); /* if this neighbor doesn't exist in the node_list, add it. */
-					m->map[north] = symbol;
+					for(int j = 0; j < number_of_nodes; j++){
+						if( node_list[j].x == nx + d[i][0] && node_list[j].y == ny + d[i][1]) {
+							exists = 1;
+							break;
+						}
+					}
+					if(exists == 0){
+						node_list[number_of_nodes].x = nx + d[i][0];
+						node_list[number_of_nodes].y = ny + d[i][1];
+						number_of_nodes++;
+						m->map[ ( (ny + d[i][1]) * m->map_width) +  nx + d[i][0] ] = 'o';
+					}
 				}
-			}
 		}
-		if(nx < m->map_width - 1 && ny > 1){ /* NorthEast nx + 1, ny - 1*/
-			if( m->map[northeast] == m->floor ){
-				if( !path_node_exists_in_flood_list(&g, nx + 1, ny - 1) ){
-					path_flood_list_add_node(&g, nx + 1, ny - 1);
-					m->map[northeast] = symbol;
-				}
-			}
-		}
-		if(nx < m->map_width - 1){ /* East nx + 1, ny*/
-			if( m->map[east] == m->floor ){
-				if( !path_node_exists_in_flood_list(&g, nx + 1, ny) ){
-					path_flood_list_add_node(&g, nx + 1, ny); /* if this neighbor doesn't exist in any of the lists, add it to open_list */
-					m->map[east] = symbol;
-				}
-			}
-		}
-		if(nx < m->map_width - 1 && ny < m->map_height - 1){ /* SouthEast nx + 1, ny + 1*/
-			if( m->map[southeast] == m->floor ){
-				if( !path_node_exists_in_flood_list(&g, nx + 1, ny + 1) ){
-					path_flood_list_add_node(&g, nx + 1, ny + 1); /* if this neighbor doesn't exist in any of the lists, add it to open_list */
-					m->map[southeast] = symbol;
-				}
-			}
-		}
-		if(ny < m->map_height - 1){ /* South  nx, ny + 1 */
-			if( m->map[south] == m->floor ){
-				if( !path_node_exists_in_flood_list(&g, nx, ny + 1) ){
-					path_flood_list_add_node(&g, nx, ny + 1); /* if this neighbor doesn't exist in any of the lists, add it to open_list */
-					m->map[south] = symbol;
-				}
-			}
-		}
-		if(nx > 1 && ny < m->map_height - 1){ /* Southwest nx - 1, ny + 1*/
-			if( m->map[southwest] == m->floor ){
-				if( !path_node_exists_in_flood_list(&g, nx - 1, ny + 1) ){
-					path_flood_list_add_node(&g, nx - 1, ny + 1); /* if this neighbor doesn't exist in any of the lists, add it to open_list */
-					m->map[southwest] = symbol;
-				}
-			}
-		}
-		if(nx > 1){ /* West  nx - 1, ny */
-			if( m->map[west] == m->floor ){
-				if( !path_node_exists_in_flood_list(&g, nx - 1, ny) ){
-					path_flood_list_add_node(&g, nx - 1, ny); /* if this neighbor doesn't exist in any of the lists, add it to open_list */
-					m->map[west] = symbol;
-				}
-			}
-		}
-		if(nx > 1 && ny > 1){/* Northwest nx - 1, ny - 1 */
-			if( m->map[northwest] == m->floor ){
-				if( !path_node_exists_in_flood_list(&g, nx - 1, ny - 1) ){
-					path_flood_list_add_node(&g, nx - 1, ny - 1); /* if this neighbor doesn't exist in any of the lists, add it to open_list */
-					m->map[northwest] = symbol;
-				}
-			}
-		}
-		if(g.current_index < (g.number_of_nodes)) g.current_index++;
-		else break;
+		current_index+=1;
+		if(node_list[current_index].x == -1) break;
 	}
 }

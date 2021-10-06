@@ -165,16 +165,13 @@ void path_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 	int nx = node_list[0].x;
 	int ny = node_list[0].y;
 
-	int d[8][2];
-	d[0][0] =  0;  d[0][1] = -1;   /* north     */
-	d[1][0] =  1;  d[1][1] = -1;   /* northeast */
-	d[2][0] =  1;  d[2][1] =  0;   /* east      */
-	d[3][0] =  1;  d[3][1] =  1;   /* southeast */
-	d[4][0] =  0;  d[4][1] =  1;   /* south     */
-	d[5][0] = -1;  d[5][1] =  1;   /* southwest */
-	d[6][0] = -1;  d[6][1] =  0;   /* west      */
-	d[7][0] = -1;  d[7][1] = -1;   /* northwest */
-
+	int d[8][2] = {
+		{ 0,  -1 }, /* north */     { 1,  -1 },	/* northeast */
+		{ 1,   0 },	/* east  */     { 1,   1 },	/* southeast */
+		{ 0,   1 },	/* south */     {-1,   1 },	/* southwest */
+		{-1,   0 }, /* west  */	    {-1,  -1 }	/* northwest */
+	};
+	
 	while(1){ /* main loop */
 
 		nx = node_list[current_index].x;
@@ -196,7 +193,7 @@ void path_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 						node_list[number_of_nodes].x = nx + d[i][0];
 						node_list[number_of_nodes].y = ny + d[i][1];
 						number_of_nodes++;
-						m->map[ ( (ny + d[i][1]) * m->map_width) +  nx + d[i][0] ] = 'o';
+						m->map[ ( (ny + d[i][1]) * m->map_width) +  nx + d[i][0] ] = symbol;
 					}
 				}
 		}

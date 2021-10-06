@@ -267,14 +267,19 @@ void map_gen_style_cave(MapData *m){
 	/* generate random noise (wall and floor tiles) on the map copy */
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
-			if( i == 0 || i == m->map_height || j == 0 || j == m->map_width){
+			if( i == 0 || i == m->map_height || j == 0 || j == m->map_width){ /* surround the map with walls. */
 				map_copy[ i * m->map_width + j ] = m->wall;
 			}
 			else{
 				/* everything  is random - wall or floor */
-				rand_tile = rand_int(10);
-				if(rand_tile > 4) map_copy[ i * m->map_width + j ] = m->floor;
-				else map_copy[ i * m->map_width + j ] = m->wall;
+				if( i > (m->map_height / 2) && i < (m->map_height / 2) + 2){ /* create empty strip in middle of map */
+					map_copy[i * m->map_width + j] = m->floor;
+				}
+				else{
+					rand_tile = rand_int(10);
+					if(rand_tile > 4) map_copy[ i * m->map_width + j ] = m->floor;
+					else map_copy[ i * m->map_width + j ] = m->wall;
+				}
 			}
 		}
 	}
@@ -309,17 +314,10 @@ void map_gen_style_cave(MapData *m){
 		if(m->map[rand_y * m->map_width + rand_x] == m->floor) break;
 	}
 	path_flood_fill(m, rand_x, rand_y, 'o');
-	int number_of_floor_tiles = map_count_tile(m,m->floor);
-	int number_of_fill_tiles = map_count_tile(m,'o');
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
-		//	if(number_of_floor_tiles < number_of_fill_tiles){
-				if(m->map[ i * m->map_width + j ] == m->floor) m->map[ i * m->map_width + j ] = m->wall;
-				if(m->map[ i * m->map_width + j ] == 'o') m->map[ i * m->map_width + j ] = m->floor;
-		//	}
-		//	else{
-	//			if(m->map[ i * m->map_width + j ] == 'o') m->map[ i * m->map_width + j ] = m->wall;
-		//	}
+			if(m->map[ i * m->map_width + j ] == m->floor) m->map[ i * m->map_width + j ] = m->wall;
+			if(m->map[ i * m->map_width + j ] == 'o') m->map[ i * m->map_width + j ] = m->floor;
 		}
 	}
 	int entrance_x, entrance_y;

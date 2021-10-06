@@ -50,12 +50,6 @@ void path_free_graph(PathGraph *g){
 }
 
 /*---------------------- Add new node to open_list ---------------------------------------------------------------------------*/
-void path_flood_list_add_node(FloodNode *list, int *list_size, int x, int y){
-		list[*list_size].x = x;
-		list[*list_size].y = y;
-}
-
-/*---------------------- Add new node to open_list ---------------------------------------------------------------------------*/
 void path_open_list_add_node(PathGraph *g, int x, int y){
 	int i = g->number_of_open_nodes;
 	g->open_list[i].x = x;
@@ -101,19 +95,6 @@ int path_open_list_get_index(PathGraph *g, int x, int y){
 		}
 	}
 	return index;
-}
-
-/*---------------------- Check to see if the given criteria are matched by a flood node --------------------------------------*/
-bool path_node_exists_in_flood_list(FloodNode list[], int list_size, int x, int y){
-	bool exists = false;
-//	int n = max_int(list_size - 1, 0);
-	for(int i = 0; i < list_size; i++){
-		if( list[i].x == x && list[i].y == y){
-			exists = true;
-			break;
-		}
-	}
-	return exists;
 }
 
 /*---------------------- Check to see if the given criteria are matched by a node in any list  -------------------------------*/

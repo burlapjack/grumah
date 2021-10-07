@@ -18,7 +18,6 @@ void system_input(WINDOW *win){
 	switch(ch)
 	{
 		case KEY_UP:
-			wprintw(win,"Up key has been pressed");
 			break;
 		case KEY_DOWN:
 			break;

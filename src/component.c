@@ -2,7 +2,7 @@
  * component.c
  * by burlapjack 2021
  *
- * All component types are structs that include an id 
+ * All component types are structs that include an id
  * and some related variables:
  *
  * typedef struct{
@@ -24,9 +24,9 @@
  * component_free(c);
  *
  * FOR GRUMAH PROGRAMMERS:
- * for each addition component type added, makes sure to 
+ * for each addition component type added, makes sure to
  * add the following related functions:
- * 
+ *
  * component_clear_all_...
  * component_list_double_...
  * component_add_...
@@ -50,7 +50,7 @@
 void component_init(Component *c, int size_lists){
 	c->attributes = malloc( sizeof (*(c->attributes)) * size_lists);
 	c->hit_points = malloc( sizeof (*(c->hit_points)) * size_lists);
-	c->draw = malloc( sizeof (*(c->draw)) * size_lists); 
+	c->draw = malloc( sizeof (*(c->draw)) * size_lists);
 	c->menu_option = malloc( sizeof (*(c->menu_option)) * size_lists);
 	c->position = malloc( sizeof (*(c->position)) * size_lists);
 	c->size = malloc( sizeof (*(c->size)) * size_lists);
@@ -89,14 +89,14 @@ void component_clear_all_draw(Component *c){
 		c->draw[i].id = 0;
 		c->draw[i].symbol = ' ';
 		c->draw[i].layer = 0;
-	}	
+	}
 }
 
 void component_clear_all_hit_points(Component *c){
 	for(int i = 0; i < (c->size_hit_points); i++){
 		c->hit_points[i].id = 0;
-		c->hit_points[i].current = 0; 
-		c->hit_points[i].max = 0; 
+		c->hit_points[i].current = 0;
+		c->hit_points[i].max = 0;
 
 	}
 }
@@ -114,7 +114,7 @@ void component_clear_all_menu_option(Component *c){
 		c->menu_option[i].parent_id = 0;
 		memset(c->menu_option[i].name, ' ', 32);
 		c->menu_option[i].highlighted = 0;
-	}	
+	}
 }
 
 void component_clear_all_position(Component *c){
@@ -128,8 +128,8 @@ void component_clear_all_position(Component *c){
 void component_clear_all_size(Component *c){
 	for(int i = 0; i < (c->size_size); i++){
 		c->size[i].id = 0;
-		c->size[i].width = 0;	
-		c->size[i].height = 0;	
+		c->size[i].width = 0;
+		c->size[i].height = 0;
 	}
 }
 
@@ -142,13 +142,13 @@ void component_clear_all_trigger(Component *c){
 }
 
 void component_clear_all(Component *c){
-	component_clear_all_attributes(c);	
+	component_clear_all_attributes(c);
 	component_clear_all_hit_points(c);
-	component_clear_all_draw(c);	
+	component_clear_all_draw(c);
 	component_clear_all_menu_option(c);
-	component_clear_all_position(c);	
-	component_clear_all_size(c);	
-	component_clear_all_trigger(c);	
+	component_clear_all_position(c);
+	component_clear_all_size(c);
+	component_clear_all_trigger(c);
 }
 
 /*-------------- Free all Component Lists -----------------------------------------------------------*/
@@ -180,8 +180,8 @@ void component_list_double_attributes(Component *c){
 	if (temp == NULL) {
 		perror("Failure to reallocate component_attributes");
 		exit(EXIT_FAILURE);
-	}	
-	c->attributes = temp;	
+	}
+	c->attributes = temp;
 	for(int i = c->size_attributes; i < (c->size_attributes * 2 ); ++i ){
 		c->attributes[i].id = 0;
 	}
@@ -194,8 +194,8 @@ void component_list_double_draw(Component *c){
 	if (temp == NULL) {
 		perror("Failure to reallocate component_draw");
 		exit(EXIT_FAILURE);
-	}	
-	c->draw = temp;	
+	}
+	c->draw = temp;
 	for(int i = c->size_draw; i < (c->size_draw * 2 ); ++i ){
 		c->draw[i].id = 0;
 	}
@@ -208,8 +208,8 @@ void component_list_double_hit_points(Component *c){
 	if (temp == NULL) {
 		perror("Failure to reallocate component_input");
 		exit(EXIT_FAILURE);
-	}	
-	c->hit_points = temp;	
+	}
+	c->hit_points = temp;
 	for(int i = c->size_hit_points; i < (c->size_hit_points * 2 ); ++i ){
 		c->hit_points[i].id = 0;
 	}
@@ -223,8 +223,8 @@ void component_list_double_input(Component *c){
 	if (temp == NULL) {
 		perror("Failure to reallocate component_input");
 		exit(EXIT_FAILURE);
-	}	
-	c->input= temp;	
+	}
+	c->input= temp;
 	for(int i = c->size_input; i < (c->size_input * 2 ); ++i ){
 		c->input[i].id = 0;
 	}
@@ -239,8 +239,8 @@ void component_list_double_position(Component *c){
 	if (temp == NULL) {
 		perror("Failure to reallocate component_position");
 		exit(EXIT_FAILURE);
-	}	
-	c->position = temp;	
+	}
+	c->position = temp;
 	for(int i = c->size_position; i < (c->size_position * 2 ); ++i ){
 		c->position[i].id = 0;
 	}
@@ -253,8 +253,8 @@ void component_list_double_size(Component *c){
 	if (temp == NULL) {
 		perror("Failure to reallocate component_size");
 		exit(EXIT_FAILURE);
-	}	
-	c->size = temp;	
+	}
+	c->size = temp;
 	for(int i = c->size_size; i < (c->size_size * 2 ); ++i ){
 		c->size[i].id = 0;
 	}
@@ -267,8 +267,8 @@ void component_list_double_menu_option(Component *c){
 	if (temp == NULL) {
 		perror("Failure to reallocate component_menu_option");
 		exit(EXIT_FAILURE);
-	}	
-	c->menu_option = temp;	
+	}
+	c->menu_option = temp;
 	for(int i = c->size_menu_option; i < (c->size_menu_option* 2 ); ++i ){
 		c->menu_option[i].id = 0;
 	}
@@ -281,8 +281,8 @@ void component_list_double_trigger(Component *c){
 	if (temp == NULL) {
 		perror("Failure to reallocate component_trigger");
 		exit(EXIT_FAILURE);
-	}	
-	c->trigger = temp;	
+	}
+	c->trigger = temp;
 
 	for(int i = c->size_trigger; i < (c->size_trigger * 2 ); ++i ){
 		c->trigger[i].id = 0;
@@ -461,13 +461,13 @@ int component_count_trigger(Component *c){
 
 int component_count_all(Component *c){
 	int total = 0;
-	total = component_count_attributes(c) 
-		+ component_count_draw(c) 
-		+ component_count_hit_points(c) 
-		+ component_count_position(c) 
-		+ component_count_menu_option(c)  
+	total = component_count_attributes(c)
+		+ component_count_draw(c)
+		+ component_count_hit_points(c)
+		+ component_count_position(c)
+		+ component_count_menu_option(c)
 		+ component_count_trigger(c);
-	return total;	
+	return total;
 }
 
 int component_count_invisible(Component *c){
@@ -478,7 +478,7 @@ int component_count_invisible(Component *c){
 				if(c->position[i].id == c->draw[j].id) break;
 				if(j == c->size_draw-1) total++;
 			}
-		}	
+		}
 	}
 	return total;
 }
@@ -487,7 +487,7 @@ int component_count_invisible(Component *c){
 void component_set_draw_layer(Component *c, int component_id, int draw_layer){
 	for(int i = 0; i < (c->size_draw); i++){
 		if(c->draw[i].id == component_id){
-			c->draw[i].layer = draw_layer;	
+			c->draw[i].layer = draw_layer;
 		}
 	}
 }

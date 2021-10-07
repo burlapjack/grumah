@@ -26,9 +26,9 @@ void map_init(MapData *m, int map_width, int map_height){
 	m->room_padding = 2;
 	m->entrance = '<';
 	m->exit = '>';
-	m->door_horizontal_closed = '-';
-	m->door_horizontal_open = '/';
-	m->door_vertical_closed = '|';
+	m->door_horizontal_closed = '+';
+	m->door_horizontal_open = '|';
+	m->door_vertical_closed = '+';
 	m->door_vertical_open= '-';
 	m->floor = '.';
 	m->hallway = '.';
@@ -259,7 +259,7 @@ void map_gen_style_dungeon(MapData *m){
 
 /*---------------------- Map Generation: Cellular Automata -------------------------------------------------------------------*/
 void map_gen_style_cave(MapData *m){
-	int iterations = 4;
+	int iterations = 2;
 	int rand_tile;
 	int neighbor_walls;
 	char map_copy[m->map_width * m->map_height];
@@ -321,15 +321,15 @@ void map_gen_style_cave(MapData *m){
 	}
 	int entrance_x, entrance_y;
 	int exit_x, exit_y;
-
+	
 	while(1){
 		entrance_x = max_int( rand_int(m->map_width - 2), 2); /* randomly place an entrance and an exit */
 		entrance_y = max_int( rand_int(m->map_height - 2), 2);
 		exit_x = max_int( rand_int(m->map_width - 2), 2);
 		exit_y = max_int( rand_int(m->map_height - 2), 2);
-
+		iterations++;
 		if(m->map[entrance_y * m->map_width + entrance_x] == m->floor && m->map[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
-			if( path_get_manhattan_distance(entrance_x, entrance_y, exit_x, exit_y) > ( max_int(m->map_width, m->map_height) / 2) ){ /* ensure that the entrance and exit arent right next to each other. */
+			if( path_get_manhattan_distance(entrance_x, entrance_y, exit_x, exit_y) > 2 ){ /* ensure that the entrance and exit arent right next to each other. */
 				m->map[(exit_y * m->map_width) + exit_x] = m->exit;
 				m->map[(entrance_y * m->map_width) + entrance_x] = m->entrance;
 				break; /* end while loop */

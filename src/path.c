@@ -5,7 +5,6 @@
  */
 
 #include <stdlib.h>
-#include <ncurses.h>
 #include <stdbool.h>
 #include <limits.h>
 #include <math.h>
@@ -177,7 +176,6 @@ void path_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 		nx = node_list[current_index].x;
 		ny = node_list[current_index].y;
 
-		//printw("\n%2d %2d",nx, ny);
 		/*---- check the map for neighboring nodes ---- */
 		for(int i = 0; i < 8; i++){
 				if(m->map[ (ny + d[i][1]) * m->map_width + nx + d[i][0] ] == m->floor){ /* check for floor tile on the map. */

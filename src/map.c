@@ -271,13 +271,12 @@ void map_gen_style_cave(MapData *m){
 				map_copy[ i * m->map_width + j ] = m->wall;
 			}
 			else{
-				/* everything  is random - wall or floor */
-				if( i > (m->map_height / 2) && i < (m->map_height / 2) + 2){ /* create empty strip in middle of map */
+				if( m->map_height > 4 && i > (m->map_height / 2) && i < (m->map_height / 2) + 2){ /* create empty strip in middle of map */
 					map_copy[i * m->map_width + j] = m->floor;
 				}
 				else{
 					rand_tile = rand_int(10);
-					if(rand_tile > 4) map_copy[ i * m->map_width + j ] = m->floor;
+					if(rand_tile > 4) map_copy[ i * m->map_width + j ] = m->floor; /* everything  is random - wall or floor */
 					else map_copy[ i * m->map_width + j ] = m->wall;
 				}
 			}
@@ -330,12 +329,12 @@ void map_gen_style_cave(MapData *m){
 		exit_y = max_int( rand_int(m->map_height - 2), 2);
 
 		if(m->map[entrance_y * m->map_width + entrance_x] == m->floor && m->map[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
-			m->map[(exit_y * m->map_width) + exit_x] = m->exit;
-			m->map[(entrance_y * m->map_width) + entrance_x] = m->entrance;
-			break; /* end while loop */
+			if( path_get_manhattan_distance(entrance_x, entrance_y, exit_x, exit_y) > ( max_int(m->map_width, m->map_height) / 2) ){ /* ensure that the entrance and exit arent right next to each other. */
+				m->map[(exit_y * m->map_width) + exit_x] = m->exit;
+				m->map[(entrance_y * m->map_width) + entrance_x] = m->entrance;
+				break; /* end while loop */
+			}
 		}
 	}
 }
-
-
 

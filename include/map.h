@@ -58,6 +58,7 @@ void   map_gen_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_ind
 void   map_gen_carve_room(MapData *m, Room *rooms, int rooms_added); /* For srp maps, carves out rectangular rooms */
 void   map_gen_fill(MapData *m); /* Fills a map entirely with walls. */
 void   map_gen_doors(MapData *m, Room *rooms, int number_of_rooms); /* For srp maps, creates doors where hallways meet rooms. */
+void   map_gen_place_exit(MapData *m);
 
 /*--------Misc math functions ------------------------------------------------------------------------------------------------*/
 int    map_count_tile(MapData *m, char tile);

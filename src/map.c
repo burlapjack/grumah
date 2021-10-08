@@ -325,23 +325,6 @@ void map_gen_style_cave(MapData *m){
 		}
 	}
 	map_gen_entrance_and_exit(m);
-//	int entrance_x, entrance_y;
-//	int exit_x, exit_y;
-
-//	while(1){
-//		entrance_x = max_int( rand_int(m->map_width - 2), 2); /* randomly place an entrance and an exit */
-//		entrance_y = max_int( rand_int(m->map_height - 2), 2);
-//		exit_x = max_int( rand_int(m->map_width - 2), 2);
-//		exit_y = max_int( rand_int(m->map_height - 2), 2);
-//		if(m->map[entrance_y * m->map_width + entrance_x] == m->floor && m->map[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
-//			if( path_get_manhattan_distance(entrance_x, entrance_y, exit_x, exit_y) > 2 ){ /* ensure that the entrance and exit arent right next to each other. */
-//				m->map[(exit_y * m->map_width) + exit_x] = m->exit;
-//				m->map[(entrance_y * m->map_width) + entrance_x] = m->entrance;
-//				break; /* end while loop */
-//			}
-//		}
-//	}
-
 }
 
 void map_gen_entrance_and_exit(MapData *m){

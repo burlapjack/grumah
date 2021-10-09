@@ -2,7 +2,7 @@
  * procedural map generation
  */
 #include <stdlib.h>
-#include <ncurses.h>
+//#include <ncurses.h>
 #include <math.h>
 #include <stdbool.h>
 #include <string.h>
@@ -264,7 +264,7 @@ void map_gen_style_dungeon(MapData *m){
 
 /*---------------------- Map Generation: Cellular Automata -------------------------------------------------------------------*/
 void map_gen_style_cave(MapData *m){
-	int iterations = 2;
+	int iterations = 2; /* number of times the map is "smoothed".  The default is 2. */
 	int rand_tile;
 	int neighbor_walls;
 	char map_copy[m->map_width * m->map_height];
@@ -343,4 +343,14 @@ int entrance_x, entrance_y;
 			}
 		}
 	}
+
+void map_gen_create_components(MapData *m, Component *c, int id){
+	for(int i = 0; i < m->map_height; i++){
+		for(int j = 0; j < m->map_width; j++){
+			component_add_position(c, id, i, j);
+			component_add_draw(c, id,0, 1, m->map[i * m->map_width + j]);
+		}
+	}
+}
+
 }

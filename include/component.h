@@ -40,6 +40,7 @@ typedef struct{
 	int id;
 	int layer;
 	char symbol;
+	int visibility;
 	int color;
 }ComponentDraw;
 

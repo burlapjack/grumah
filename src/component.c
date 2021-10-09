@@ -44,7 +44,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../include/component.h"
-
+#include "../include/map.h"
 /*---------------Initialize Component Lists -----------------------------------------------------*/
 // Init all component lists within a Component instance
 void component_init(Component *c, int size_lists){
@@ -300,7 +300,6 @@ void component_add_attributes(Component *c, int str, int per, int agi) {
 		}
 		else if (c->attributes[i].id == 0){
 			c->attributes[i].id = c->next_id;
-			c->next_id++;
 			c->attributes[i].strength = str;
 			c->attributes[i].perception = per;
 			c->attributes[i].agility = agi;
@@ -316,11 +315,10 @@ void component_add_draw(Component *c, int layer, int color, char symbol) {
 		}
 		else if (c->draw[i].id == 0){
 			c->draw[i].id = c->next_id;
-			c->next_id++;
 			c->draw[i].color = color;
 			c->draw[i].symbol = symbol;
 			c->draw[i].layer = layer;
-			c->draw[i].visibility = 0;
+			c->draw[i].visibility = 1;
 			break;
 		}
 	}
@@ -358,7 +356,6 @@ void component_add_position(Component *c, int x, int y) {
 		}
 		else if (c->position[i].id == 0){
 			c->position[i].id = c->next_id;
-			c->next_id++;
 			c->position[i].x = x;
 			c->position[i].y = y;
 			break;
@@ -388,7 +385,6 @@ void component_add_size(Component *c, int width, int height) {
 		}
 		else if (c->size[i].id == 0){
 			c->size[i].id = c->next_id;
-			c->next_id++;
 			break;
 		}
 	}
@@ -402,7 +398,6 @@ void component_add_trigger(Component *c, int game_state) {
 		}
 		else if (c->trigger[i].id == 0){
 			c->trigger[i].id = c->next_id;
-			c->next_id++;
 			c->trigger[i].game_state = game_state;
 			break;
 		}

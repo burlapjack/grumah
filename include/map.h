@@ -10,6 +10,8 @@
 typedef struct{
 	int map_width;
 	int map_height;
+	int map_x_offset;
+	int map_y_offset;
 	int number_of_rooms;
 	int room_max_width;
 	int room_max_height;
@@ -43,16 +45,14 @@ typedef struct{
 	int x,y,x2,y2;
 }Hall;
 
+/*-------- Fill empty area of map with a given character/symbol --------------------------------------------------------------*/
+void   map_flood_fill(MapData *m, int rand_x, int rand_y, char character);
 
-/*--------Map Init / Free from memory ----------------------------------------------------------------------------------------*/
-void   map_init(MapData *m, int map_width, int map_height); /* Initializes a MapData struct. */
+/*-------- Map Init / Free from memory ---------------------------------------------------------------------------------------*/
 void   map_free(MapData *m); /* Deallocates MapData memory. */
+void   map_init(MapData *m, int map_width, int map_height); /* Initializes a MapData struct. */
 
-/*--------Map Generation Style -----------------------------------------------------------------------------------------------*/
-void   map_gen_style_dungeon(MapData *m, Component *c); /* Simple-Room-Placement procedurally generated map. Rectangular rooms connected by hallways. */
-void   map_gen_style_cave(MapData *m, Component *c); /* Cellular-Automata procedurally generated map.  Cave-like design. */
-
-/*--------Map generation helper functions ------------------------------------------------------------------------------------*/
+/*-------- Map generation helper functions -----------------------------------------------------------------------------------*/
 void   map_gen_add_components(MapData *m, Component *c);
 void   map_gen_carve_hallways(MapData *m, Room *rooms, int rooms_added); /* Designates the carving of hallways for an srp map, connects rooms left to right. */
 void   map_gen_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend); /* Called on to carve horizontal section of hallway */
@@ -61,6 +61,10 @@ void   map_gen_carve_room(MapData *m, Room *rooms, int rooms_added); /* For srp 
 void   map_gen_fill(MapData *m); /* Fills a map entirely with walls. */
 void   map_gen_doors(MapData *m, Room *rooms, int number_of_rooms); /* For srp maps, creates doors where hallways meet rooms. */
 void   map_gen_entrance_and_exit(MapData *m);
+
+/*-------- Map Generation Style ----------------------------------------------------------------------------------------------*/
+void   map_gen_style_dungeon(MapData *m, Component *c); /* Simple-Room-Placement procedurally generated map. Rectangular rooms connected by hallways. */
+void   map_gen_style_cave(MapData *m, Component *c); /* Cellular-Automata procedurally generated map.  Cave-like design. */
 
 /*--------Misc math functions ------------------------------------------------------------------------------------------------*/
 int    map_count_tile(MapData *m, char tile);

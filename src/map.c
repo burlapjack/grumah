@@ -17,6 +17,8 @@
 void map_init(MapData *m, int map_width, int map_height){
 	m->map_width = map_width;
 	m->map_height = map_height;
+	m->map_x_offset = 0;
+	m->map_y_offset = 0;
 	m->map = malloc( sizeof (*(m->map)) * (map_width * map_height));
 	m->number_of_rooms = 12;
 	m->room_max_width = 7;
@@ -318,7 +320,7 @@ void map_gen_style_cave(MapData *m, Component *c){
 		rand_y = max_int( rand_int(m->map_height - 2), 2);
 		if(m->map[rand_y * m->map_width + rand_x] == m->floor) break;
 	}
-	path_flood_fill(m, rand_x, rand_y, 'o');
+	map_flood_fill(m, rand_x, rand_y, 'o');
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
 			if(m->map[ i * m->map_width + j ] == m->floor) m->map[ i * m->map_width + j ] = m->wall;
@@ -350,8 +352,65 @@ int entrance_x, entrance_y;
 void map_gen_add_components(MapData *m, Component *c){
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
-			component_add_position(c, i, j);
+			component_add_position(c, j, i);
 			component_add_draw(c, 0, 1, m->map[i * m->map_width + j]);
+			c->next_id++;
+		}
+	}
+}
+
+
+/*--------------------- Fill an area with a given symbol/tile. --------------------------------------------------------------*/
+void map_flood_fill(MapData *m, int rand_x, int rand_y, char character){
+
+	int current_index = 0;
+	int number_of_nodes = 1;
+	int list_size = path_count_floor(m);
+	FloodNode node_list[list_size];
+
+	for(int i = 0; i < list_size; i++){
+		node_list[i].x = -1;
+		node_list[i].y = -1;
+	};
+
+	/* Add the first node outside of the main loop. */
+	node_list[0].x = rand_x;
+	node_list[0].y = rand_y;
+	m->map[(rand_y * m->map_width) + rand_x] = character;
+
+	int nx = node_list[0].x;
+	int ny = node_list[0].y;
+
+	int d[8][2] = {
+		{ 0,  -1 }, /* north */     { 1,  -1 },	/* northeast */
+		{ 1,   0 },	/* east  */     { 1,   1 },	/* southeast */
+		{ 0,   1 },	/* south */     {-1,   1 },	/* southwest */
+		{-1,   0 }, /* west  */	    {-1,  -1 }	/* northwest */
+	};
+
+	while(1){ /* main loop */
+
+		nx = node_list[current_index].x;
+		ny = node_list[current_index].y;
+
+		/*---- check the map for neighboring nodes ---- */
+		for(int i = 0; i < 8; i++){
+			if(m->map[ (ny + d[i][1]) * m->map_width + nx + d[i][0] ] == m->floor){ /* check for floor tile on the map. */
+				int exists = 0;
+
+				for(int j = 0; j < number_of_nodes; j++){
+					if( node_list[j].x == nx + d[i][0] && node_list[j].y == ny + d[i][1]) {
+						exists = 1;
+						break;
+					}
+				}
+				if(exists == 0){
+					node_list[number_of_nodes].x = nx + d[i][0];
+					node_list[number_of_nodes].y = ny + d[i][1];
+					number_of_nodes++;
+					m->map[ ( (ny + d[i][1]) * m->map_width) +  nx + d[i][0] ] = character;
+				}
+			}
 		}
 	}
 }

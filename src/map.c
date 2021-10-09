@@ -343,6 +343,7 @@ int entrance_x, entrance_y;
 			}
 		}
 	}
+}
 
 void map_gen_add_components(MapData *m, Component *c, int id){
 	for(int i = 0; i < m->map_height; i++){
@@ -351,6 +352,4 @@ void map_gen_add_components(MapData *m, Component *c, int id){
 			component_add_draw(c, id,0, 1, m->map[i * m->map_width + j]);
 		}
 	}
-}
-
 }

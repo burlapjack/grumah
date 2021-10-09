@@ -316,6 +316,7 @@ void component_add_draw(Component *c, int id, int layer, int color, char symbol)
 			c->draw[i].color = color;
 			c->draw[i].symbol = symbol;
 			c->draw[i].layer = layer;
+			c->draw[i].visibility = 0;
 			break;
 		}
 	}
@@ -488,6 +489,15 @@ void component_set_draw_layer(Component *c, int component_id, int draw_layer){
 	for(int i = 0; i < (c->size_draw); i++){
 		if(c->draw[i].id == component_id){
 			c->draw[i].layer = draw_layer;
+		}
+	}
+}
+
+/*-------------- Set Component Visibility Level --------------------------------------------------*/
+void component_set_visibility(Component *c, int component_id, int visibility){
+	for(int i = 0; i < (c->size_draw); i++){
+		if(c->draw[i].id == component_id){
+			c->draw[i].visibility = visibility;
 		}
 	}
 }

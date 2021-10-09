@@ -130,5 +130,6 @@ int component_count_invisible(Component *c);
 
 /*----------- Component Set Values ---------------------------------------------------------------*/
 void component_set_draw_layer(Component *c, int component_id, int draw_layer);
+void component_set_visibility(Component *c, int component_id, int visibility);
 
 #endif /*COMPONENT_H*/

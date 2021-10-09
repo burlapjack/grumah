@@ -49,11 +49,11 @@ void   map_init(MapData *m, int map_width, int map_height); /* Initializes a Map
 void   map_free(MapData *m); /* Deallocates MapData memory. */
 
 /*--------Map Generation Style -----------------------------------------------------------------------------------------------*/
-void   map_gen_style_dungeon(MapData *m); /* Simple-Room-Placement procedurally generated map. Rectangular rooms connected by hallways. */
-void   map_gen_style_cave(MapData *m); /* Cellular-Automata procedurally generated map.  Cave-like design. */
+void   map_gen_style_dungeon(MapData *m, Component *c); /* Simple-Room-Placement procedurally generated map. Rectangular rooms connected by hallways. */
+void   map_gen_style_cave(MapData *m, Component *c); /* Cellular-Automata procedurally generated map.  Cave-like design. */
 
 /*--------Map generation helper functions ------------------------------------------------------------------------------------*/
-void   map_gen_add_components(MapData *m, Component *c, int id); /* Uses the MapData map array to create components. */
+void   map_gen_add_components(MapData *m, Component *c);
 void   map_gen_carve_hallways(MapData *m, Room *rooms, int rooms_added); /* Designates the carving of hallways for an srp map, connects rooms left to right. */
 void   map_gen_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend); /* Called on to carve horizontal section of hallway */
 void   map_gen_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend); /* Called on to carve vertical section of hallway */

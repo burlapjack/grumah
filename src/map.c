@@ -208,7 +208,7 @@ void map_gen_doors(MapData *m, Room *rooms, int number_of_rooms){
 
 /*---------------------- Map Generation: Simple Room Placement ---------------------------------------------------------------*/
 /* Rooms are added one at a time wherever they will fit, then hallways are created between them. */
-void map_gen_style_dungeon(MapData *m){
+void map_gen_style_dungeon(MapData *m, Component *c){
 	int room_x,room_y, room_x2, room_y2;
 	int rooms_added = 0;
 	int collision_detected = 0;
@@ -260,10 +260,11 @@ void map_gen_style_dungeon(MapData *m){
 	map_gen_carve_hallways(m, rooms, rooms_added);
 	map_gen_doors(m, rooms, rooms_added);
 
+	map_gen_add_components(m, c);
 }
 
 /*---------------------- Map Generation: Cellular Automata -------------------------------------------------------------------*/
-void map_gen_style_cave(MapData *m){
+void map_gen_style_cave(MapData *m, Component *c){
 	int iterations = 2; /* number of times the map is "smoothed".  The default is 2. */
 	int rand_tile;
 	int neighbor_walls;
@@ -325,6 +326,7 @@ void map_gen_style_cave(MapData *m){
 		}
 	}
 	map_gen_entrance_and_exit(m);
+	map_gen_add_components(m, c);
 }
 
 void map_gen_entrance_and_exit(MapData *m){
@@ -345,11 +347,11 @@ int entrance_x, entrance_y;
 	}
 }
 
-void map_gen_add_components(MapData *m, Component *c, int id){
+void map_gen_add_components(MapData *m, Component *c){
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
-			component_add_position(c, id, i, j);
-			component_add_draw(c, id,0, 1, m->map[i * m->map_width + j]);
+			component_add_position(c, i, j);
+			component_add_draw(c, 0, 1, m->map[i * m->map_width + j]);
 		}
 	}
 }

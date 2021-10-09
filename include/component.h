@@ -66,6 +66,7 @@ typedef struct {
 	ComponentPosition *position;
 	ComponentSize *size;
 	ComponentTrigger *trigger;
+	int next_id;
 	int size_draw;
 	int size_hit_points;
 	int size_input;
@@ -92,14 +93,14 @@ void component_list_double_size(Component *c);
 void component_list_double_trigger(Component *c);
 
 /*----------- Component Container Additions ------------------------------------------------------*/
-void component_add_attributes(Component *c, int id, int str, int per, int agi);
-void component_add_draw(Component *c, int id, int layer, int color, char symbol);
-void component_add_hitpoints(Component *c, int id, int value);
-void component_add_input(Component *c, int id);
-void component_add_position(Component *c, int id, int x, int y);
+void component_add_attributes(Component *c, int str, int per, int agi);
+void component_add_draw(Component *c, int layer, int color, char symbol);
+void component_add_hitpoints(Component *c, int value);
+void component_add_input(Component *c);
+void component_add_position(Component *c, int x, int y);
 void component_add_menu_option(Component *c, int id, char name[32], int parent_id, int highlighted);
-void component_add_size(Component *c, int id, int width, int height);
-void component_add_trigger(Component *c, int id, int game_state);
+void component_add_size(Component *c, int width, int height);
+void component_add_trigger(Component *c, int game_state);
 
 /*----------- Clear components without deallocation ----------------------------------------------*/
 void component_clear_all_attributes(Component *c);

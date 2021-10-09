@@ -56,6 +56,8 @@ void component_init(Component *c, int size_lists){
 	c->size = malloc( sizeof (*(c->size)) * size_lists);
 	c->trigger = malloc( sizeof (*(c->trigger)) * size_lists);
 
+	c->next_id = 0;
+
 	c->size_attributes = size_lists;
 	c->size_hit_points = size_lists;
 	c->size_draw = size_lists;
@@ -291,13 +293,14 @@ void component_list_double_trigger(Component *c){
 }
 
 /*-------------- Add Component to entity list using a Component container struct -----------------*/
-void component_add_attributes(Component *c, int id, int str, int per, int agi) {
+void component_add_attributes(Component *c, int str, int per, int agi) {
 	for(int i = 0; i < c->size_attributes; ++i){
 		if (i == c->size_attributes-1 && c->attributes[i].id != 0){
 			component_list_double_attributes(c);
 		}
 		else if (c->attributes[i].id == 0){
-			c->attributes[i].id = id;
+			c->attributes[i].id = c->next_id;
+			c->next_id++;
 			c->attributes[i].strength = str;
 			c->attributes[i].perception = per;
 			c->attributes[i].agility = agi;
@@ -306,13 +309,14 @@ void component_add_attributes(Component *c, int id, int str, int per, int agi) {
 	}
 }
 
-void component_add_draw(Component *c, int id, int layer, int color, char symbol) {
+void component_add_draw(Component *c, int layer, int color, char symbol) {
 	for(int i = 0; i < c->size_draw; ++i){
 		if (i == (c->size_draw - 1) && c->draw[i].id != 0){
 			component_list_double_draw(c);
 		}
 		else if (c->draw[i].id == 0){
-			c->draw[i].id = id;
+			c->draw[i].id = c->next_id;
+			c->next_id++;
 			c->draw[i].color = color;
 			c->draw[i].symbol = symbol;
 			c->draw[i].layer = layer;
@@ -335,7 +339,7 @@ void component_add_hit_points(Component *c, int id) {
 	}
 }
 
-void component_add_input(Component *c, int id) {
+void component_add_input(Component *c ) {
 	for(int i = 0; i < c->size_input; ++i){
 		if (i == c->size_input-1 && c->input[i].id != 0){
 			component_list_double_input(c);
@@ -347,13 +351,14 @@ void component_add_input(Component *c, int id) {
 	}
 }
 
-void component_add_position(Component *c, int id, int x, int y) {
+void component_add_position(Component *c, int x, int y) {
 	for(int i = 0; i < (c->size_position); ++i){
 		if (i == (c->size_position-1) && c->position[i].id != 0){
 			component_list_double_position(c);
 		}
 		else if (c->position[i].id == 0){
-			c->position[i].id = id;
+			c->position[i].id = c->next_id;
+			c->next_id++;
 			c->position[i].x = x;
 			c->position[i].y = y;
 			break;
@@ -376,26 +381,28 @@ void component_add_menu_option(Component *c, int id, char name[32], int parent_i
 	}
 }
 
-void component_add_size(Component *c, int id, int width, int height) {
+void component_add_size(Component *c, int width, int height) {
 	for(int i = 0; i < c->size_size; ++i){
 		if (i == c->size_size-1 && c->size[i].id != 0){
 			component_list_double_size(c);
 		}
 		else if (c->size[i].id == 0){
-			c->size[i].id = id;
+			c->size[i].id = c->next_id;
+			c->next_id++;
 			break;
 		}
 	}
 }
 
 
-void component_add_trigger(Component *c, int id, int game_state) {
+void component_add_trigger(Component *c, int game_state) {
 	for(int i = 0; i < c->size_trigger; ++i){
 		if (i == c->size_trigger-1 && c->trigger[i].id != 0){
 			component_list_double_trigger(c);
 		}
 		else if (c->trigger[i].id == 0){
-			c->trigger[i].id = id;
+			c->trigger[i].id = c->next_id;
+			c->next_id++;
 			c->trigger[i].game_state = game_state;
 			break;
 		}

@@ -53,6 +53,7 @@ void   map_gen_style_dungeon(MapData *m); /* Simple-Room-Placement procedurally 
 void   map_gen_style_cave(MapData *m); /* Cellular-Automata procedurally generated map.  Cave-like design. */
 
 /*--------Map generation helper functions ------------------------------------------------------------------------------------*/
+void   map_gen_add_components(MapData *m, Component *c, int id); /* Uses the MapData map array to create components. */
 void   map_gen_carve_hallways(MapData *m, Room *rooms, int rooms_added); /* Designates the carving of hallways for an srp map, connects rooms left to right. */
 void   map_gen_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend); /* Called on to carve horizontal section of hallway */
 void   map_gen_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend); /* Called on to carve vertical section of hallway */

@@ -344,7 +344,7 @@ int entrance_x, entrance_y;
 		}
 	}
 
-void map_gen_create_components(MapData *m, Component *c, int id){
+void map_gen_add_components(MapData *m, Component *c, int id){
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
 			component_add_position(c, id, i, j);

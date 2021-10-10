@@ -45,6 +45,17 @@ typedef struct{
 	int x,y,x2,y2;
 }Hall;
 
+typedef struct{
+	float x1, y1;
+	float x2, y2;
+}Edge;
+
+typedef struct{
+	int edge_id[4];
+	int edge_exist[4];
+	bool exist;
+}Cell;
+
 /*-------- Fill empty area of map with a given character/symbol --------------------------------------------------------------*/
 void   map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol);
 

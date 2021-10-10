@@ -2,7 +2,6 @@
  * procedural map generation
  */
 #include <stdlib.h>
-//#include <ncurses.h>
 #include <math.h>
 #include <stdbool.h>
 #include <string.h>
@@ -419,4 +418,120 @@ void map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 	}
 }
 
+/* ---------- Line-of-sight calculations ------------------------------------------------------------------------------------*/
+void map_shadow_cast(MapData *m, int origin_x, int origin_y){
+	int size_edge_list = m->map_width * m->map_height;
+	int size_cell_list = map_count_tile(m, m->floor);
+	int number_of_edges = 0;
+	int current_cell = 0;
+	int current, north, east, south, west;
+	Edge edge_list[size_edge_list];
+	Cell cell_list[size_cell_list];
 
+	for(int i = 1; i < m->map_height - 1; i++){
+		for(int j = 1; j < m->map_width - 1; j++){
+
+			current = i * m->map_width + j;
+			north   = (i - 1) * m->map_width + j;
+			east    = i * m->map_width + j + 1;
+			south   = (i + 1) * m->map_width + j;
+			west    = i * m->map_width + j - 1;
+
+			if(m->terrain[current] == m->wall){ /* look for walls. */
+				if(m->terrain[north] != m->wall) cell_list[current].edge_exist[0] = 1; /* north */	
+				if(m->terrain[east] != m->wall)  cell_list[current].edge_exist[1] = 1; /* east  */	
+				if(m->terrain[south] != m->wall) cell_list[current].edge_exist[2] = 1; /* south */	
+				if(m->terrain[west] != m->wall)  cell_list[current].edge_exist[3] = 1; /* west  */	
+
+				if(cell_list[current].edge_exist[0] == 1){ /* North edge. */
+					if(cell_list[current].edge_exist[3] == 1){ /* create new northern edge */
+						edge_list[number_of_edges].x1 = j;
+						edge_list[number_of_edges].y1 = i;
+						edge_list[number_of_edges].x2 = j;
+						edge_list[number_of_edges].y2 = i;
+						number_of_edges++;
+					}
+					else if(cell_list[current].edge_exist[3] == 0){
+						cell_list[current].edge_id[0] = cell_list[west].edge_id[0]; /* assign the western neighbor north edge id to current north edge id */
+						edge_list[ cell_list[current].edge_id[0] ].x2 = j;
+						edge_list[ cell_list[current].edge_id[0] ].y2 = i;
+					}
+				}
+				if(cell_list[current].edge_exist[1] == 1){
+					if(cell_list[current].edge_exist[0] == 1){ /* create new eastern edge */
+						edge_list[number_of_edges].x1 = j;
+						edge_list[number_of_edges].y1 = i;
+						edge_list[number_of_edges].x2 = j;
+						edge_list[number_of_edges].y2 = i;
+						number_of_edges++;
+					}
+					else if(cell_list[current].edge_exist[0] == 0){
+						cell_list[current].edge_id[1] = cell_list[west].edge_id[1]; /* assign the northern neighbor east edge id to current east edge id */
+						edge_list[ cell_list[current].edge_id[1] ].x2 = j;
+						edge_list[ cell_list[current].edge_id[1] ].y2 = i;
+					}
+				}
+				if(cell_list[current].edge_exist[2] == 1){
+					if(cell_list[current].edge_exist[3] == 1){ /* create new southern edge */
+						edge_list[number_of_edges].x1 = j;
+						edge_list[number_of_edges].y1 = i;
+						edge_list[number_of_edges].x2 = j;
+						edge_list[number_of_edges].y2 = i;
+						number_of_edges++;
+					}
+					else if(cell_list[current].edge_exist[0] == 0){
+						cell_list[current].edge_id[2] = cell_list[west].edge_id[2]; /* assign the western neighbor southern edge id to current southern edge id */
+						edge_list[ cell_list[current].edge_id[2] ].x2 = j;
+						edge_list[ cell_list[current].edge_id[2] ].y2 = i;
+					}
+				}
+				if(cell_list[current].edge_exist[3] == 1){
+					if(cell_list[current].edge_exist[0] == 1){ /* create new western edge */
+						edge_list[number_of_edges].x1 = j;
+						edge_list[number_of_edges].y1 = i;
+						edge_list[number_of_edges].x2 = j;
+						edge_list[number_of_edges].y2 = i;
+						number_of_edges++;
+					}
+					else if(cell_list[current].edge_exist[0] == 0){
+						cell_list[current].edge_id[3] = cell_list[west].edge_id[3]; /* assign the northern neighbor western edge id to current western edge id */
+						edge_list[ cell_list[current].edge_id[3] ].x2 = j;
+						edge_list[ cell_list[current].edge_id[3] ].y2 = i;
+					}
+				}
+			}
+		}
+	}
+
+/* Iterate over Cells
+ *	add cell if = wall
+ *		IF NOT there is a neighbor to the north:
+ *			IF there is a neighbor to the west:
+ *				copy the western neighbors north edge id to this cell;
+ *			ELSE
+ *				create new north edge id for this cell;
+ *			END
+ *		END
+ *		IF NOT there is a neighbor to the east:
+ *			IF there is a neighbor to the north:
+ *				copy the northern neighbors east edge id to this cell;
+ *			ELSE
+ *				create new east edge id for this cell;
+ *			END
+ *		END
+ *		IF NOT there is a neighbor to the south:
+ *			IF there is a neighbor to the west:
+ *				copy the western neighbor south edge id to this cell;
+ *			ELSE
+ *				create new southern edge id for this cell;
+ *			END	
+ *		END
+ *		IF NOT there is a neighbor the the west:
+ *			IF there is a neighbor to the north:
+ *				copy the northern neighbors west edge id to this cell;
+ *			ELSE
+ *				create new west edge id for this cell;
+ *			END
+ *		END
+ */
+}

@@ -1,6 +1,7 @@
 // component.h
 // declares component types
 // by burlapjack 2021
+//
 
 #ifndef COMPONENT_H
 #define COMPONENT_H

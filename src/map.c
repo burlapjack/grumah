@@ -418,3 +418,5 @@ void map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 		if(node_list[current_index].x == -1) break;
 	}
 }
+
+

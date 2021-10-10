@@ -114,3 +114,6 @@ void system_draw_layer(WINDOW *w,Component *c, int draw_layer, int x_offset, int
 		}
 	}
 }
+
+
+

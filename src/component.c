@@ -503,3 +503,6 @@ void component_set_visibility(Component *c, int component_id, int visibility){
 		}
 	}
 }
+
+
+

@@ -318,10 +318,12 @@ void map_gen_style_cave(MapData *m, Component *c){
 	while(1){  /* remove disconnected caves. */
 		rand_x = max_int( rand_int(m->map_width - 2), 2);
 		rand_y = max_int( rand_int(m->map_height - 2), 2);
-		if(m->map[rand_y * m->map_width + rand_x] == m->floor) break;
+		if(m->map[rand_y * m->map_width + rand_x] == m->floor){
+			map_flood_fill(m, rand_x, rand_y, 'o');
+			break;
+		}
 	}
-	map_flood_fill(m, rand_x, rand_y, 'o');
-	for(int i = 0; i < m->map_height; i++){
+	for(int i = 0; i < m->map_height; i++){ /* fill in unwanted parts of the map */
 		for(int j = 0; j < m->map_width; j++){
 			if(m->map[ i * m->map_width + j ] == m->floor) m->map[ i * m->map_width + j ] = m->wall;
 			if(m->map[ i * m->map_width + j ] == 'o') m->map[ i * m->map_width + j ] = m->floor;
@@ -361,7 +363,7 @@ void map_gen_add_components(MapData *m, Component *c){
 
 
 /*--------------------- Fill an area with a given symbol/tile. --------------------------------------------------------------*/
-void map_flood_fill(MapData *m, int rand_x, int rand_y, char character){
+void map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 
 	int current_index = 0;
 	int number_of_nodes = 1;
@@ -376,7 +378,7 @@ void map_flood_fill(MapData *m, int rand_x, int rand_y, char character){
 	/* Add the first node outside of the main loop. */
 	node_list[0].x = rand_x;
 	node_list[0].y = rand_y;
-	m->map[(rand_y * m->map_width) + rand_x] = character;
+	m->map[(rand_y * m->map_width) + rand_x] = symbol;
 
 	int nx = node_list[0].x;
 	int ny = node_list[0].y;
@@ -395,7 +397,7 @@ void map_flood_fill(MapData *m, int rand_x, int rand_y, char character){
 
 		/*---- check the map for neighboring nodes ---- */
 		for(int i = 0; i < 8; i++){
-			if(m->map[ (ny + d[i][1]) * m->map_width + nx + d[i][0] ] == m->floor){ /* check for floor tile on the map. */
+			if(m->map[ (ny + d[i][1]) * m->map_width + (nx + d[i][0]) ] == m->floor){ /* check for floor tile on the map. */
 				int exists = 0;
 
 				for(int j = 0; j < number_of_nodes; j++){
@@ -408,9 +410,11 @@ void map_flood_fill(MapData *m, int rand_x, int rand_y, char character){
 					node_list[number_of_nodes].x = nx + d[i][0];
 					node_list[number_of_nodes].y = ny + d[i][1];
 					number_of_nodes++;
-					m->map[ ( (ny + d[i][1]) * m->map_width) +  nx + d[i][0] ] = character;
+					m->map[ ( (ny + d[i][1]) * m->map_width) +  nx + d[i][0] ] = symbol;
 				}
 			}
 		}
+		current_index++;
+		if(node_list[current_index].x == -1) break;
 	}
 }

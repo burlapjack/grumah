@@ -83,22 +83,22 @@ void system_menu(WINDOW *w, Component *c, int *menu_visible, int input){
 /*------------------------------ Draw the map walls and rooms ------------------------------------*/
 void system_draw_map(WINDOW *w, MapData *m, Component *c){
 	/*-- Will need to be edited later to accomodate colors --*/
-	for(int i = 0; i < m->map_height; i++){
-		for(int j = 0; j < m->map_width; j++){
-			mvwprintw( w, i + m->map_y_offset, j + m->map_x_offset, "%c", m->map[i * m->map_width + j] );
-		}
-	}
-
-//	for(int i = 0; i < c->size_draw; i++){
-//		if(c->draw[i].layer == 0 && c->draw[i].visibility > 0){
-//			for(int j = 0; j < c->size_position; j++){
-//				if(c->position[j].id == c->draw[i].id){
-//					mvwprintw(w, c->position[j].y + m->map_y_offset, c->position[j].x + m->map_x_offset,"%c", c->draw[i].symbol);
-//					break;
-//				}
-//			}
+//	for(int i = 0; i < m->map_height; i++){
+//		for(int j = 0; j < m->map_width; j++){
+//			mvwprintw( w, i + m->map_y_offset, j + m->map_x_offset, "%c", m->map[i * m->map_width + j] );
 //		}
 //	}
+
+	for(int i = 0; i < c->size_draw; i++){
+		if(c->draw[i].layer == 0 && c->draw[i].visibility > 0){
+			for(int j = 0; j < c->size_position; j++){
+				if(c->position[j].id == c->draw[i].id){
+					mvwprintw(w, c->position[j].y + m->map_y_offset, c->position[j].x + m->map_x_offset,"%c", c->draw[i].symbol);
+					break;
+				}
+			}
+		}
+	}
 }
 
 /*------------------------------ Draw components by layer ----------------------------------------*/

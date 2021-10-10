@@ -56,7 +56,7 @@ void component_init(Component *c, int size_lists){
 	c->size = malloc( sizeof (*(c->size)) * size_lists);
 	c->trigger = malloc( sizeof (*(c->trigger)) * size_lists);
 
-	c->next_id = 0;
+	c->next_id = 1;
 
 	c->size_attributes = size_lists;
 	c->size_hit_points = size_lists;

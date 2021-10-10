@@ -46,7 +46,7 @@ typedef struct{
 }Hall;
 
 /*-------- Fill empty area of map with a given character/symbol --------------------------------------------------------------*/
-void   map_flood_fill(MapData *m, int rand_x, int rand_y, char character);
+void   map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol);
 
 /*-------- Map Init / Free from memory ---------------------------------------------------------------------------------------*/
 void   map_free(MapData *m); /* Deallocates MapData memory. */

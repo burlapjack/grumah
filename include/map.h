@@ -34,7 +34,7 @@ typedef struct{
 	int color_door_vertical;
 	int color_floor;
 	int color_wall;
-	char *map;
+	char *terrain;
 }MapData;
 
 typedef struct{

@@ -23,7 +23,7 @@ int path_count_floor(MapData *m){
 	int count = 0;
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
-			if(m->map[ (i * m->map_width) + j] == m->floor){
+			if(m->terrain[ (i * m->map_width) + j] == m->floor){
 				count++;
 			}
 		}
@@ -143,26 +143,5 @@ void path_node_update(PathGraph *g, int nx, int ny){
 	}
 }
 
-
 void path_line_of_sight(Component *c, MapData *m, int x, int y){
-	int sight_range = 4;
-	int number_of_nodes = 0;
-	int current_node = 0;
-	int list_size = sight_range * sight_range;
-	PathNode node_list[list_size];
-
-	node_list[0].x;
-	node_list[0].y;
-
-	while(current_node <= number_of_nodes){
-		for( int i = 0; i < c->size_position; i++){
-			if(c->position[i].x == node_list[ current_node ].x && c->position[i].y == node_list[ current_node ].y  ){ /* find the matching position component id */
-				for(int j = 0; j < c->size_draw; j++){
-					if(c->position[i].id == c->draw[j].id && c->draw[j].symbol != m->wall){ /* find the matching draw component id */
-						number_of_nodes++;
-					}
-				}
-			}
-		}
-	}
 }

@@ -418,15 +418,55 @@ void map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 	}
 }
 
+void map_shadow_cast_cell_list_init(Cell cell_list[], int size_cell_list){
+	for(int i = 0; i < size_cell_list; i++){
+		for(int j = 0; j < 4; j++){
+			cell_list[i].edge_id[j] = -1;
+			cell_list[i].edge_exist[j] = 0;
+		}
+	}
+}
+
+void map_shadow_cast_edge_list_init(Edge edge_list[], int size_edge_list){
+	for(int i = 0; i < size_edge_list; i++){
+		edge_list[i].x1 = -1;
+		edge_list[i].y1 = -1;
+		edge_list[i].x2 = -1;
+		edge_list[i].y2 = -1;
+	}
+}
+
+void map_shadow_cast_poly_list_init(VisPoly poly_list[], int size_poly_list){
+	for(int i = 0; i < size_poly_list; i++){
+		poly_list[i].angle = 0;
+		poly_list[i].x = -1;
+		poly_list[i].y = -1;
+	}
+}
+
+int map_compare_angles (const void *a, const void *b){
+	VisPoly *poly1 = (VisPoly *)a;
+	VisPoly *poly2 = (VisPoly *)b;
+	return ( poly1->angle - poly2->angle);
+}
+
+
+	// return the int pointer of the value of a - the int pointer of the value of b
 /* ---------- Line-of-sight calculations ------------------------------------------------------------------------------------*/
-void map_shadow_cast(MapData *m, int origin_x, int origin_y){
+void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
+	int tile_width = 10; /* an arbitrary width given to tiles for better angle accuracy */
 	int size_edge_list = m->map_width * m->map_height;
-	int size_cell_list = map_count_tile(m, m->floor);
+	int size_cell_list = m->map_width * m->map_height;
+	int size_poly_list = m->map_width * m->map_height;
 	int number_of_edges = 0;
-	int current_cell = 0;
 	int current, north, east, south, west;
 	Edge edge_list[size_edge_list];
 	Cell cell_list[size_cell_list];
+	VisPoly poly_list[size_poly_list];
+	int number_of_polys = 0;
+	map_shadow_cast_cell_list_init(cell_list, size_cell_list);
+	map_shadow_cast_edge_list_init(edge_list, size_edge_list);
+	map_shadow_cast_poly_list_init(poly_list, size_poly_list);
 
 	for(int i = 1; i < m->map_height - 1; i++){
 		for(int j = 1; j < m->map_width - 1; j++){
@@ -436,114 +476,129 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y){
 			east    = i * m->map_width + j + 1;
 			south   = (i + 1) * m->map_width + j;
 			west    = i * m->map_width + j - 1;
-			if(m->terrain[current] != m->wall){
-				cell_list[current].exist = false;
-			}
-			else if(m->terrain[current] == m->wall){ /* look for walls. */
-				cell_list[current].exist = true;
-				cell_list[current].edge_exist[0] = 0; /* initialize values */
-				cell_list[current].edge_exist[1] = 0;
-				cell_list[current].edge_exist[2] = 0;
-				cell_list[current].edge_exist[3] = 0;
 
-				if(m->terrain[north] != m->wall) cell_list[current].edge_exist[0] = 1; /* north */
-				if(m->terrain[east] != m->wall)  cell_list[current].edge_exist[1] = 1; /* east  */
-				if(m->terrain[south] != m->wall) cell_list[current].edge_exist[2] = 1; /* south */
-				if(m->terrain[west] != m->wall)  cell_list[current].edge_exist[3] = 1; /* west  */
+			if(m->terrain[current] == m->wall){
 
-				if(cell_list[current].edge_exist[0] == 1){ /* North edge. */
-					if(cell_list[current].edge_exist[3] == 1){ /* create new northern edge */
-						edge_list[number_of_edges].x1 = j;
-						edge_list[number_of_edges].y1 = i;
-						edge_list[number_of_edges].x2 = j;
-						edge_list[number_of_edges].y2 = i;
-						cell_list[current].edge_id[0] = number_of_edges; /*add north edge id */
-						number_of_edges++;
-					}
-					else if(cell_list[current].edge_exist[3] == 0){
-						cell_list[current].edge_id[0] = cell_list[west].edge_id[0]; /* assign the western neighbor north edge id to current north edge id */
-						edge_list[ cell_list[current].edge_id[0] ].x2 = j;
+				if( m->terrain[north] != m->wall){
+					if(cell_list[west].edge_exist[0] == 1){
+						cell_list[current].edge_id[0] = cell_list[west].edge_id[0]; /* extend edge id from western neighbor. */
+						edge_list[ cell_list[current].edge_id[0] ].x2 = j; /* extend edge coords in edge_list */
 						edge_list[ cell_list[current].edge_id[0] ].y2 = i;
 					}
-				}
-				if(cell_list[current].edge_exist[1] == 1){
-					if(cell_list[current].edge_exist[0] == 1){ /* create new eastern edge */
+					else{ /* no wall to west, create new edge. */
+						cell_list[current].edge_id[0] = number_of_edges;
 						edge_list[number_of_edges].x1 = j;
 						edge_list[number_of_edges].y1 = i;
 						edge_list[number_of_edges].x2 = j;
 						edge_list[number_of_edges].y2 = i;
-						cell_list[current].edge_id[1] = number_of_edges;
 						number_of_edges++;
 					}
-					else if(cell_list[current].edge_exist[0] == 0){
-						cell_list[current].edge_id[1] = cell_list[west].edge_id[1]; /* assign the northern neighbor east edge id to current east edge id */
-						edge_list[ cell_list[current].edge_id[1] ].x2 = j;
+				}
+
+				if( m->terrain[east] != m->wall){
+					if(cell_list[north].edge_exist[1] == 1){
+						cell_list[current].edge_id[1] = cell_list[north].edge_id[1]; /* extend edge id from northern neighbor. */
+						edge_list[ cell_list[current].edge_id[1] ].x2 = j; /* extend edge coords in edge_list */
 						edge_list[ cell_list[current].edge_id[1] ].y2 = i;
 					}
-				}
-				if(cell_list[current].edge_exist[2] == 1){
-					if(cell_list[current].edge_exist[3] == 1){ /* create new southern edge */
+					else{ /* no wall to north, create new edge. */
+						cell_list[current].edge_id[1] = number_of_edges;
 						edge_list[number_of_edges].x1 = j;
 						edge_list[number_of_edges].y1 = i;
 						edge_list[number_of_edges].x2 = j;
 						edge_list[number_of_edges].y2 = i;
-						cell_list[current].edge_id[2] = number_of_edges;
 						number_of_edges++;
 					}
-					else if(cell_list[current].edge_exist[0] == 0){
-						cell_list[current].edge_id[2] = cell_list[west].edge_id[2]; /* assign the western neighbor southern edge id to current southern edge id */
-						edge_list[ cell_list[current].edge_id[2] ].x2 = j;
+				}
+
+				if( m->terrain[south] != m->wall){
+					if( cell_list[west].edge_exist[2] == 1){
+						cell_list[current].edge_id[2] = cell_list[west].edge_id[2]; /* extend edge id from western neighbor. */
+						edge_list[ cell_list[current].edge_id[2] ].x2 = j; /* extend edge coords in edge_list */
 						edge_list[ cell_list[current].edge_id[2] ].y2 = i;
 					}
-				}
-				if(cell_list[current].edge_exist[3] == 1){
-					if(cell_list[current].edge_exist[0] == 1){ /* create new western edge */
+					else{ /* no wall to west, create new edge. */
+						cell_list[current].edge_id[2] = number_of_edges;
 						edge_list[number_of_edges].x1 = j;
 						edge_list[number_of_edges].y1 = i;
 						edge_list[number_of_edges].x2 = j;
 						edge_list[number_of_edges].y2 = i;
-						cell_list[current].edge_id[3] = number_of_edges;
 						number_of_edges++;
 					}
-					else if(cell_list[current].edge_exist[0] == 0){
-						cell_list[current].edge_id[3] = cell_list[west].edge_id[3]; /* assign the northern neighbor western edge id to current western edge id */
-						edge_list[ cell_list[current].edge_id[3] ].x2 = j;
+				}
+				if( m->terrain[east] != m->wall){
+					if(cell_list[north].edge_exist[3] == 1){
+						cell_list[current].edge_id[3] = cell_list[north].edge_id[3]; /* extend edge id from northern neighbor. */
+						edge_list[ cell_list[current].edge_id[3] ].x2 = j; /* extend edge coords in edge_list */
 						edge_list[ cell_list[current].edge_id[3] ].y2 = i;
+					}
+					else{ /* no wall to west, create new edge. */
+						cell_list[current].edge_id[3] = number_of_edges;
+						edge_list[number_of_edges].x1 = j;
+						edge_list[number_of_edges].y1 = i;
+						edge_list[number_of_edges].x2 = j;
+						edge_list[number_of_edges].y2 = i;
+						number_of_edges++;
 					}
 				}
 			}
 		}
 	}
 
-/* Iterate over Cells
- *	add cell if = wall
- *		IF NOT there is a neighbor to the north:
- *			IF there is a neighbor to the west:
- *				copy the western neighbors north edge id to this cell;
- *			ELSE
- *				create new north edge id for this cell;
- *			END
- *		END
- *		IF NOT there is a neighbor to the east:
- *			IF there is a neighbor to the north:
- *				copy the northern neighbors east edge id to this cell;
- *			ELSE
- *				create new east edge id for this cell;
- *			END
- *		END
- *		IF NOT there is a neighbor to the south:
- *			IF there is a neighbor to the west:
- *				copy the western neighbor south edge id to this cell;
- *			ELSE
- *				create new southern edge id for this cell;
- *			END
- *		END
- *		IF NOT there is a neighbor the the west:
- *			IF there is a neighbor to the north:
- *				copy the northern neighbors west edge id to this cell;
- *			ELSE
- *				create new west edge id for this cell;
- *			END
- *		END
- */
+
+	for(int i = 0; i < number_of_edges; i++){ /* iterate edge_list */
+		for(int j = 0; j < 2; j++){
+			float rdx, rdy; /* ray vector */
+
+			rdx = (j == 0 ? edge_list[i].x1 : edge_list[i].x2) - origin_x; /* start or end point */
+			rdy = (j == 0 ? edge_list[i].y1 : edge_list[i].y2) - origin_y;
+
+			float base_ang = atan2f(rdy, rdx); /* return angle of ray vector */
+			float ang = 0; /* angle of shot ray */
+
+			for(int k = 0; k < 3; k++){ /* create 3 rays: one that hits an edge end-point, and 2 that over-shoot it very slightly. */
+				if(k == 0) ang = base_ang - 0.0001f;
+				if(k == 1) ang = base_ang;
+				if(k == 2) ang = base_ang + 0.0001f;
+
+				rdx = distance * cosf(ang); /* shoot ray specified distance. */
+				rdy = distance * sinf(ang);
+
+				float min_t1 = INFINITY;
+				float min_px = 0, min_py = 0, min_ang = 0;
+
+				/* check ray intersections with edges */
+				for(int n = 0; n < size_edge_list; n++){
+					/* create line segment vector to represent the edge from start to end */
+					float edx = edge_list[n].x2 - edge_list[i].x1;
+					float edy = edge_list[n].y2 - edge_list[i].y1;
+
+					if (fabs(edx - rdx) > 0.0f && fabs(edy - rdy) > 0.0f){
+						/* use line segment intersect point line algorithm */
+						/* t2 is normalized distance from line segment start to line segment end of intersect point. */
+						float t2 = (rdx * (edge_list[n].y1 - origin_y) + (rdy * (origin_x - edge_list[n].x1))) / (edx * rdy - edy * rdx);
+						/* t1 is normalized distance from source along ray to ray lenge of intersect point. */
+						float t1 = (edge_list[n].x1 + edx * t2 - origin_x) / rdx;
+
+						/* if intersect point exists along ray and edge line segment, then intersect point is valid. */
+						if(t1 > 0 && t2 >= 0 && t2 <= 1.0f){
+							/* if this point is closest to origin, store it and reject the others */
+							if(t1 < min_t1){
+								min_t1 = t1;
+								min_px = origin_x + rdx * t1;
+								min_py = origin_y + rdy * t1;
+								min_ang = atan2f(min_py - origin_y, min_px - origin_x);
+							}
+						}
+					}
+				}
+				/* add intersection point to poly_list. */
+				poly_list[number_of_polys].angle = min_ang;
+				poly_list[number_of_polys].x = min_px;
+				poly_list[number_of_polys].y = min_py;
+				number_of_polys++;
+			}
+		}
+	}
+	qsort(poly_list,number_of_polys, sizeof(VisPoly), map_compare_angles); /* sort rays by angle */
 }

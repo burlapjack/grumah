@@ -6,6 +6,7 @@
 #define MAP_H
 
 #include "component.h"
+#include <stdbool.h>
 
 typedef struct{
 	int map_width;
@@ -53,8 +54,12 @@ typedef struct{
 typedef struct{
 	int edge_id[4];
 	int edge_exist[4];
-	bool exist;
 }Cell;
+
+typedef struct{
+	float angle;
+	float x,y;
+}VisPoly;
 
 /*-------- Fill empty area of map with a given character/symbol --------------------------------------------------------------*/
 void   map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol);
@@ -84,6 +89,6 @@ int    max_int(int a, int b); /* returns the greater of two given integers. */
 int    min_int(int a, int b); /* returns the lesser of two given integers. */
 int    rand_int(int n); /* returns a random integer */
 
-void map_shadow_cast(MapData *m, int origin_x, int origin_y);
+void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance);
 
 #endif /* MAP_H */

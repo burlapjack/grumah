@@ -436,12 +436,20 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y){
 			east    = i * m->map_width + j + 1;
 			south   = (i + 1) * m->map_width + j;
 			west    = i * m->map_width + j - 1;
+			if(m->terrain[current] != m->wall){
+				cell_list[current].exist = false;
+			}
+			else if(m->terrain[current] == m->wall){ /* look for walls. */
+				cell_list[current].exist = true;
+				cell_list[current].edge_exist[0] = 0; /* initialize values */
+				cell_list[current].edge_exist[1] = 0;
+				cell_list[current].edge_exist[2] = 0;
+				cell_list[current].edge_exist[3] = 0;
 
-			if(m->terrain[current] == m->wall){ /* look for walls. */
-				if(m->terrain[north] != m->wall) cell_list[current].edge_exist[0] = 1; /* north */	
-				if(m->terrain[east] != m->wall)  cell_list[current].edge_exist[1] = 1; /* east  */	
-				if(m->terrain[south] != m->wall) cell_list[current].edge_exist[2] = 1; /* south */	
-				if(m->terrain[west] != m->wall)  cell_list[current].edge_exist[3] = 1; /* west  */	
+				if(m->terrain[north] != m->wall) cell_list[current].edge_exist[0] = 1; /* north */
+				if(m->terrain[east] != m->wall)  cell_list[current].edge_exist[1] = 1; /* east  */
+				if(m->terrain[south] != m->wall) cell_list[current].edge_exist[2] = 1; /* south */
+				if(m->terrain[west] != m->wall)  cell_list[current].edge_exist[3] = 1; /* west  */
 
 				if(cell_list[current].edge_exist[0] == 1){ /* North edge. */
 					if(cell_list[current].edge_exist[3] == 1){ /* create new northern edge */
@@ -449,6 +457,7 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y){
 						edge_list[number_of_edges].y1 = i;
 						edge_list[number_of_edges].x2 = j;
 						edge_list[number_of_edges].y2 = i;
+						cell_list[current].edge_id[0] = number_of_edges; /*add north edge id */
 						number_of_edges++;
 					}
 					else if(cell_list[current].edge_exist[3] == 0){
@@ -463,6 +472,7 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y){
 						edge_list[number_of_edges].y1 = i;
 						edge_list[number_of_edges].x2 = j;
 						edge_list[number_of_edges].y2 = i;
+						cell_list[current].edge_id[1] = number_of_edges;
 						number_of_edges++;
 					}
 					else if(cell_list[current].edge_exist[0] == 0){
@@ -477,6 +487,7 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y){
 						edge_list[number_of_edges].y1 = i;
 						edge_list[number_of_edges].x2 = j;
 						edge_list[number_of_edges].y2 = i;
+						cell_list[current].edge_id[2] = number_of_edges;
 						number_of_edges++;
 					}
 					else if(cell_list[current].edge_exist[0] == 0){
@@ -491,6 +502,7 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y){
 						edge_list[number_of_edges].y1 = i;
 						edge_list[number_of_edges].x2 = j;
 						edge_list[number_of_edges].y2 = i;
+						cell_list[current].edge_id[3] = number_of_edges;
 						number_of_edges++;
 					}
 					else if(cell_list[current].edge_exist[0] == 0){
@@ -524,7 +536,7 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y){
  *				copy the western neighbor south edge id to this cell;
  *			ELSE
  *				create new southern edge id for this cell;
- *			END	
+ *			END
  *		END
  *		IF NOT there is a neighbor the the west:
  *			IF there is a neighbor to the north:

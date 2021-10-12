@@ -452,6 +452,25 @@ int map_compare_angles (const void *a, const void *b){
 }
 
 
+void map_shadow_cast_remove_duplicate_rays(VisPoly poly_list[], int size_poly_list, int number_of_polys){
+	int flag;
+	VisPoly temp_poly_list[size_poly_list];
+	int number_of_unique_polys = 0;
+	for( int i = 0; i < number_of_polys; i++){
+		for(int j = 0; j < number_of_polys; j++){
+			flag = 0;
+			if(i != j && fabs(poly_list[i].x - poly_list[j].x) < 0.1f && fabs(poly_list[i].y - poly_list[j].y) < 0.1f){
+				for( int k = 0; k < number_of_unique_polys; k++){
+					if(fabs(temp_poly_list[k].x - poly_list[j].x) < 0.1f && fabs(temp_poly_list[k].y - poly_list[j].y) < 0.1f)
+						flag = 1;
+					if(flag != 1)
+						temp_poly_list[number_of_unique_polys] = poly_list[j];
+				}		
+			}
+		}		
+	}
+}
+
 	// return the int pointer of the value of a - the int pointer of the value of b
 /* ---------- Line-of-sight calculations ------------------------------------------------------------------------------------*/
 void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
@@ -606,8 +625,8 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
 		}
 	}
 	qsort(poly_list,number_of_polys, sizeof(VisPoly), map_compare_angles); /* sort rays by angle */
+
 	printw("number of polys: %d", number_of_polys);	
-	for( int i = 0; i < number_of_polys; i++){
-					
-	}
+
+
 }

@@ -2,6 +2,7 @@
  * procedural map generation
  */
 #include <stdlib.h>
+#include <ncurses.h>
 #include <math.h>
 #include <stdbool.h>
 #include <string.h>
@@ -566,6 +567,7 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
 
 				float min_t1 = INFINITY;
 				float min_px = 0, min_py = 0, min_ang = 0;
+				bool ray_collision = false; /* will test if there has been a collision. */
 
 				/* check ray intersections with edges */
 				for(int n = 0; n < size_edge_list; n++){
@@ -588,17 +590,24 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
 								min_px = origin_x + rdx * t1;
 								min_py = origin_y + rdy * t1;
 								min_ang = atan2f(min_py - origin_y, min_px - origin_x);
+								ray_collision = true;
 							}
 						}
 					}
 				}
-				/* add intersection point to poly_list. */
-				poly_list[number_of_polys].angle = min_ang;
-				poly_list[number_of_polys].x = min_px;
-				poly_list[number_of_polys].y = min_py;
-				number_of_polys++;
+				if(ray_collision){
+					/* add intersection point to poly_list. */
+					poly_list[number_of_polys].angle = min_ang;
+					poly_list[number_of_polys].x = min_px;
+					poly_list[number_of_polys].y = min_py;
+					number_of_polys++;
+				}
 			}
 		}
 	}
 	qsort(poly_list,number_of_polys, sizeof(VisPoly), map_compare_angles); /* sort rays by angle */
+	printw("number of polys: %d", number_of_polys);	
+	for( int i = 0; i < number_of_polys; i++){
+					
+	}
 }

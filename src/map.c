@@ -452,29 +452,39 @@ int map_compare_angles (const void *a, const void *b){
 }
 
 
-void map_shadow_cast_remove_duplicate_rays(VisPoly poly_list[], int size_poly_list, int number_of_polys){
+void map_shadow_cast_remove_duplicate_rays(VisPoly poly_list[], int size_poly_list, int *number_of_polys){
+	int i, j;
+	int number_of_unique_polys = 1;
 	int flag;
 	VisPoly temp_poly_list[size_poly_list];
-	int number_of_unique_polys = 0;
-	for( int i = 0; i < number_of_polys; i++){
-		for(int j = 0; j < number_of_polys; j++){
-			flag = 0;
+	temp_poly_list[0].x = poly_list[0].x;
+	temp_poly_list[0].y = poly_list[0].y;
+	temp_poly_list[0].angle = poly_list[0].angle;
+
+	for( i = 0; i < *number_of_polys; i++){
+		flag = 0;
+		for(j = 0; j < *number_of_polys; j++){
+			/*if duplicate is found */
 			if(i != j && fabs(poly_list[i].x - poly_list[j].x) < 0.1f && fabs(poly_list[i].y - poly_list[j].y) < 0.1f){
-				for( int k = 0; k < number_of_unique_polys; k++){
-					if(fabs(temp_poly_list[k].x - poly_list[j].x) < 0.1f && fabs(temp_poly_list[k].y - poly_list[j].y) < 0.1f)
-						flag = 1;
-					if(flag != 1)
-						temp_poly_list[number_of_unique_polys] = poly_list[j];
-				}		
+				flag = 1;	
+				break;
 			}
 		}		
+		if(flag == 0){
+			temp_poly_list[number_of_unique_polys].x = poly_list[i].x;
+			temp_poly_list[number_of_unique_polys].y = poly_list[i].y;
+			temp_poly_list[number_of_unique_polys].angle = poly_list[i].angle;
+			number_of_unique_polys++;
+		}
+		
 	}
+	*number_of_polys = number_of_unique_polys;
+	memcpy(poly_list, temp_poly_list, sizeof (VisPoly) * number_of_unique_polys);
 }
 
 	// return the int pointer of the value of a - the int pointer of the value of b
 /* ---------- Line-of-sight calculations ------------------------------------------------------------------------------------*/
 void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
-	int tile_width = 10; /* an arbitrary width given to tiles for better angle accuracy */
 	int size_edge_list = m->map_width * m->map_height;
 	int size_cell_list = m->map_width * m->map_height;
 	int size_poly_list = m->map_width * m->map_height;
@@ -625,8 +635,12 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
 		}
 	}
 	qsort(poly_list,number_of_polys, sizeof(VisPoly), map_compare_angles); /* sort rays by angle */
+//	printw("number of polys: %d\n", number_of_polys);	
+	map_shadow_cast_remove_duplicate_rays(poly_list, size_poly_list, &number_of_polys);
 
-	printw("number of polys: %d", number_of_polys);	
-
+	for(int i = 0; i < number_of_polys; i++){
+		printw("%4f, %4f\n", poly_list[i].x, poly_list[i].y);
+	}
+//	printw("new number of polys: %d", number_of_polys);	
 
 }

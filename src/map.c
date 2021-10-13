@@ -482,23 +482,44 @@ void map_shadow_cast_remove_duplicate_rays(VisPoly poly_list[], int size_poly_li
 	memcpy(poly_list, temp_poly_list, sizeof (VisPoly) * number_of_unique_polys);
 }
 
+
+
+void map_shadow_cast_edge_list_double(Edge edge_list[], int *size_edge_list){
+	//test the reallocation
+	Edge *temp = realloc(edge_list, sizeof (*temp) * (*size_edge_list * 2));
+	if (temp == NULL) {
+		perror("Failure to reallocate shadow cast edge_list");
+		exit(EXIT_FAILURE);
+	}
+	edge_list = temp;
+	for(int i = *size_edge_list; i < (*size_edge_list * 2 ); ++i ){
+		edge_list[i].x1 = -1;
+		edge_list[i].y1 = -1;
+		edge_list[i].x2 = -1;
+		edge_list[i].y2 = -1;
+	}
+	*size_edge_list = *size_edge_list * 2;
+}
+
+
 	// return the int pointer of the value of a - the int pointer of the value of b
 /* ---------- Line-of-sight calculations ------------------------------------------------------------------------------------*/
 void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
-	int size_edge_list = m->map_width * m->map_height;
-	int size_cell_list = m->map_width * m->map_height;
+	int size_edge_list = 20;
+	int size_cell_list = map_count_tile(m, m->wall);
+	//int size_cell_list = m->map_width * m->map_height;
 	int size_poly_list = m->map_width * m->map_height;
 	int number_of_edges = 0;
 	int current, north, east, south, west;
-	Edge edge_list[size_edge_list];
-	Cell cell_list[size_cell_list];
-	VisPoly poly_list[size_poly_list];
+	Edge *edge_list = malloc( sizeof (*edge_list) * size_edge_list);
+	Cell *cell_list = malloc( sizeof (Cell) * size_cell_list);
+	VisPoly *poly_list = malloc( sizeof (VisPoly) * size_poly_list);
 	int number_of_polys = 0;
 	map_shadow_cast_cell_list_init(cell_list, size_cell_list);
 	map_shadow_cast_edge_list_init(edge_list, size_edge_list);
 	map_shadow_cast_poly_list_init(poly_list, size_poly_list);
 
-	for(int i = 1; i < m->map_height - 1; i++){
+	for(int i = 1; i < m->map_height - 1; i++){ /* iterate through terrain */
 		for(int j = 1; j < m->map_width - 1; j++){
 
 			current = i * m->map_width + j;
@@ -521,6 +542,7 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
 						edge_list[number_of_edges].y1 = i;
 						edge_list[number_of_edges].x2 = j;
 						edge_list[number_of_edges].y2 = i;
+						if(size_edge_list == number_of_edges) map_shadow_cast_edge_list_double(edge_list, &size_edge_list);
 						number_of_edges++;
 					}
 				}
@@ -537,6 +559,7 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
 						edge_list[number_of_edges].y1 = i;
 						edge_list[number_of_edges].x2 = j;
 						edge_list[number_of_edges].y2 = i;
+						if(size_edge_list == number_of_edges) map_shadow_cast_edge_list_double(edge_list, &size_edge_list);
 						number_of_edges++;
 					}
 				}
@@ -553,6 +576,7 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
 						edge_list[number_of_edges].y1 = i;
 						edge_list[number_of_edges].x2 = j;
 						edge_list[number_of_edges].y2 = i;
+						if(size_edge_list == number_of_edges) map_shadow_cast_edge_list_double(edge_list, &size_edge_list);
 						number_of_edges++;
 					}
 				}
@@ -568,6 +592,7 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
 						edge_list[number_of_edges].y1 = i;
 						edge_list[number_of_edges].x2 = j;
 						edge_list[number_of_edges].y2 = i;
+						if(size_edge_list == number_of_edges) map_shadow_cast_edge_list_double(edge_list, &size_edge_list);
 						number_of_edges++;
 					}
 				}
@@ -635,12 +660,15 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
 		}
 	}
 	qsort(poly_list,number_of_polys, sizeof(VisPoly), map_compare_angles); /* sort rays by angle */
-//	printw("number of polys: %d\n", number_of_polys);	
-	map_shadow_cast_remove_duplicate_rays(poly_list, size_poly_list, &number_of_polys);
+	printw("number of polys: %d\n", number_of_polys);	
+//	map_shadow_cast_remove_duplicate_rays(poly_list, size_poly_list, &number_of_polys);
 
-	for(int i = 0; i < number_of_polys; i++){
-		printw("%4f, %4f\n", poly_list[i].x, poly_list[i].y);
-	}
-//	printw("new number of polys: %d", number_of_polys);	
+//	for(int i = 0; i < number_of_polys; i++){
+//		printw("%4f, %4f\n", poly_list[i].x, poly_list[i].y);
+//	}
+	printw("new number of polys: %d", number_of_polys);	
 
+	free(edge_list);
+	free(cell_list);
+	free(poly_list);
 }

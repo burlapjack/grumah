@@ -667,7 +667,6 @@ void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance){
 //		printw("%4f, %4f\n", poly_list[i].x, poly_list[i].y);
 //	}
 	printw("new number of polys: %d", number_of_polys);	
-
 	free(edge_list);
 	free(cell_list);
 	free(poly_list);

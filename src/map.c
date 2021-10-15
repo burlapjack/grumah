@@ -422,10 +422,15 @@ void map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 void map_bresenham(MapData *m, int x0, int y0, int x1, int y1){
 	int scaled_tile_size = 4;
 	int scaled_x0, scaled_y0, scaled_x1, scaled_y1;
+	int x,y;
 	int slope = (y1 - y0) / (x1 - x0);
 	scaled_x0 = x0 * scaled_tile_size + (scaled_tile_size / 2); /* origin scaled up and placed in center of tile. */
 	scaled_y0 = y0 * scaled_tile_size + (scaled_tile_size / 2);
 	
+	if((x1 - x0) > (y1 - y0)){
+	}
+	else{
+	}
 	//when slope > -1 and slope < 1 : x+= 1, y +=slope
 	//when slope > 1 or slope < -1 : x+= inverse slope, y += 1 
 	

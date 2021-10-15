@@ -89,6 +89,5 @@ int    max_int(int a, int b); /* returns the greater of two given integers. */
 int    min_int(int a, int b); /* returns the lesser of two given integers. */
 int    rand_int(int n); /* returns a random integer */
 
-void map_shadow_cast(MapData *m, int origin_x, int origin_y, int distance);
 
 #endif /* MAP_H */

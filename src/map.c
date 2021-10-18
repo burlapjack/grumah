@@ -431,9 +431,18 @@ void map_bresenham(MapData *m, int x0, int y0, int x1, int y1){
 	}
 	else{
 	}
-	//when slope > -1 and slope < 1 : x+= 1, y +=slope
-	//when slope > 1 or slope < -1 : x+= inverse slope, y += 1 
-	
-	
+	/* 1. get endpoints
+	 * 2. find position decision parameter.   di = 2dy - dx where dx = x1 - x0 and dy = y0 - y1
+	 * 3. if di > 0   above true line
+	 * 	di + 1 = di + 2dy - 2dx
+	 * 	xn = x0 + 1    where xn is the x incremental value
+	 * 	yn = y0 + 1    where yn is the y incremental value
+	 *
+	 * 4. if di < 0    below true line
+	 * 	di + 1 = di + 2dy
+	 * 	xn = x0 + 1
+	 * 	yn = yn	
+	 *
+	 */	
 }
 

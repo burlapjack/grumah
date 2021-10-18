@@ -419,18 +419,32 @@ void map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 	}
 }
 
-void map_bresenham(MapData *m, int x0, int y0, int x1, int y1){
-	int scaled_tile_size = 4;
-	int scaled_x0, scaled_y0, scaled_x1, scaled_y1;
-	int x,y;
-	int slope = (y1 - y0) / (x1 - x0);
-	scaled_x0 = x0 * scaled_tile_size + (scaled_tile_size / 2); /* origin scaled up and placed in center of tile. */
-	scaled_y0 = y0 * scaled_tile_size + (scaled_tile_size / 2);
-	
-	if((x1 - x0) > (y1 - y0)){
+void map_bresenham(MapData *m, int start_x, int start_y, int end_x, int end_y){
+
+	int distance_1, distance_2;
+	int slope = (end_y - start_y) / (end_x - start_x);
+	int y_intercept = start_y - slope;
+	int actual_y;
+	int actual_x;
+	int current_x = start_x;
+	int current_y = start_y;
+
+	if( slope < 1){
+			
+			actual_y = slope * (current_x + 1) + y_intercept;
+			distance_1 = actual_y - current_y;
+			distance_2 = current_y + 1 - actual_y;
+
+			if( distance_1 < distance_2){
+				current_y = current_y;	
+			}
+			else if(distance_1 > distance_2){
+				current_y += 1;
+			}
+
 	}
-	else{
-	}
+
+
 	/* 1. get endpoints
 	 * 2. find position decision parameter.   di = 2dy - dx where dx = x1 - x0 and dy = y0 - y1
 	 * 3. if di > 0   above true line
@@ -441,8 +455,8 @@ void map_bresenham(MapData *m, int x0, int y0, int x1, int y1){
 	 * 4. if di < 0    below true line
 	 * 	di + 1 = di + 2dy
 	 * 	xn = x0 + 1
-	 * 	yn = yn	
+	 * 	yn = yn
 	 *
-	 */	
+	 */
 }
 

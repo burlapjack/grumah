@@ -420,43 +420,15 @@ void map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 }
 
 void map_bresenham(MapData *m, int start_x, int start_y, int end_x, int end_y){
+	int d;
+	int dx = end_x - start_x;
+	int dy = end_y - start_y;	
+	int b = start_y - (dy / dx) * start_x;
+	
+	if( dy / dx <= 1 ){    /* if slope is less than or equal to one */
 
-	int distance_1, distance_2;
-	int slope = (end_y - start_y) / (end_x - start_x);
-	int y_intercept = start_y - slope;
-	int actual_y;
-	int actual_x;
-	int current_x = start_x;
-	int current_y = start_y;
-
-	if( slope < 1){
+		d = dy * start_x - dx * start_y + (dx) * b; /* decision factor */
 			
-			actual_y = slope * (current_x + 1) + y_intercept;
-			distance_1 = actual_y - current_y;
-			distance_2 = current_y + 1 - actual_y;
-
-			if( distance_1 < distance_2){
-				current_y = current_y;	
-			}
-			else if(distance_1 > distance_2){
-				current_y += 1;
-			}
-
 	}
-
-
-	/* 1. get endpoints
-	 * 2. find position decision parameter.   di = 2dy - dx where dx = x1 - x0 and dy = y0 - y1
-	 * 3. if di > 0   above true line
-	 * 	di + 1 = di + 2dy - 2dx
-	 * 	xn = x0 + 1    where xn is the x incremental value
-	 * 	yn = y0 + 1    where yn is the y incremental value
-	 *
-	 * 4. if di < 0    below true line
-	 * 	di + 1 = di + 2dy
-	 * 	xn = x0 + 1
-	 * 	yn = yn
-	 *
-	 */
 }
 

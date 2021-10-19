@@ -422,13 +422,11 @@ void map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 void map_bresenham(MapData *m, int start_x, int start_y, int end_x, int end_y){
 	int d;
 	int dx = end_x - start_x;
-	int dy = end_y - start_y;	
+	int dy = end_y - start_y;
 	int b = start_y - (dy / dx) * start_x;
-	
-	if( dy / dx <= 1 ){    /* if slope is less than or equal to one */
 
+	if( dy / dx <= 1 ){    /* if slope is less than or equal to one */
 		d = dy * start_x - dx * start_y + (dx) * b; /* decision factor */
-			
 	}
 }
 

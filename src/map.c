@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <math.h>
-#include <stdbool.h>
+//#include <stdbool.h>
 #include <string.h>
 #include <assert.h>
 #include <limits.h>

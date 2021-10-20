@@ -6,7 +6,7 @@
 #define MAP_H
 
 #include "component.h"
-#include <stdbool.h>
+//#include <stdbool.h>
 
 typedef struct{
 	int map_width;

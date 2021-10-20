@@ -5,7 +5,6 @@
  */
 
 #include <stdlib.h>
-#include <stdbool.h>
 #include <limits.h>
 #include <math.h>
 #include "../include/path.h"
@@ -97,20 +96,20 @@ int path_open_list_get_index(PathGraph *g, int x, int y){
 }
 
 /*---------------------- Check to see if the given criteria are matched by a node in any list  -------------------------------*/
-bool path_node_exists_in_lists(PathGraph *g, int x, int y){
-	bool exists = false;
+int  path_node_exists_in_lists(PathGraph *g, int x, int y){
+	int  exists = 0;
 	/* checked open_list */
 	for(int i = 0; i < g->number_of_open_nodes; i++){
 		if( g->open_list[i].x == x && g->open_list[i].y == y){
-			exists = true;
+			exists = 1;
 			break;
 		}
 	}
-	if(exists == false){
+	if(exists == 0){
 		/* check closed_list */
 		for(int i = 0; i < g->number_of_closed_nodes; i++){
 			if( g->closed_list[i].x == x && g->closed_list[i].y == y){
-				exists = true;
+				exists = 1;
 				break;
 			}
 		}
@@ -119,12 +118,12 @@ bool path_node_exists_in_lists(PathGraph *g, int x, int y){
 }
 
 
-/*--------------------- Return true if the node with the given coordinates exist in the open list. -------------------------*/
-bool path_node_exists_in_open_list(PathGraph *g, int x, int y){
-	bool exists = false;
+/*--------------------- Return 1 if the node with the given coordinates exist in the open list. ------------------------------*/
+int path_node_exists_in_open_list(PathGraph *g, int x, int y){
+	int  exists = 0;
 	for(int i = 0; i < g->number_of_open_nodes; i++){
 		if( g->open_list[i].x == x && g->open_list[i].y == y){ /* find coordinate match */
-			exists = true;
+			exists = 1;
 			break;
 		}
 	}

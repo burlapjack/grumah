@@ -51,7 +51,6 @@ void component_init(Component *c, int size_lists){
 	c->attributes = malloc( sizeof (*(c->attributes)) * size_lists);
 	c->hit_points = malloc( sizeof (*(c->hit_points)) * size_lists);
 	c->draw = malloc( sizeof (*(c->draw)) * size_lists);
-	c->menu_option = malloc( sizeof (*(c->menu_option)) * size_lists);
 	c->position = malloc( sizeof (*(c->position)) * size_lists);
 	c->size = malloc( sizeof (*(c->size)) * size_lists);
 	c->trigger = malloc( sizeof (*(c->trigger)) * size_lists);
@@ -61,7 +60,6 @@ void component_init(Component *c, int size_lists){
 	c->size_attributes = size_lists;
 	c->size_hit_points = size_lists;
 	c->size_draw = size_lists;
-	c->size_menu_option = size_lists;
 	c->size_position = size_lists;
 	c->size_size = size_lists;
 	c->size_trigger = size_lists;
@@ -69,7 +67,6 @@ void component_init(Component *c, int size_lists){
 	for( int i = 0; i < size_lists; i++){
 		c->attributes[i].id = 0;
 		c->draw[i].id = 0;
-		c->menu_option[i].id = 0;
 		c->position[i].id = 0;
 		c->size[i].id = 0;
 		c->trigger[i].id = 0;
@@ -110,15 +107,6 @@ void component_clear_all_input(Component *c){
 	}
 }
 
-void component_clear_all_menu_option(Component *c){
-	for(int i = 0; i < (c->size_menu_option); i++){
-		c->menu_option[i].id = 0;
-		c->menu_option[i].parent_id = 0;
-		memset(c->menu_option[i].name, ' ', 32);
-		c->menu_option[i].highlighted = 0;
-	}
-}
-
 void component_clear_all_position(Component *c){
 	for(int i = 0; i < (c->size_position); i++){
 		c->position[i].id = 0;
@@ -147,7 +135,6 @@ void component_clear_all(Component *c){
 	component_clear_all_attributes(c);
 	component_clear_all_hit_points(c);
 	component_clear_all_draw(c);
-	component_clear_all_menu_option(c);
 	component_clear_all_position(c);
 	component_clear_all_size(c);
 	component_clear_all_trigger(c);
@@ -160,7 +147,6 @@ void component_free(Component *c){
 	free(c->hit_points);
 	//free(c->input);
 	//c->input = NULL;
-	free(c->menu_option);
 	free(c->position);
 	free(c->size);
 	free(c->trigger);
@@ -169,7 +155,6 @@ void component_free(Component *c){
 	c->attributes = NULL;
 	c->draw = NULL;
 	c->hit_points = NULL;
-	c->menu_option = NULL;
 	c->position = NULL;
 	c->size = NULL;
 	free(c);
@@ -263,20 +248,6 @@ void component_list_double_size(Component *c){
 	c->size_size = c->size_size * 2;
 }
 
-void component_list_double_menu_option(Component *c){
-	//test the reallocation
-	ComponentMenuOption *temp = realloc(c->menu_option, sizeof (ComponentMenuOption) * (c->size_menu_option * 2));
-	if (temp == NULL) {
-		perror("Failure to reallocate component_menu_option");
-		exit(EXIT_FAILURE);
-	}
-	c->menu_option = temp;
-	for(int i = c->size_menu_option; i < (c->size_menu_option* 2 ); ++i ){
-		c->menu_option[i].id = 0;
-	}
-	c->size_menu_option = c->size_menu_option * 2;
-}
-
 void component_list_double_trigger(Component *c){
 	//test the reallocation
 	ComponentTrigger *temp = realloc(c->trigger, sizeof (ComponentTrigger) * (c->size_trigger * 2));
@@ -363,21 +334,6 @@ void component_add_position(Component *c, int x, int y) {
 	}
 }
 
-void component_add_menu_option(Component *c, int id, char name[32], int parent_id, int highlighted) {
-	for(int i = 0; i < (c->size_menu_option); ++i){
-		if (i == c->size_menu_option-1 && c->menu_option[i].id != 0){
-			component_list_double_menu_option(c);
-		}
-		else if (c->menu_option[i].id == 0){
-			c->menu_option[i].id = id;
-			strcpy(c->menu_option[i].name,name); /*check if this is right! */
-			c->menu_option[i].parent_id = parent_id;
-			c->menu_option[i].highlighted = highlighted;
-			break;
-		}
-	}
-}
-
 void component_add_size(Component *c, int width, int height) {
 	for(int i = 0; i < c->size_size; ++i){
 		if (i == c->size_size-1 && c->size[i].id != 0){
@@ -389,7 +345,6 @@ void component_add_size(Component *c, int width, int height) {
 		}
 	}
 }
-
 
 void component_add_trigger(Component *c, int game_state) {
 	for(int i = 0; i < c->size_trigger; ++i){
@@ -438,14 +393,6 @@ int component_count_position(Component *c){
 	return total;
 }
 
-int component_count_menu_option(Component *c){
-	int total=0;
-	for(int i = 0; i < (c->size_menu_option); i++){
-		if(c->menu_option[i].id != 0) total++;
-	}
-	return total;
-}
-
 int component_count_size(Component *c){
 	int total=0;
 	for(int i = 0; i < (c->size_size); i++){
@@ -468,7 +415,6 @@ int component_count_all(Component *c){
 		+ component_count_draw(c)
 		+ component_count_hit_points(c)
 		+ component_count_position(c)
-		+ component_count_menu_option(c)
 		+ component_count_trigger(c);
 	return total;
 }

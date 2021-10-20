@@ -63,7 +63,6 @@ typedef struct {
 	ComponentDraw *draw;
 	ComponentHitPoints *hit_points;
 	ComponentInput *input;
-	ComponentMenuOption *menu_option;
 	ComponentPosition *position;
 	ComponentSize *size;
 	ComponentTrigger *trigger;
@@ -71,7 +70,6 @@ typedef struct {
 	int size_draw;
 	int size_hit_points;
 	int size_input;
-	int size_menu_option;
 	int size_position;
 	int size_size;
 	int size_attributes;
@@ -88,7 +86,6 @@ void component_list_double_attributes(Component *c);
 void component_list_double_draw(Component *c);
 void component_list_double_hitpoints(Component *c);
 void component_list_double_input(Component *c);
-void component_list_double_menu_option(Component *c);
 void component_list_double_position(Component *c);
 void component_list_double_size(Component *c);
 void component_list_double_trigger(Component *c);
@@ -99,7 +96,6 @@ void component_add_draw(Component *c, int layer, int color, char symbol);
 void component_add_hitpoints(Component *c, int value);
 void component_add_input(Component *c);
 void component_add_position(Component *c, int x, int y);
-void component_add_menu_option(Component *c, int id, char name[32], int parent_id, int highlighted);
 void component_add_size(Component *c, int width, int height);
 void component_add_trigger(Component *c, int game_state);
 
@@ -108,8 +104,6 @@ void component_clear_all_attributes(Component *c);
 void component_clear_all_draw(Component *c);
 void component_clear_all_hitpoints(Component *c);
 void component_clear_all_input(Component *c);
-void component_clear_all_menu_option(Component *c);
-void component_clear_all_menu_position(Component *c);
 void component_clear_all_size(Component *c);
 void component_clear_all_trigger(Component *c);
 
@@ -122,7 +116,6 @@ void component_free__all(Component *c);
 int component_count_attributes(Component *c);
 int component_count_draw(Component *c);
 int component_count_hit_points(Component *c);
-int component_count_menu_option(Component *c);
 int component_count_position(Component *c);
 int component_count_size(Component *c);
 int component_count_trigger(Component *c);

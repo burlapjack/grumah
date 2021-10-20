@@ -60,7 +60,7 @@ int main(int argc, char *argv[]){
 	cbreak();
 	keypad(stdscr, TRUE);					
 	noecho();
-	curse_set(0);
+	curs_set(0);
 	WINDOW *win = newwin(win_height, win_width, 0, 0);	
 
 	/*----- game loop ----------------------*/

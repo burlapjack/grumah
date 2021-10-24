@@ -8,11 +8,11 @@
 
 #include <stdlib.h>
 #include <ncurses.h>
-#include "../include/map.h"
-#include "../include/component.h"
+#include "../include/gr_map.h"
+#include "../include/gr_component.h"
 
 
-void system_input(WINDOW *win){
+void gr_system_input(WINDOW *win){
 
 	int ch = wgetch(win);
 	switch(ch)
@@ -34,7 +34,7 @@ void system_input(WINDOW *win){
 }
 
 /*------------------------------ Draw the map walls and rooms ------------------------------------*/
-void system_draw_map(WINDOW *w, MapData *m, Component *c){
+void gr_system_draw_map(WINDOW *w, MapData *m, Component *c){
 	/*-- Will need to be edited later to accomodate colors --*/
 //	for(int i = 0; i < m->map_height; i++){
 //		for(int j = 0; j < m->map_width; j++){
@@ -55,7 +55,7 @@ void system_draw_map(WINDOW *w, MapData *m, Component *c){
 }
 
 /*------------------------------ Draw components by layer ----------------------------------------*/
-void system_draw_layer(WINDOW *w,Component *c, int draw_layer, int x_offset, int y_offset){
+void gr_system_draw_layer(WINDOW *w,Component *c, int draw_layer, int x_offset, int y_offset){
 	for(size_t i = 0; i < (c->size_draw); i++){
 		if (c->draw[i].layer == draw_layer){
 			for(size_t j = 0; j < c->size_position; j++){

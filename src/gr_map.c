@@ -8,13 +8,13 @@
 #include <string.h>
 #include <assert.h>
 #include <limits.h>
-#include "../include/map.h"
-#include "../include/component.h"
-#include "../include/path.h"
+#include "../include/gr_map.h"
+#include "../include/gr_component.h"
+#include "../include/gr_path.h"
 
 
 /*---------------------- Initialize map data ---------------------------------------------------------------------------------*/
-void map_init(MapData *m, int map_width, int map_height){
+void gr_map_init(MapData *m, int map_width, int map_height){
 	m->map_width = map_width;
 	m->map_height = map_height;
 	m->map_x_offset = 0;
@@ -42,18 +42,18 @@ void map_init(MapData *m, int map_width, int map_height){
 	m->color_door_vertical = 1;
 	m->color_floor = 1;
 	m->color_wall = 1;
-	map_gen_fill(m);
+	gr_map_gen_fill(m);
 }
 
 /*---------------------- Deallocate map data ---------------------------------------------------------------------------------*/
-void map_free(MapData *m){
+void gr_map_free(MapData *m){
 	free(m->terrain);
 	m->terrain = NULL;
 	free(m);
 	m = NULL;
 }
 
-int map_count_tile(MapData *m, char tile){
+int gr_map_count_tile(MapData *m, char tile){
 	int count = 0;
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
@@ -64,17 +64,17 @@ int map_count_tile(MapData *m, char tile){
 }
 
 /*------ Find the largest of two integers ------------------------------------------------------------------------------------*/
-int max_int(int a, int b){
+int gr_max_int(int a, int b){
 	if (a > b) return a; else return b;
 }
 
 /*------ Find the smallest of two integers -----------------------------------------------------------------------------------*/
-int min_int(int a, int b){
+int gr_min_int(int a, int b){
 	if (a < b) return a; else return b;
 }
 
 /*--------------------- Pseudo-random number generator ----------------------------------------------------------------------*/
-int rand_int(int n){
+int gr_rand_int(int n){
 	if((n - 1) == RAND_MAX) return rand();
 	else {
 		assert(n <= RAND_MAX);
@@ -88,7 +88,7 @@ int rand_int(int n){
 }
 
 /*------ "Carve" a horizontal hallway int the map array ----------------------------------------------------------------------*/
-void map_gen_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend){
+void gr_map_gen_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_index, int xstart, int xend){
 	for(int j = xstart; j <= xend; j++){
 		if(m->terrain[(halls_array[hall_index].y * m->map_width) + j ] != m->entrance && m->terrain[(halls_array[hall_index].y * m->map_width) + j ] != m->exit){
 			m->terrain[ (halls_array[hall_index].y * m->map_width) + j ] = m->hallway_horizontal;
@@ -97,7 +97,7 @@ void map_gen_carve_hall_horizontally(MapData *m, Hall *halls_array, int hall_ind
 }
 
 /*------ "Carve" a verticle hallway int the map array ------------------------------------------------------------------------*/
-void map_gen_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend){
+void gr_map_gen_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index, int ystart, int yend){
 	for(int j = ystart; j <= yend; j++){
 		if(m->terrain[ (j * m->map_width) + halls_array[hall_index].x2  ] != m->entrance && m->terrain[ (j * m->map_width) + halls_array[hall_index].x2 ] != m->exit){
 			m->terrain[ (j * m->map_width) + halls_array[hall_index].x2 ] = m->hallway_vertical;
@@ -106,7 +106,7 @@ void map_gen_carve_hall_vertically(MapData *m, Hall *halls_array, int hall_index
 }
 
 /*---------------------- Carve rooms -----------------------------------------------------------------------------------------*/
-void map_gen_carve_room(MapData *m, Room *rooms, int rooms_added){
+void gr_map_gen_carve_room(MapData *m, Room *rooms, int rooms_added){
 	/* "Carve" rooms into the map array */
 	for(int i = 0; i < rooms_added; i++){
 		for(int j = rooms[i].y; j < rooms[i].y2; j++){
@@ -118,7 +118,7 @@ void map_gen_carve_room(MapData *m, Room *rooms, int rooms_added){
 }
 
 /*---------------------- Generate doors on the edges of each room ------------------------------------------------------------*/
-void map_gen_carve_hallways(MapData *m, Room *rooms, int rooms_added){
+void gr_map_gen_carve_hallways(MapData *m, Room *rooms, int rooms_added){
 	int xa,xb,ya,yb;
 	int random_direction;
 	Hall halls[rooms_added - 1];
@@ -140,34 +140,34 @@ void map_gen_carve_hallways(MapData *m, Room *rooms, int rooms_added){
 	/* Hall coords start at random points within a */
 	/* room and end randomly within the next room. */
 	for(int i = 0; i < (rooms_added - 1); i++){
-		halls[i].x = rooms[i].x + rand_int(rooms[i].x2 - rooms[i].x);
-		halls[i].y = rooms[i].y + rand_int(rooms[i].y2 - rooms[i].y);
-		halls[i].x2 = rooms[i + 1].x + rand_int(rooms[i + 1].x2 - rooms[i + 1].x);
-		halls[i].y2 = rooms[i + 1].y + rand_int(rooms[i + 1].y2 - rooms[i + 1].y);
+		halls[i].x = rooms[i].x + gr_rand_int(rooms[i].x2 - rooms[i].x);
+		halls[i].y = rooms[i].y + gr_rand_int(rooms[i].y2 - rooms[i].y);
+		halls[i].x2 = rooms[i + 1].x + gr_rand_int(rooms[i + 1].x2 - rooms[i + 1].x);
+		halls[i].y2 = rooms[i + 1].y + gr_rand_int(rooms[i + 1].y2 - rooms[i + 1].y);
 	}
 	/* "Carve" hallways in the map array */
 	for(int i = 0; i < (rooms_added - 1); i++){
 		/* define hallway endpoints */
-		xa = min_int(halls[i].x,halls[i].x2);
-		xb = max_int(halls[i].x,halls[i].x2);
-		ya = min_int(halls[i].y,halls[i].y2);
-		yb = max_int(halls[i].y,halls[i].y2);
+		xa = gr_min_int(halls[i].x,halls[i].x2);
+		xb = gr_max_int(halls[i].x,halls[i].x2);
+		ya = gr_min_int(halls[i].y,halls[i].y2);
+		yb = gr_max_int(halls[i].y,halls[i].y2);
 
 		/* Randomly pick the horizontal and verticle carve order of hallway. */
-		random_direction = rand_int(4);
+		random_direction = gr_rand_int(4);
 		if(random_direction > 2){
-			map_gen_carve_hall_horizontally(m, halls, i, xa, xb);
-			map_gen_carve_hall_vertically(m, halls, i, ya, yb);
+			gr_map_gen_carve_hall_horizontally(m, halls, i, xa, xb);
+			gr_map_gen_carve_hall_vertically(m, halls, i, ya, yb);
 		}
 		else{
-			map_gen_carve_hall_vertically(m, halls, i, ya, yb);
-			map_gen_carve_hall_horizontally(m, halls, i, xa, xb);
+			gr_map_gen_carve_hall_vertically(m, halls, i, ya, yb);
+			gr_map_gen_carve_hall_horizontally(m, halls, i, xa, xb);
 		}
 	}
 }
 
 /*---------------------- Fill a map so that it is all walls ------------------------------------------------------------------*/
-void map_gen_fill(MapData *m){
+void gr_map_gen_fill(MapData *m){
 	for ( int i = 0; i < m->map_height; i++){
 		for ( int j = 0; j < m->map_width; j++){
 			m->terrain[ i * m->map_width + j] = m->wall;
@@ -176,7 +176,7 @@ void map_gen_fill(MapData *m){
 }
 
 /*---------------------- Generate doors on the edges of each room ------------------------------------------------------------*/
-void map_gen_doors(MapData *m, Room *rooms, int number_of_rooms){
+void gr_map_gen_doors(MapData *m, Room *rooms, int number_of_rooms){
 	char top, bottom, left, right;
 	/* y coord */
 	for(int i = 1; i < (m->map_height-1); i++){ /* y coord */
@@ -210,7 +210,7 @@ void map_gen_doors(MapData *m, Room *rooms, int number_of_rooms){
 
 /*---------------------- Map Generation: Simple Room Placement ---------------------------------------------------------------*/
 /* Rooms are added one at a time wherever they will fit, then hallways are created between them. */
-void map_gen_style_dungeon(MapData *m, Component *c){
+void gr_map_gen_style_dungeon(MapData *m, Component *c){
 	int room_x,room_y, room_x2, room_y2;
 	int rooms_added = 0;
 	int collision_detected = 0;
@@ -219,19 +219,19 @@ void map_gen_style_dungeon(MapData *m, Component *c){
 	Room rooms[m->number_of_rooms];
 
 	/* Start a fresh map, filled with all walls. */
-	map_gen_fill(m);
+	gr_map_gen_fill(m);
 
 	/* Room Creation */
 	while(rooms_added < m->number_of_rooms){
 		/* Propose random room coordinates */
-		room_x = rand_int(m->map_width - m->room_max_width - 2 );
-		room_x = max_int(2, room_x);
-		room_y = rand_int(m->map_height - m->room_max_height - 2 );
-		room_y = max_int(2, room_y);
-		room_x2 = rand_int(m->room_max_width) + room_x + m->room_min_width;
-		room_x2 = min_int(m->map_width - 2, room_x2);
-		room_y2 = rand_int(m->room_max_height) + room_y + m->room_min_height;
-		room_y2 = min_int(m->map_height - 2, room_y2);
+		room_x = gr_rand_int(m->map_width - m->room_max_width - 2 );
+		room_x = gr_max_int(2, room_x);
+		room_y = gr_rand_int(m->map_height - m->room_max_height - 2 );
+		room_y = gr_max_int(2, room_y);
+		room_x2 = gr_rand_int(m->room_max_width) + room_x + m->room_min_width;
+		room_x2 = gr_min_int(m->map_width - 2, room_x2);
+		room_y2 = gr_rand_int(m->room_max_height) + room_y + m->room_min_height;
+		room_y2 = gr_min_int(m->map_height - 2, room_y2);
 
 		/* Check for collisions with existing rooms */
 		for(int i = 0; i < rooms_added; i++){
@@ -257,16 +257,16 @@ void map_gen_style_dungeon(MapData *m, Component *c){
 		collision_detected = 0;
 		if(fails == fail_limit) break;
 	}
-	map_gen_carve_room(m, rooms, rooms_added);
-	map_gen_entrance_and_exit(m);
-	map_gen_carve_hallways(m, rooms, rooms_added);
-	map_gen_doors(m, rooms, rooms_added);
+	gr_map_gen_carve_room(m, rooms, rooms_added);
+	gr_map_gen_entrance_and_exit(m);
+	gr_map_gen_carve_hallways(m, rooms, rooms_added);
+	gr_map_gen_doors(m, rooms, rooms_added);
 
-	map_gen_add_components(m, c);
+	gr_map_gen_add_components(m, c);
 }
 
 /*---------------------- Map Generation: Cellular Automata -------------------------------------------------------------------*/
-void map_gen_style_cave(MapData *m, Component *c){
+void gr_map_gen_style_cave(MapData *m, Component *c){
 	int iterations = 2; /* number of times the map is "smoothed".  The default is 2. */
 	int rand_tile;
 	int neighbor_walls;
@@ -283,7 +283,7 @@ void map_gen_style_cave(MapData *m, Component *c){
 					terrain_copy[i * m->map_width + j] = m->floor;
 				}
 				else{
-					rand_tile = rand_int(10);
+					rand_tile = gr_rand_int(10);
 					if(rand_tile > 4) terrain_copy[ i * m->map_width + j ] = m->floor; /* everything  is random - wall or floor */
 					else terrain_copy[ i * m->map_width + j ] = m->wall;
 				}
@@ -316,10 +316,10 @@ void map_gen_style_cave(MapData *m, Component *c){
 
 	int rand_x, rand_y;
 	while(1){  /* remove disconnected caves. */
-		rand_x = max_int( rand_int(m->map_width - 2), 2);
-		rand_y = max_int( rand_int(m->map_height - 2), 2);
+		rand_x = gr_max_int( gr_rand_int(m->map_width - 2), 2);
+		rand_y = gr_max_int( gr_rand_int(m->map_height - 2), 2);
 		if(m->terrain[rand_y * m->map_width + rand_x] == m->floor){
-			map_flood_fill(m, rand_x, rand_y, 'o');
+			gr_map_flood_fill(m, rand_x, rand_y, 'o');
 			break;
 		}
 	}
@@ -329,18 +329,18 @@ void map_gen_style_cave(MapData *m, Component *c){
 			if(m->terrain[ i * m->map_width + j ] == 'o') m->terrain[ i * m->map_width + j ] = m->floor;
 		}
 	}
-	map_gen_entrance_and_exit(m);
-	map_gen_add_components(m, c);
+	gr_map_gen_entrance_and_exit(m);
+	gr_map_gen_add_components(m, c);
 }
 
-void map_gen_entrance_and_exit(MapData *m){
+void gr_map_gen_entrance_and_exit(MapData *m){
 int entrance_x, entrance_y;
 	int exit_x, exit_y;
 	while(1){
-		entrance_x = max_int( rand_int(m->map_width - 2), 2); /* randomly place an entrance and an exit */
-		entrance_y = max_int( rand_int(m->map_height - 2), 2);
-		exit_x = max_int( rand_int(m->map_width - 2), 2);
-		exit_y = max_int( rand_int(m->map_height - 2), 2);
+		entrance_x = gr_max_int( gr_rand_int(m->map_width - 2), 2); /* randomly place an entrance and an exit */
+		entrance_y = gr_max_int( gr_rand_int(m->map_height - 2), 2);
+		exit_x = gr_max_int( gr_rand_int(m->map_width - 2), 2);
+		exit_y = gr_max_int( gr_rand_int(m->map_height - 2), 2);
 		if(m->terrain[entrance_y * m->map_width + entrance_x] == m->floor && m->terrain[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
 			if( path_get_manhattan_distance(entrance_x, entrance_y, exit_x, exit_y) > 2 ){ /* ensure that the entrance and exit arent right next to each other. */
 				m->terrain[(exit_y * m->map_width) + exit_x] = m->exit;
@@ -351,11 +351,11 @@ int entrance_x, entrance_y;
 	}
 }
 
-void map_gen_add_components(MapData *m, Component *c){
+void gr_map_gen_add_components(MapData *m, Component *c){
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
-			component_add_position(c, j, i);
-			component_add_draw(c, 0, 1, m->terrain[i * m->map_width + j]);
+			gr_component_add_position(c, j, i);
+			gr_component_add_draw(c, 0, 1, m->terrain[i * m->map_width + j]);
 			c->next_id++;
 		}
 	}
@@ -363,7 +363,7 @@ void map_gen_add_components(MapData *m, Component *c){
 
 
 /*--------------------- Fill an area with a given symbol/tile. --------------------------------------------------------------*/
-void map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
+void gr_map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 
 	int current_index = 0;
 	int number_of_nodes = 1;
@@ -419,22 +419,10 @@ void map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 	}
 }
 
-void map_bresenham(MapData *m, int start_x, int start_y, int end_x, int end_y){
-	int xk,yk;
-	int pk;                                    /* decision parameter */
-	int dx = end_x - start_x;                 /* delta x */
-	int dy = end_y - start_y;                 /* delta y */
-	int b = start_y - (dy / dx) * start_x;    /* y-intercept */
-
-	if(dy < dx){    /* if slope is less than or equal to one */
-		xk = start_x;
-		yk = start_y;
-		while(xk < end_x){
-			//pk = 2 * dy * xk - 2 * dx * yk + c; 	
+void gr_map_los_raycast(MapData *m, int origin_x, int origin_y, int number_of_rays, int range){
+	for(int i = 0; i < range; i++){
+		for(int j = 0; j < range; j++){
+			
 		}
 	}
-	else if(dy > dx){
-
-	}
 }
-

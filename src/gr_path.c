@@ -7,18 +7,18 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <math.h>
-#include "../include/path.h"
-#include "../include/map.h"
+#include "../include/gr_path.h"
+#include "../include/gr_map.h"
 
 /*====================== Opaque Data Types =================================================================================*/
 
 
 
-int path_get_manhattan_distance(int x1, int y1, int x2, int y2){
+int gr_path_get_manhattan_distance(int x1, int y1, int x2, int y2){
 	return abs(x1 - x2) + abs(y1 - y2);
 }
 
-int path_count_floor(MapData *m){
+int gr_path_count_floor(MapData *m){
 	int count = 0;
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
@@ -31,7 +31,7 @@ int path_count_floor(MapData *m){
 }
 
 /*---------------------- Copy contents of indicated open_list node into closed_list ------------------------------------------*/
-void path_closed_list_add_node(PathGraph *g, int open_list_index){
+void gr_path_closed_list_add_node(PathGraph *g, int open_list_index){
 	g->closed_list[g->number_of_closed_nodes] = g->open_list[open_list_index];
 	g->number_of_closed_nodes++;
 	for(int i = open_list_index; i < g->number_of_open_nodes - 1; i++){ /* remove target node by overwriting it. */
@@ -41,14 +41,14 @@ void path_closed_list_add_node(PathGraph *g, int open_list_index){
 }
 
 /*---------------------- Deallocate PathGraph memory --------------------------------------------------------------------------*/
-void path_free_graph(PathGraph *g){
+void gr_path_free_graph(PathGraph *g){
 	free(g->open_list);
 	free(g->closed_list);
 	free(g);
 }
 
 /*---------------------- Add new node to open_list ---------------------------------------------------------------------------*/
-void path_open_list_add_node(PathGraph *g, int x, int y){
+void gr_path_open_list_add_node(PathGraph *g, int x, int y){
 	int i = g->number_of_open_nodes;
 	g->open_list[i].x = x;
 	g->open_list[i].y = y;
@@ -60,7 +60,7 @@ void path_open_list_add_node(PathGraph *g, int x, int y){
 }
 
 /*---------------------- Get the closed_list[] index via map coords ----------------------------------------------------------*/
-int path_closed_list_get_index(PathGraph *g, int x, int y){
+int gr_path_closed_list_get_index(PathGraph *g, int x, int y){
 	int index;
 	for( int i = 0; i < g->number_of_closed_nodes; i++){
 		if (g->closed_list[i].x == x && g->closed_list[i].y == y){
@@ -71,7 +71,7 @@ int path_closed_list_get_index(PathGraph *g, int x, int y){
 	return index;
 }
 /*--------------------- Return the index of the node that has the lowest f value, and is a child of current_index node. ------*/
-int path_open_list_get_index_lowest_f(PathGraph *g){
+int gr_path_open_list_get_index_lowest_f(PathGraph *g){
 	int lowest = INT_MAX;
 	int target_index;
 	for( int i = 0; i < g->number_of_open_nodes; i++){
@@ -84,7 +84,7 @@ int path_open_list_get_index_lowest_f(PathGraph *g){
 }
 
 /*---------------------- Get the open_list[] index via map coords ------------------------------------------------------------*/
-int path_open_list_get_index(PathGraph *g, int x, int y){
+int gr_path_open_list_get_index(PathGraph *g, int x, int y){
 	int index;
 	for( int i = 0; i < g->number_of_open_nodes - 1; i++){
 		if (g->open_list[i].x == x && g->open_list[i].y == y){
@@ -96,7 +96,7 @@ int path_open_list_get_index(PathGraph *g, int x, int y){
 }
 
 /*---------------------- Check to see if the given criteria are matched by a node in any list  -------------------------------*/
-int  path_node_exists_in_lists(PathGraph *g, int x, int y){
+int  gr_path_node_exists_in_lists(PathGraph *g, int x, int y){
 	int  exists = 0;
 	/* checked open_list */
 	for(int i = 0; i < g->number_of_open_nodes; i++){
@@ -119,7 +119,7 @@ int  path_node_exists_in_lists(PathGraph *g, int x, int y){
 
 
 /*--------------------- Return 1 if the node with the given coordinates exist in the open list. ------------------------------*/
-int path_node_exists_in_open_list(PathGraph *g, int x, int y){
+int gr_path_node_exists_in_open_list(PathGraph *g, int x, int y){
 	int  exists = 0;
 	for(int i = 0; i < g->number_of_open_nodes; i++){
 		if( g->open_list[i].x == x && g->open_list[i].y == y){ /* find coordinate match */
@@ -131,7 +131,7 @@ int path_node_exists_in_open_list(PathGraph *g, int x, int y){
 }
 
 /*--------------------- Updates the g and f value of a node if it already has been added to the open_list. ------------------*/
-void path_node_update(PathGraph *g, int nx, int ny){
+void gr_path_node_update(PathGraph *g, int nx, int ny){
 	int ni = path_open_list_get_index(g, nx, ny);
 	int existing_f = g->open_list[ni].f; /* the current f value of this node. */
 	int new_f = g->open_list[g->current_index].g + 1 + g->open_list[ni].h; /* the possible new f value */
@@ -142,5 +142,5 @@ void path_node_update(PathGraph *g, int nx, int ny){
 	}
 }
 
-void path_line_of_sight(Component *c, MapData *m, int x, int y){
+void gr_path_line_of_sight(Component *c, MapData *m, int x, int y){
 }

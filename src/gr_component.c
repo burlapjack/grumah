@@ -43,11 +43,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "../include/component.h"
-#include "../include/map.h"
+#include "../include/gr_component.h"
+#include "../include/gr_map.h"
 /*---------------Initialize Component Lists -----------------------------------------------------*/
 // Init all component lists within a Component instance
-void component_init(Component *c, int size_lists){
+void gr_component_init(Component *c, int size_lists){
 	c->attributes = malloc( sizeof (*(c->attributes)) * size_lists);
 	c->hit_points = malloc( sizeof (*(c->hit_points)) * size_lists);
 	c->draw = malloc( sizeof (*(c->draw)) * size_lists);
@@ -74,7 +74,7 @@ void component_init(Component *c, int size_lists){
 }
 
 /*-------------- Clear Component list data (without deallocation) ----------------------------------*/
-void component_clear_all_attributes(Component *c){
+void gr_component_clear_all_attributes(Component *c){
 	for(int i = 0; i < (c->size_attributes); i++){
 		c->attributes[i].id = 0;
 		c->attributes[i].strength = 0;
@@ -83,7 +83,7 @@ void component_clear_all_attributes(Component *c){
 	}
 }
 
-void component_clear_all_draw(Component *c){
+void gr_component_clear_all_draw(Component *c){
 	for(int i = 0; i < (c->size_draw); i++){
 		c->draw[i].id = 0;
 		c->draw[i].symbol = ' ';
@@ -91,7 +91,7 @@ void component_clear_all_draw(Component *c){
 	}
 }
 
-void component_clear_all_hit_points(Component *c){
+void gr_component_clear_all_hit_points(Component *c){
 	for(int i = 0; i < (c->size_hit_points); i++){
 		c->hit_points[i].id = 0;
 		c->hit_points[i].current = 0;
@@ -100,14 +100,14 @@ void component_clear_all_hit_points(Component *c){
 	}
 }
 
-void component_clear_all_input(Component *c){
+void gr_component_clear_all_input(Component *c){
 	for(int i = 0; i < (c->size_input); i++){
 		c->input[i].id = 0;
 		c->input[i].key_pressed = 0; //This might need to change
 	}
 }
 
-void component_clear_all_position(Component *c){
+void gr_component_clear_all_position(Component *c){
 	for(int i = 0; i < (c->size_position); i++){
 		c->position[i].id = 0;
 		c->position[i].x =  0;
@@ -115,7 +115,7 @@ void component_clear_all_position(Component *c){
 	}
 }
 
-void component_clear_all_size(Component *c){
+void gr_component_clear_all_size(Component *c){
 	for(int i = 0; i < (c->size_size); i++){
 		c->size[i].id = 0;
 		c->size[i].width = 0;
@@ -123,7 +123,7 @@ void component_clear_all_size(Component *c){
 	}
 }
 
-void component_clear_all_trigger(Component *c){
+void gr_component_clear_all_trigger(Component *c){
 	for(int i = 0; i < (c->size_trigger); i++){
 		c->trigger[i].id = 0;
 		c->trigger[i].game_state = 0;
@@ -131,17 +131,17 @@ void component_clear_all_trigger(Component *c){
 	}
 }
 
-void component_clear_all(Component *c){
-	component_clear_all_attributes(c);
-	component_clear_all_hit_points(c);
-	component_clear_all_draw(c);
-	component_clear_all_position(c);
-	component_clear_all_size(c);
-	component_clear_all_trigger(c);
+void gr_component_clear_all(Component *c){
+	gr_component_clear_all_attributes(c);
+	gr_component_clear_all_hit_points(c);
+	gr_component_clear_all_draw(c);
+	gr_component_clear_all_position(c);
+	gr_component_clear_all_size(c);
+	gr_component_clear_all_trigger(c);
 }
 
 /*-------------- Free all Component Lists -----------------------------------------------------------*/
-void component_free(Component *c){
+void gr_component_free(Component *c){
 	free(c->attributes);
 	free(c->draw);
 	free(c->hit_points);
@@ -161,7 +161,7 @@ void component_free(Component *c){
 }
 
 /*---------------Double the size of an Component list -----------------------------------------------*/
-void component_list_double_attributes(Component *c){
+void gr_component_list_double_attributes(Component *c){
 	//test the reallocation
 	ComponentAttributes *temp = realloc(c->attributes, sizeof (ComponentAttributes) * (c->size_attributes* 2));
 	if (temp == NULL) {
@@ -175,7 +175,7 @@ void component_list_double_attributes(Component *c){
 	c->size_attributes = c->size_attributes * 2;
 }
 
-void component_list_double_draw(Component *c){
+void gr_component_list_double_draw(Component *c){
 	//test the reallocation
 	ComponentDraw *temp = realloc(c->draw, sizeof (ComponentDraw) * (c->size_draw* 2));
 	if (temp == NULL) {
@@ -189,7 +189,7 @@ void component_list_double_draw(Component *c){
 	c->size_draw = c->size_draw * 2;
 }
 
-void component_list_double_hit_points(Component *c){
+void gr_component_list_double_hit_points(Component *c){
 	//test the reallocation
 	ComponentHitPoints *temp = realloc(c->hit_points, sizeof (ComponentHitPoints) * (c->size_hit_points * 2));
 	if (temp == NULL) {
@@ -204,7 +204,7 @@ void component_list_double_hit_points(Component *c){
 
 }
 
-void component_list_double_input(Component *c){
+void gr_component_list_double_input(Component *c){
 	//test the reallocation
 	ComponentInput *temp = realloc(c->input, sizeof (ComponentInput) * (c->size_input* 2));
 	if (temp == NULL) {
@@ -219,7 +219,7 @@ void component_list_double_input(Component *c){
 
 }
 
-void component_list_double_position(Component *c){
+void gr_component_list_double_position(Component *c){
 	//test the reallocation
 	ComponentPosition *temp = realloc(c->position, sizeof (ComponentPosition) * (c->size_position* 2));
 
@@ -234,7 +234,7 @@ void component_list_double_position(Component *c){
 	c->size_position = c->size_position * 2;
 }
 
-void component_list_double_size(Component *c){
+void gr_component_list_double_size(Component *c){
 	//test the reallocation
 	ComponentSize *temp = realloc(c->size, sizeof (ComponentSize) * (c->size_size* 2));
 	if (temp == NULL) {
@@ -248,7 +248,7 @@ void component_list_double_size(Component *c){
 	c->size_size = c->size_size * 2;
 }
 
-void component_list_double_trigger(Component *c){
+void gr_component_list_double_trigger(Component *c){
 	//test the reallocation
 	ComponentTrigger *temp = realloc(c->trigger, sizeof (ComponentTrigger) * (c->size_trigger * 2));
 	if (temp == NULL) {
@@ -264,10 +264,10 @@ void component_list_double_trigger(Component *c){
 }
 
 /*-------------- Add Component to entity list using a Component container struct -----------------*/
-void component_add_attributes(Component *c, int str, int per, int agi) {
+void gr_component_add_attributes(Component *c, int str, int per, int agi) {
 	for(int i = 0; i < c->size_attributes; ++i){
 		if (i == c->size_attributes-1 && c->attributes[i].id != 0){
-			component_list_double_attributes(c);
+			gr_component_list_double_attributes(c);
 		}
 		else if (c->attributes[i].id == 0){
 			c->attributes[i].id = c->next_id;
@@ -279,10 +279,10 @@ void component_add_attributes(Component *c, int str, int per, int agi) {
 	}
 }
 
-void component_add_draw(Component *c, int layer, int color, char symbol) {
+void gr_component_add_draw(Component *c, int layer, int color, char symbol) {
 	for(int i = 0; i < c->size_draw; ++i){
 		if (i == (c->size_draw - 1) && c->draw[i].id != 0){
-			component_list_double_draw(c);
+			gr_component_list_double_draw(c);
 		}
 		else if (c->draw[i].id == 0){
 			c->draw[i].id = c->next_id;
@@ -295,10 +295,10 @@ void component_add_draw(Component *c, int layer, int color, char symbol) {
 	}
 }
 
-void component_add_hit_points(Component *c, int id) {
+void gr_component_add_hit_points(Component *c, int id) {
 	for(int i = 0; i < c->size_hit_points; ++i){
 		if (i == c->size_hit_points-1 && c->hit_points[i].id != 0){
-			component_list_double_hit_points(c);
+			gr_component_list_double_hit_points(c);
 		}
 		else if (c->hit_points[i].id == 0){
 			c->hit_points[i].max = 0;
@@ -308,10 +308,10 @@ void component_add_hit_points(Component *c, int id) {
 	}
 }
 
-void component_add_input(Component *c ) {
+void gr_component_add_input(Component *c ) {
 	for(int i = 0; i < c->size_input; ++i){
 		if (i == c->size_input-1 && c->input[i].id != 0){
-			component_list_double_input(c);
+			gr_component_list_double_input(c);
 		}
 		else if (c->input[i].id == 0){
 			c->input[i].key_pressed = 0;
@@ -320,10 +320,10 @@ void component_add_input(Component *c ) {
 	}
 }
 
-void component_add_position(Component *c, int x, int y) {
+void gr_component_add_position(Component *c, int x, int y) {
 	for(int i = 0; i < (c->size_position); ++i){
 		if (i == (c->size_position-1) && c->position[i].id != 0){
-			component_list_double_position(c);
+			gr_component_list_double_position(c);
 		}
 		else if (c->position[i].id == 0){
 			c->position[i].id = c->next_id;
@@ -334,10 +334,10 @@ void component_add_position(Component *c, int x, int y) {
 	}
 }
 
-void component_add_size(Component *c, int width, int height) {
+void gr_component_add_size(Component *c, int width, int height) {
 	for(int i = 0; i < c->size_size; ++i){
 		if (i == c->size_size-1 && c->size[i].id != 0){
-			component_list_double_size(c);
+			gr_component_list_double_size(c);
 		}
 		else if (c->size[i].id == 0){
 			c->size[i].id = c->next_id;
@@ -346,10 +346,10 @@ void component_add_size(Component *c, int width, int height) {
 	}
 }
 
-void component_add_trigger(Component *c, int game_state) {
+void gr_component_add_trigger(Component *c, int game_state) {
 	for(int i = 0; i < c->size_trigger; ++i){
 		if (i == c->size_trigger-1 && c->trigger[i].id != 0){
-			component_list_double_trigger(c);
+			gr_component_list_double_trigger(c);
 		}
 		else if (c->trigger[i].id == 0){
 			c->trigger[i].id = c->next_id;
@@ -362,14 +362,14 @@ void component_add_trigger(Component *c, int game_state) {
 /*---------------Query Component Lists -----------------------------------------------------------*/
 
 /*----- Find the total of a certain component ----------------*/
-int component_count_attributes(Component *c){
+int gr_component_count_attributes(Component *c){
 	int total=0;
 	for(int i = 0; i < (c->size_attributes); i++){
 		if(c->attributes[i].id != 0) total++;
 	}
 	return total;
 }
-int component_count_draw(Component *c){
+int gr_component_count_draw(Component *c){
 	int total=0;
 	for(int i = 0; i < (c->size_draw); i++){
 		if(c->draw[i].id != 0) total++;
@@ -377,7 +377,7 @@ int component_count_draw(Component *c){
 	return total;
 }
 
-int component_count_hit_points(Component *c){
+int gr_component_count_hit_points(Component *c){
 	int total=0;
 	for(int i = 0; i < (c->size_hit_points); i++){
 		if(c->hit_points[i].id != 0) total++;
@@ -385,7 +385,7 @@ int component_count_hit_points(Component *c){
 	return total;
 }
 
-int component_count_position(Component *c){
+int gr_component_count_position(Component *c){
 	int total=0;
 	for(int i = 0; i < (c->size_position); i++){
 		if(c->position[i].id != 0) total++;
@@ -393,7 +393,7 @@ int component_count_position(Component *c){
 	return total;
 }
 
-int component_count_size(Component *c){
+int gr_component_count_size(Component *c){
 	int total=0;
 	for(int i = 0; i < (c->size_size); i++){
 		if(c->size[i].id != 0) total++;
@@ -401,7 +401,7 @@ int component_count_size(Component *c){
 	return total;
 }
 
-int component_count_trigger(Component *c){
+int gr_component_count_trigger(Component *c){
 	int total=0;
 	for(int i = 0; i < (c->size_trigger); i++){
 		if(c->trigger[i].id != 0) total++;
@@ -409,17 +409,17 @@ int component_count_trigger(Component *c){
 	return total;
 }
 
-int component_count_all(Component *c){
+int gr_component_count_all(Component *c){
 	int total = 0;
-	total = component_count_attributes(c)
-		+ component_count_draw(c)
-		+ component_count_hit_points(c)
-		+ component_count_position(c)
-		+ component_count_trigger(c);
+	total = gr_component_count_attributes(c)
+		+ gr_component_count_draw(c)
+		+ gr_component_count_hit_points(c)
+		+ gr_component_count_position(c)
+		+ gr_component_count_trigger(c);
 	return total;
 }
 
-int component_count_invisible(Component *c){
+int gr_component_count_invisible(Component *c){
 	int total = 0;
 	for(int i = 0; i < (c->size_position); i++){
 		if(c->position[i].id != 0){
@@ -433,7 +433,7 @@ int component_count_invisible(Component *c){
 }
 
 /*-------------- Set Component Draw Layer --------------------------------------------------------*/
-void component_set_draw_layer(Component *c, int component_id, int draw_layer){
+void gr_component_set_draw_layer(Component *c, int component_id, int draw_layer){
 	for(int i = 0; i < (c->size_draw); i++){
 		if(c->draw[i].id == component_id){
 			c->draw[i].layer = draw_layer;
@@ -442,7 +442,7 @@ void component_set_draw_layer(Component *c, int component_id, int draw_layer){
 }
 
 /*-------------- Set Component Visibility Level --------------------------------------------------*/
-void component_set_visibility(Component *c, int component_id, int visibility){
+void gr_component_set_visibility(Component *c, int component_id, int visibility){
 	for(int i = 0; i < (c->size_draw); i++){
 		if(c->draw[i].id == component_id){
 			c->draw[i].visibility = visibility;

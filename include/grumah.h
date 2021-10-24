@@ -11,10 +11,10 @@
 
 #include <stdlib.h>
 #include <ncurses.h>
-#include "component.h"
-#include "entity.h"
-#include "system.h"
-#include "map.h"
-#include "path.h"
+#include "gr_component.h"
+#include "gr_entity.h"
+#include "gr_system.h"
+#include "gr_map.h"
+#include "gr_path.h"
 
 #endif /* GRUMAH_H */

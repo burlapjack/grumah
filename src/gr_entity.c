@@ -5,8 +5,8 @@
 #include <stdlib.h>
 //#include <ncurses.h>
 #include <string.h>
-#include "../include/component.h"
-#include "../include/entity.h"
+#include "../include/g_component.h"
+#include "../include/g_entity.h"
 
 //void entity_add_player(Component *c, int id, int x, int y){
 //	component_add_position(c, id, x, y);

@@ -33,7 +33,7 @@ component type such as ComponentPosition and ComponentDraw.  The
 entity module contains helpful functions that create various common 
 entities such as a default player entity or a menu entity.  Lastly,
 the system module contains the functions that are run in the 
-game-loop such as system\_menu and system\_draw\_map. 
+game-loop such as gr\_system\_menu and gr\_system\_draw\_map. 
 
 ## Getting Started
 

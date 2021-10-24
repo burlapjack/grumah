@@ -342,7 +342,7 @@ int entrance_x, entrance_y;
 		exit_x = gr_max_int( gr_rand_int(m->map_width - 2), 2);
 		exit_y = gr_max_int( gr_rand_int(m->map_height - 2), 2);
 		if(m->terrain[entrance_y * m->map_width + entrance_x] == m->floor && m->terrain[exit_y * m->map_width + exit_x] == m->floor){ /* check if the entrance and exit are on floor tiles */
-			if( path_get_manhattan_distance(entrance_x, entrance_y, exit_x, exit_y) > 2 ){ /* ensure that the entrance and exit arent right next to each other. */
+			if( gr_path_get_manhattan_distance(entrance_x, entrance_y, exit_x, exit_y) > 2 ){ /* ensure that the entrance and exit arent right next to each other. */
 				m->terrain[(exit_y * m->map_width) + exit_x] = m->exit;
 				m->terrain[(entrance_y * m->map_width) + entrance_x] = m->entrance;
 				break; /* end while loop */
@@ -367,7 +367,7 @@ void gr_map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 
 	int current_index = 0;
 	int number_of_nodes = 1;
-	int list_size = path_count_floor(m);
+	int list_size = gr_path_count_floor(m);
 	FloodNode node_list[list_size];
 
 	for(int i = 0; i < list_size; i++){

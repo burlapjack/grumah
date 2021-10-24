@@ -132,7 +132,7 @@ int gr_path_node_exists_in_open_list(PathGraph *g, int x, int y){
 
 /*--------------------- Updates the g and f value of a node if it already has been added to the open_list. ------------------*/
 void gr_path_node_update(PathGraph *g, int nx, int ny){
-	int ni = path_open_list_get_index(g, nx, ny);
+	int ni = gr_path_open_list_get_index(g, nx, ny);
 	int existing_f = g->open_list[ni].f; /* the current f value of this node. */
 	int new_f = g->open_list[g->current_index].g + 1 + g->open_list[ni].h; /* the possible new f value */
 	if(existing_f > new_f ){ /* check to see if this node is better off with a new parent node. */

@@ -85,23 +85,15 @@ int next_entity = 1;
 /*----- Initialize a Component Object --*/
 int num_components = 10;
 Component *c = malloc(sizeof (*c));
-component_init(c, num_components);
+gr_component_init(c, num_components);
 
 ```
 Component *c is a pointer to a struct that holds all the different kinds of
 components that will be needed.  You will be using this pointer a lot.
 
-Now, add a player entity:
- 
-```c
-/*------Add player entity at x=10, y=12 --*/
-entity_add_plyr(c, next_entity, 10, 12);
-
-```
-
 You can use the component\_free\_all function to deallocate all of that 
 memory when the program ends:
 
 ```c
-component_free_all(c);
+gr_component_free_all(c);
 ```

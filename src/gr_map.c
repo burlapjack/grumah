@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <math.h>
-//#include <stdbool.h>
 #include <string.h>
 #include <assert.h>
 #include <limits.h>
@@ -419,10 +418,40 @@ void gr_map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 	}
 }
 
-void gr_map_los_raycast(MapData *m, int origin_x, int origin_y, int number_of_rays, int range){
-	for(int i = 0; i < range; i++){
-		for(int j = 0; j < range; j++){
-			
+float gr_map_dda(float slope, float dx, float dy){
+	/* calculate the hypotenuse of a line at a given slope while you step 1 unit */
+	/* in the x or 1 unit in the y direction. Return the lowest result. */
+
+	float sx = sqrtf( pow(1,2) + pow((dy/dx), 2) );
+	float sy = sqrtf( pow(1,2) + pow((dx/dy), 2) );
+	if(sx <= sy) return dx;
+	else if(sy < sx) return sy;
+}
+
+void gr_map_los_raycast(MapData *m, int origin_x, int origin_y, int range){
+		
+	double current_radians = 0;
+	double current_length = 0;
+	double  dx, dy;
+	int mapx, mapy;
+
+	for(int  j = 0; j < 360; j += 45){
+		for(int k = 0; k < range; k++){
+			current_radians = (double) j * M_PI / 180;
+			dx = cos(current_radians) * (double) k;
+			dy = sin(current_radians) * (double) k;						
+			mapx = origin_x + (int) dx;		
+			mapy = origin_y + (int) dy;		
+			if(m->terrain[ mapy * m->map_width + mapx ] == m->floor){
+				/* light this tile up */	
+			}
+			else{
+				break; /* move on to next ray angle */
+			}
 		}
 	}
+
 }
+
+
+

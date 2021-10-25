@@ -46,16 +46,20 @@ have a recent version of ncurses installed already.
 ```c
 /* main.c */
 
-#include <ncurses.h>
-#include "../include/grumah.h"
+#include "grumah/include/grumah.h"
 
 int main(int argc, char *argv[]){
 	
 	int win_width = 80;
 	int win_height = 24;
 	unsigned int game_running = 1;
-	
+
+	/*----- Create seed using srand() ------*/
+	time_t t;
+	srand((unsigned) time(&t));	
+
 	/*----- ncurses boilerplate-------------*/
+	set_locale(LC_ALL, "");
 	initscr();
 	cbreak();
 	keypad(stdscr, TRUE);					

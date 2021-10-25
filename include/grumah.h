@@ -10,6 +10,8 @@
 #define GRUMAH_H
 
 #include <stdlib.h>
+#include <locale.h>
+#include <time.h>
 #include <ncurses.h>
 #include "gr_component.h"
 #include "gr_entity.h"

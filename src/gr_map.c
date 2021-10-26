@@ -418,20 +418,19 @@ void gr_map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 	}
 }
 
-float gr_map_dda(float slope, float dx, float dy){
+//float gr_map_dda(float slope, float dx, float dy){
 	/* calculate the hypotenuse of a line at a given slope while you step 1 unit */
 	/* in the x or 1 unit in the y direction. Return the lowest result. */
 
-	float sx = sqrtf( pow(1,2) + pow((dy/dx), 2) );
-	float sy = sqrtf( pow(1,2) + pow((dx/dy), 2) );
-	if(sx <= sy) return dx;
-	else if(sy < sx) return sy;
-}
+//	float sx = sqrtf( pow(1,2) + pow((dy/dx), 2) );
+//	float sy = sqrtf( pow(1,2) + pow((dx/dy), 2) );
+//	if(sx <= sy) return dx;
+//	else if(sy < sx) return sy;
+//}
 
-void gr_map_los_raycast(MapData *m, int origin_x, int origin_y, int range){
+void gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, int range){
 		
 	double current_radians = 0;
-	double current_length = 0;
 	double  dx, dy;
 	int mapx, mapy;
 
@@ -444,6 +443,11 @@ void gr_map_los_raycast(MapData *m, int origin_x, int origin_y, int range){
 			mapy = origin_y + (int) dy;		
 			if(m->terrain[ mapy * m->map_width + mapx ] == m->floor){
 				/* light this tile up */	
+				for(int i = 0; i < c->size_position; i++){
+					if(c->position[i].x == dx && c->position[i].y == dy){
+						c->draw[c->position[i].id].visibility = 1;	
+					}
+				}
 			}
 			else{
 				break; /* move on to next ray angle */

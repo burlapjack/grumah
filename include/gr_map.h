@@ -89,7 +89,6 @@ int    gr_max_int(int a, int b); /* returns the greater of two given integers. *
 int    gr_min_int(int a, int b); /* returns the lesser of two given integers. */
 int    gr_rand_int(int n); /* returns a random integer */
 
-
 void gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, int range);
 
 #endif /* MAP_H */

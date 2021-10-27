@@ -185,6 +185,7 @@ void gr_component_list_double_draw(Component *c){
 	c->draw = temp;
 	for(int i = c->size_draw; i < (c->size_draw * 2 ); ++i ){
 		c->draw[i].id = 0;
+		c->draw[i].visibility = 0;
 	}
 	c->size_draw = c->size_draw * 2;
 }
@@ -450,5 +451,14 @@ void gr_component_set_visibility(Component *c, int component_id, int visibility)
 	}
 }
 
-
-
+void gr_component_position_randomize(MapData *m, int id){
+	int rand_x;
+	int rand_y;
+	while(1){
+		rand_x = gr_rand_int(m->map_width);
+		rand_y = gr_rand_int(m->map_height);
+		if(m->terrain[ rand_y * m->map_width + rand_x ] == m->floor){
+			break;	
+		}
+	}
+}

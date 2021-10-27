@@ -428,6 +428,7 @@ void gr_map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 //	else if(sy < sx) return sy;
 //}
 
+
 void gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, int range){
 	double current_radians = 0;
 	double  dx, dy;
@@ -442,9 +443,9 @@ void gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, in
 			mapy = origin_y + (int) dy;
 			if(m->terrain[ mapy * m->map_width + mapx ] == m->floor){
 				/* light this tile up */
-				for(int i = 0; i < c->size_position; i++){
+				for(int i = 0; i < c->size_position; i++){ /* search for position match. */
 					if(c->position[i].x == dx && c->position[i].y == dy){
-						c->draw[c->position[i].id].visibility = 2;
+						c->draw[c->position[i].id].visibility = 2; /* set visibility to 2 (full visibility). */
 					}
 				}
 			}

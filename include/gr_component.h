@@ -16,6 +16,14 @@ typedef struct{
 
 typedef struct{
 	int id;
+	int layer;
+	char symbol;
+	int visibility;
+	int color;
+}ComponentDraw;
+
+typedef struct{
+	int id;
 	int max;
 	int current;
 }ComponentHitPoints;
@@ -36,21 +44,6 @@ typedef struct{
 	int width;
 	int height;
 }ComponentSize;
-
-typedef struct{
-	int id;
-	int layer;
-	char symbol;
-	int visibility;
-	int color;
-}ComponentDraw;
-
-typedef struct{
-	int id;
-	int parent_id;
-	char name[32];
-	int highlighted;
-}ComponentMenuOption;
 
 typedef struct{
 	int id;

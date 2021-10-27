@@ -333,7 +333,7 @@ void gr_map_gen_style_cave(MapData *m, Component *c){
 }
 
 void gr_map_gen_entrance_and_exit(MapData *m){
-int entrance_x, entrance_y;
+	int entrance_x, entrance_y;
 	int exit_x, exit_y;
 	while(1){
 		entrance_x = gr_max_int( gr_rand_int(m->map_width - 2), 2); /* randomly place an entrance and an exit */
@@ -429,23 +429,22 @@ void gr_map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 //}
 
 void gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, int range){
-		
 	double current_radians = 0;
 	double  dx, dy;
 	int mapx, mapy;
 
-	for(int  j = 0; j < 360; j += 45){
-		for(int k = 0; k < range; k++){
+	for(int  j = 0; j < 360; j += 45){                     /* iterate radians. */
+		for(int k = 0; k < range; k++){                    /* iterate length of ray. */
 			current_radians = (double) j * M_PI / 180;
 			dx = cos(current_radians) * (double) k;
-			dy = sin(current_radians) * (double) k;						
-			mapx = origin_x + (int) dx;		
-			mapy = origin_y + (int) dy;		
+			dy = sin(current_radians) * (double) k;
+			mapx = origin_x + (int) dx;
+			mapy = origin_y + (int) dy;
 			if(m->terrain[ mapy * m->map_width + mapx ] == m->floor){
-				/* light this tile up */	
+				/* light this tile up */
 				for(int i = 0; i < c->size_position; i++){
 					if(c->position[i].x == dx && c->position[i].y == dy){
-						c->draw[c->position[i].id].visibility = 1;	
+						c->draw[c->position[i].id].visibility = 2;
 					}
 				}
 			}
@@ -456,6 +455,3 @@ void gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, in
 	}
 
 }
-
-
-

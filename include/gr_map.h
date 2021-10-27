@@ -82,13 +82,17 @@ void   gr_map_gen_entrance_and_exit(MapData *m);
 void   gr_map_gen_style_dungeon(MapData *m, Component *c); /* Simple-Room-Placement procedurally generated map. Rectangular rooms connected by hallways. */
 void   gr_map_gen_style_cave(MapData *m, Component *c); /* Cellular-Automata procedurally generated map.  Cave-like design. */
 
-/*--------Misc math functions ------------------------------------------------------------------------------------------------*/
-int    gr_map_count_tile(MapData *m, char tile);
+/*-------- Misc math functions -----------------------------------------------------------------------------------------------*/
 int    gr_map_xy(int x, int y, int map_width); /* Returns a converted one-dimensional array index given the equivelent two-dimensional x and y coordinates. */
 int    gr_max_int(int a, int b); /* returns the greater of two given integers. */
 int    gr_min_int(int a, int b); /* returns the lesser of two given integers. */
 int    gr_rand_int(int n); /* returns a random integer */
 
-void gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, int range);
+/*------- Raycasting ---------------------------------------------------------------------------------------------------------*/
+void   gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, int range);
+
+/*------- Query map data  ----------------------------------------------------------------------------------------------------*/
+int    gr_map_count_tile(MapData *m, char tile);
+int   gr_map_get_random_empty_floor(MapData *m);
 
 #endif /* MAP_H */

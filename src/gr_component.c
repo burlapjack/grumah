@@ -451,14 +451,3 @@ void gr_component_set_visibility(Component *c, int component_id, int visibility)
 	}
 }
 
-void gr_component_position_randomize(MapData *m, int id){
-	int rand_x;
-	int rand_y;
-	while(1){
-		rand_x = gr_rand_int(m->map_width);
-		rand_y = gr_rand_int(m->map_height);
-		if(m->terrain[ rand_y * m->map_width + rand_x ] == m->floor){
-			break;	
-		}
-	}
-}

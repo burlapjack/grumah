@@ -456,3 +456,16 @@ void gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, in
 	}
 
 }
+
+int gr_map_get_random_empty_floor(MapData *m){
+	int rand_x;
+	int rand_y;
+	while(1){
+		rand_x = gr_rand_int(m->map_width);
+		rand_y = gr_rand_int(m->map_height);
+		if(m->terrain[ rand_y * m->map_width + rand_x ] == m->floor){
+			break;
+		}
+	}
+	return (rand_y * m->map_width + rand_x);
+}

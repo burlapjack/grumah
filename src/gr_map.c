@@ -429,29 +429,40 @@ void gr_map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 //}
 
 
-void gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, int range){
+void gr_map_los_raycast(MapData *m, Component *c, int id, int range){
 	double current_radians = 0;
 	double  dx, dy;
+	int wall_hit;
 	int mapx, mapy;
+	int origin_x, origin_y;
 
-	for(int  j = 0; j < 360; j += 45){                     /* iterate radians. */
+	for(int i = 1; i < c->size_position; i++){ /* look for entity position by id */
+		if(c->position[i].id == id){
+			origin_x = c->position[i].x;	
+			origin_y = c->position[i].y;	
+			break;
+		}
+	}
+
+	for(int  j = 0; j < 360; j += 10){                     /* iterate radians. */
+		wall_hit = 0;
 		for(int k = 0; k < range; k++){                    /* iterate length of ray. */
 			current_radians = (double) j * M_PI / 180;
 			dx = cos(current_radians) * (double) k;
 			dy = sin(current_radians) * (double) k;
 			mapx = origin_x + (int) dx;
 			mapy = origin_y + (int) dy;
-			if(m->terrain[ mapy * m->map_width + mapx ] == m->floor){
 				/* light this tile up */
-				for(int i = 0; i < c->size_position; i++){ /* search for position match. */
-					if(c->position[i].x == dx && c->position[i].y == dy){
-						c->draw[c->position[i].id].visibility = 2; /* set visibility to 2 (full visibility). */
+			for(int i = 0; i < c->size_position; i++){ /* search for position match. */
+				if(c->position[i].x == dx && c->position[i].y == dy){
+					c->draw[c->position[i].id].visibility = 2; /* set visibility to 2 (full visibility). */
+					if(m->terrain[ mapy * m->map_width + mapx ] == m->wall){
+						wall_hit = 1;
+						break;
 					}
 				}
 			}
-			else{
-				break; /* move on to next ray angle */
-			}
+			if(wall_hit == 1) break;
 		}
 	}
 
@@ -461,9 +472,9 @@ void gr_map_component_set_random_position(MapData *m, Component *c, int id){
 	int rand_x;
 	int rand_y;
 	while(1){
-		rand_x = gr_rand_int(m->map_width);
-		rand_y = gr_rand_int(m->map_height);
-		if(m->terrain[ rand_y * m->map_width + rand_x ] == m->floor){
+		rand_x = gr_rand_int(m->map_width - 2);
+		rand_y = gr_rand_int(m->map_height - 2);
+		if( rand_x > 2 && rand_y > 2 && m->terrain[ rand_y * m->map_width + rand_x ] == m->floor){
 			break;
 		}
 	}

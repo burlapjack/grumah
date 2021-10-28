@@ -457,7 +457,7 @@ void gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, in
 
 }
 
-int gr_map_get_random_empty_floor(MapData *m){
+void gr_map_component_set_random_position(MapData *m, Component *c, int id){
 	int rand_x;
 	int rand_y;
 	while(1){
@@ -467,5 +467,11 @@ int gr_map_get_random_empty_floor(MapData *m){
 			break;
 		}
 	}
-	return (rand_y * m->map_width + rand_x);
+	for(int i = 0; i < c->size_position; i++){
+		if(c->position[i].id == id){
+			c->position[i].x = rand_x;
+			c->position[i].y = rand_y;
+			break;
+		}
+	}
 }

@@ -290,7 +290,7 @@ void gr_component_add_draw(Component *c, int layer, int color, char symbol) {
 			c->draw[i].color = color;
 			c->draw[i].symbol = symbol;
 			c->draw[i].layer = layer;
-			c->draw[i].visibility = 1;
+			c->draw[i].visibility = 0;
 			break;
 		}
 	}

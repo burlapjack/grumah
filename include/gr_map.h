@@ -93,6 +93,6 @@ void   gr_map_los_raycast(MapData *m, Component *c, int origin_x, int origin_y, 
 
 /*------- Query map data  ----------------------------------------------------------------------------------------------------*/
 int    gr_map_count_tile(MapData *m, char tile);
-int   gr_map_get_random_empty_floor(MapData *m);
+void   gr_map_component_set_random_position(MapData *m, Component *c, int id);
 
 #endif /* MAP_H */

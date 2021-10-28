@@ -69,7 +69,7 @@ int main(int argc, char *argv[]){
 
 	/*----- game loop ----------------------*/
 	while(game_running == 1){
-		//game code will here.
+		//game code will go here.
 	}
 
 	/*----- game over ----------------------*/

@@ -4,4 +4,5 @@ src/main.c
 grumah
 *.swp
 bin/
+obj/
 *.o

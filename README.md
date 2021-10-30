@@ -83,9 +83,6 @@ Next, you will want to set up an entity id counter and a
 Component object pointer inside your main function.
 
 ```c
-/*----- entity id counter --------------*/
-int next_entity = 1;
-
 /*----- Initialize a Component Object --*/
 int num_components = 10;
 Component *c = malloc(sizeof (*c));

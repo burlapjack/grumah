@@ -418,17 +418,6 @@ void gr_map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 	}
 }
 
-//float gr_map_dda(float slope, float dx, float dy){
-	/* calculate the hypotenuse of a line at a given slope while you step 1 unit */
-	/* in the x or 1 unit in the y direction. Return the lowest result. */
-
-//	float sx = sqrtf( pow(1,2) + pow((dy/dx), 2) );
-//	float sy = sqrtf( pow(1,2) + pow((dx/dy), 2) );
-//	if(sx <= sy) return dx;
-//	else if(sy < sx) return sy;
-//}
-
-
 void gr_map_los_raycast(MapData *m, Component *c, int id, int range){
 	double current_radians = 0;
 	double  dx, dy;
@@ -438,8 +427,8 @@ void gr_map_los_raycast(MapData *m, Component *c, int id, int range){
 
 	for(int i = 1; i < c->size_position; i++){ /* look for entity position by id */
 		if(c->position[i].id == id){
-			origin_x = c->position[i].x;	
-			origin_y = c->position[i].y;	
+			origin_x = c->position[i].x;
+			origin_y = c->position[i].y;
 			break;
 		}
 	}
@@ -468,21 +457,17 @@ void gr_map_los_raycast(MapData *m, Component *c, int id, int range){
 
 }
 
-void gr_map_component_set_random_position(MapData *m, Component *c, int id){
-	int rand_x;
-	int rand_y;
-	while(1){
-		rand_x = gr_rand_int(m->map_width - 2);
-		rand_y = gr_rand_int(m->map_height - 2);
-		if( rand_x > 2 && rand_y > 2 && m->terrain[ rand_y * m->map_width + rand_x ] == m->floor){
-			break;
+MapCoordinates gr_map_get_random_tile(MapData *m, char tile){
+	MapCoordinates coord;
+	int search = 1;
+	while(search){
+		coord.x = gr_rand_int(m->map_width - 2);
+		coord.y = gr_rand_int(m->map_height - 2);
+		if( coord.x > 2 && coord.y > 2
+		&&  coord.x < m->map_width - 2 && coord.y < m->map_height - 2
+		&& m->terrain[ coord.y * m->map_width + coord.x ] == tile){
+			search = 0;
 		}
 	}
-	for(int i = 0; i < c->size_position; i++){
-		if(c->position[i].id == id){
-			c->position[i].x = rand_x;
-			c->position[i].y = rand_y;
-			break;
-		}
-	}
+	return coord;
 }

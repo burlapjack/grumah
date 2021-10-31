@@ -45,6 +45,7 @@
 #include <string.h>
 #include "../include/gr_component.h"
 #include "../include/gr_map.h"
+
 /*---------------Initialize Component Lists -----------------------------------------------------*/
 // Init all component lists within a Component instance
 void gr_component_init(Component *c, int size_lists){

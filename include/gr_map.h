@@ -47,19 +47,9 @@ typedef struct{
 }Hall;
 
 typedef struct{
-	float x1, y1;
-	float x2, y2;
-}Edge;
-
-typedef struct{
-	int edge_id[4];
-	int edge_exist[4];
-}Cell;
-
-typedef struct{
-	float angle;
-	float x,y;
-}VisPoly;
+	int x;
+	int y;
+} MapCoordinates;
 
 /*-------- Fill empty area of map with a given character/symbol --------------------------------------------------------------*/
 void   gr_map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol);
@@ -93,6 +83,6 @@ void   gr_map_los_raycast(MapData *m, Component *c, int id, int range);
 
 /*------- Query map data  ----------------------------------------------------------------------------------------------------*/
 int    gr_map_count_tile(MapData *m, char tile);
-void   gr_map_component_set_random_position(MapData *m, Component *c, int id);
+MapCoordinates gr_map_get_random_tile(MapData *m, char tile);
 
 #endif /* MAP_H */

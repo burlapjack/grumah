@@ -4,13 +4,25 @@
 
 #include <stdlib.h>
 //#include <ncurses.h>
-#include <string.h>
+//#include <string.h>
 #include "../include/gr_component.h"
 #include "../include/gr_entity.h"
 
-//void gr_entity_add_player(Component *c, int id, int x, int y){
-//	component_add_position(c, id, x, y);
-//	component_add_draw(c, id, 1, 1,'@');
-//	component_add_stats(c, id, 5, 5, 5, 5);
-//}
+int gr_entity_add_player(Component *c, int x, int y){
+	gr_component_add_position(c, x, y);
+	gr_component_add_draw(c, 1, 1,'@');
+	gr_component_add_attributes(c, 0, 0, 0 );
+	c->next_id++;
+	return c->next_id;
+}
+
+void gr_entity_set_location(Component *c, int id, int x, int y){
+	for(int i = 0; i < c->size_position; i++){
+		if(c->position[i].id == id){
+			c->position[i].x = x;
+			c->position[i].y = y;
+			break;
+		}
+	}
+}
 

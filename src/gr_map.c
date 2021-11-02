@@ -421,6 +421,7 @@ void gr_map_flood_fill(MapData *m, int rand_x, int rand_y, char symbol){
 void gr_map_los_raycast(MapData *m, Component *c, int id, int range){
 	double current_radians = 0;
 	double  dx, dy;
+	//double pi = 3.141593;
 	int wall_hit;
 	int mapx, mapy;
 	int origin_x, origin_y;
@@ -432,15 +433,14 @@ void gr_map_los_raycast(MapData *m, Component *c, int id, int range){
 			break;
 		}
 	}
-
 	for(int  j = 0; j < 360; j += 10){                     /* iterate radians. */
 		wall_hit = 0;
 		for(int k = 0; k < range; k++){                    /* iterate length of ray. */
 			current_radians = (double) j * M_PI / 180;
-			dx = cos(current_radians) * (double) k;
-			dy = sin(current_radians) * (double) k;
-			mapx = origin_x + (int) dx;
-			mapy = origin_y + (int) dy;
+			dx = cos(current_radians) * k;
+			dy = sin(current_radians) * k;
+			mapx = origin_x + dx;
+			mapy = origin_y + dy;
 				/* light this tile up */
 			for(int i = 0; i < c->size_position; i++){ /* search for position match. */
 				if(c->position[i].x == dx && c->position[i].y == dy){
@@ -454,7 +454,6 @@ void gr_map_los_raycast(MapData *m, Component *c, int id, int range){
 			if(wall_hit == 1) break;
 		}
 	}
-
 }
 
 MapCoordinates gr_map_get_random_tile(MapData *m, char tile){

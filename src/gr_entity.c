@@ -3,8 +3,6 @@
 //by burlapjack 2021
 
 #include <stdlib.h>
-//#include <ncurses.h>
-//#include <string.h>
 #include "../include/gr_component.h"
 #include "../include/gr_entity.h"
 
@@ -25,4 +23,3 @@ void gr_entity_set_location(Component *c, int id, int x, int y){
 		}
 	}
 }
-

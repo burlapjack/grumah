@@ -353,8 +353,8 @@ void gr_map_gen_entrance_and_exit(MapData *m){
 void gr_map_gen_add_components(MapData *m, Component *c){
 	for(int i = 0; i < m->map_height; i++){
 		for(int j = 0; j < m->map_width; j++){
-			gr_component_add_position(c, j, i);
-			gr_component_add_draw(c, 0, 1, m->terrain[i * m->map_width + j]);
+			//gr_component_add_position(c, j, i);
+			gr_component_add_draw(c, j, i, 0, 1, m->terrain[i * m->map_width + j]);
 			c->next_id++;
 		}
 	}
@@ -426,10 +426,10 @@ void gr_map_los_raycast(MapData *m, Component *c, int id, int range){
 	int mapx, mapy;
 	int origin_x, origin_y;
 
-	for(int i = 1; i < c->size_position; i++){ /* look for entity position by id */
-		if(c->position[i].id == id){
-			origin_x = c->position[i].x;
-			origin_y = c->position[i].y;
+	for(int i = 1; i < c->size_draw; i++){ /* look for entity position by id */
+		if(c->draw[i].id == id){
+			origin_x = c->draw[i].x;
+			origin_y = c->draw[i].y;
 			break;
 		}
 	}
@@ -442,9 +442,9 @@ void gr_map_los_raycast(MapData *m, Component *c, int id, int range){
 			mapx = origin_x + dx;
 			mapy = origin_y + dy;
 				/* light this tile up */
-			for(int i = 0; i < c->size_position; i++){ /* search for position match. */
-				if(c->position[i].x == dx && c->position[i].y == dy){
-					c->draw[c->position[i].id].visibility = 2; /* set visibility to 2 (full visibility). */
+			for(int i = 0; i < c->size_draw; i++){ /* search for position match. */
+				if(c->draw[i].x == dx && c->draw[i].y == dy){
+					c->draw[c->draw[i].id].visibility = 2; /* set visibility to 2 (full visibility). */
 					if(m->terrain[ mapy * m->map_width + mapx ] == m->wall){
 						wall_hit = 1;
 						break;

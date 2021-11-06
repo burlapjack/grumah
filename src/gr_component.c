@@ -44,7 +44,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "../include/gr_component.h"
-#include "../include/gr_map.h"
+//#include "../include/gr_map.h"
 
 /*---------------Initialize Component Lists -----------------------------------------------------*/
 // Init all component lists within a Component instance
@@ -52,7 +52,7 @@ void gr_component_init(Component *c, int size_lists){
 	c->attributes = malloc( sizeof (*(c->attributes)) * size_lists);
 	c->hit_points = malloc( sizeof (*(c->hit_points)) * size_lists);
 	c->draw = malloc( sizeof (*(c->draw)) * size_lists);
-	c->position = malloc( sizeof (*(c->position)) * size_lists);
+//	c->position = malloc( sizeof (*(c->position)) * size_lists);
 	c->size = malloc( sizeof (*(c->size)) * size_lists);
 	c->trigger = malloc( sizeof (*(c->trigger)) * size_lists);
 
@@ -61,14 +61,14 @@ void gr_component_init(Component *c, int size_lists){
 	c->size_attributes = size_lists;
 	c->size_hit_points = size_lists;
 	c->size_draw = size_lists;
-	c->size_position = size_lists;
+	//c->size_position = size_lists;
 	c->size_size = size_lists;
 	c->size_trigger = size_lists;
 
 	for( int i = 0; i < size_lists; i++){
 		c->attributes[i].id = 0;
 		c->draw[i].id = 0;
-		c->position[i].id = 0;
+		//c->position[i].id = 0;
 		c->size[i].id = 0;
 		c->trigger[i].id = 0;
 	}
@@ -108,13 +108,13 @@ void gr_component_clear_all_input(Component *c){
 	}
 }
 
-void gr_component_clear_all_position(Component *c){
+/*void gr_component_clear_all_position(Component *c){
 	for(int i = 0; i < (c->size_position); i++){
 		c->position[i].id = 0;
 		c->position[i].x =  0;
 		c->position[i].y =  0;
 	}
-}
+}*/
 
 void gr_component_clear_all_size(Component *c){
 	for(int i = 0; i < (c->size_size); i++){
@@ -136,7 +136,7 @@ void gr_component_clear_all(Component *c){
 	gr_component_clear_all_attributes(c);
 	gr_component_clear_all_hit_points(c);
 	gr_component_clear_all_draw(c);
-	gr_component_clear_all_position(c);
+	//gr_component_clear_all_position(c);
 	gr_component_clear_all_size(c);
 	gr_component_clear_all_trigger(c);
 }
@@ -148,7 +148,7 @@ void gr_component_free(Component *c){
 	free(c->hit_points);
 	//free(c->input);
 	//c->input = NULL;
-	free(c->position);
+	//free(c->position);
 	free(c->size);
 	free(c->trigger);
 
@@ -156,7 +156,7 @@ void gr_component_free(Component *c){
 	c->attributes = NULL;
 	c->draw = NULL;
 	c->hit_points = NULL;
-	c->position = NULL;
+	//c->position = NULL;
 	c->size = NULL;
 	free(c);
 }
@@ -221,7 +221,7 @@ void gr_component_list_double_input(Component *c){
 
 }
 
-void gr_component_list_double_position(Component *c){
+/*void gr_component_list_double_position(Component *c){
 	//test the reallocation
 	ComponentPosition *temp = realloc(c->position, sizeof (ComponentPosition) * (c->size_position* 2));
 
@@ -234,7 +234,7 @@ void gr_component_list_double_position(Component *c){
 		c->position[i].id = 0;
 	}
 	c->size_position = c->size_position * 2;
-}
+}*/
 
 void gr_component_list_double_size(Component *c){
 	//test the reallocation
@@ -281,13 +281,15 @@ void gr_component_add_attributes(Component *c, int str, int per, int agi) {
 	}
 }
 
-void gr_component_add_draw(Component *c, int layer, int color, char symbol) {
+void gr_component_add_draw(Component *c, int x, int y, int layer, int color, char symbol) {
 	for(int i = 0; i < c->size_draw; ++i){
 		if (i == (c->size_draw - 1) && c->draw[i].id != 0){
 			gr_component_list_double_draw(c);
 		}
 		else if (c->draw[i].id == 0){
 			c->draw[i].id = c->next_id;
+			c->draw[i].x = x;
+			c->draw[i].y = y;
 			c->draw[i].color = color;
 			c->draw[i].symbol = symbol;
 			c->draw[i].layer = layer;
@@ -322,7 +324,7 @@ void gr_component_add_input(Component *c ) {
 	}
 }
 
-void gr_component_add_position(Component *c, int x, int y) {
+/*void gr_component_add_position(Component *c, int x, int y) {
 	for(int i = 0; i < (c->size_position); ++i){
 		if (i == (c->size_position-1) && c->position[i].id != 0){
 			gr_component_list_double_position(c);
@@ -334,7 +336,7 @@ void gr_component_add_position(Component *c, int x, int y) {
 			break;
 		}
 	}
-}
+}*/
 
 void gr_component_add_size(Component *c, int width, int height) {
 	for(int i = 0; i < c->size_size; ++i){
@@ -387,13 +389,13 @@ int gr_component_count_hit_points(Component *c){
 	return total;
 }
 
-int gr_component_count_position(Component *c){
+/*int gr_component_count_position(Component *c){
 	int total=0;
 	for(int i = 0; i < (c->size_position); i++){
 		if(c->position[i].id != 0) total++;
 	}
 	return total;
-}
+}*/
 
 int gr_component_count_size(Component *c){
 	int total=0;
@@ -416,12 +418,12 @@ int gr_component_count_all(Component *c){
 	total = gr_component_count_attributes(c)
 		+ gr_component_count_draw(c)
 		+ gr_component_count_hit_points(c)
-		+ gr_component_count_position(c)
+		//+ gr_component_count_position(c)
 		+ gr_component_count_trigger(c);
 	return total;
 }
 
-int gr_component_count_invisible(Component *c){
+/*int gr_component_count_invisible(Component *c){
 	int total = 0;
 	for(int i = 0; i < (c->size_position); i++){
 		if(c->position[i].id != 0){
@@ -432,7 +434,7 @@ int gr_component_count_invisible(Component *c){
 		}
 	}
 	return total;
-}
+}*/
 
 /*-------------- Set Component Draw Layer --------------------------------------------------------*/
 void gr_component_set_draw_layer(Component *c, int component_id, int draw_layer){

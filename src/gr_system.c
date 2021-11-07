@@ -13,7 +13,6 @@
 
 
 void gr_system_input(WINDOW *win, MapData *m, Component *c){
-
 	int ch = wgetch(win);
 	switch(ch)
 	{

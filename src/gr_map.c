@@ -443,8 +443,8 @@ void gr_map_los_raycast(MapData *m, Component *c, int id, int range){
 			mapy = origin_y + dy;
 				/* light this tile up */
 			for(int i = 0; i < c->size_draw; i++){ /* search for position match. */
-				if(c->draw[i].x == dx && c->draw[i].y == dy){
-					c->draw[c->draw[i].id].visibility = 2; /* set visibility to 2 (full visibility). */
+				if(c->draw[i].x == mapx && c->draw[i].y == mapy){
+					c->draw[i].visibility = 2; /* set visibility to 2 (full visibility). */
 					if(m->terrain[ mapy * m->map_width + mapx ] == m->wall){
 						wall_hit = 1;
 						break;

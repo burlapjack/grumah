@@ -134,9 +134,8 @@ void gr_component_free(Component *c){
 	free(c->attributes);
 	free(c->draw);
 	free(c->hit_points);
-	//free(c->input);
-	//c->input = NULL;
-	//free(c->position);
+	free(c->input);
+	c->input = NULL;
 	free(c->size);
 	free(c->trigger);
 
@@ -182,7 +181,7 @@ void gr_component_list_double_hit_points(Component *c){
 	//test the reallocation
 	ComponentHitPoints *temp = realloc(c->hit_points, sizeof (ComponentHitPoints) * (c->size_hit_points * 2));
 	if (temp == NULL) {
-		perror("Failure to reallocate component_input");
+		perror("Failure to reallocate component_hit_points");
 		exit(EXIT_FAILURE);
 	}
 	c->hit_points = temp;

@@ -13,8 +13,8 @@ typedef struct{
 	int select;
 	int back;
 	int inventory;
-}Input;
+}InputData;
 
-void gr_input_file_get_custom_values(Input *i);
+void gr_input_file_get_custom_values(InputData *i);
 
 #endif /* GR_INPUT_H */

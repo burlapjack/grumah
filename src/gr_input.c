@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "../include/gr_input.h"
 
-void gr_input_init(Input *i){
+void gr_input_init(InputData *i){
 	i->up          = 'k';
 	i->down        = 'j';
 	i->left        = 'h';
@@ -19,10 +19,10 @@ void gr_input_init(Input *i){
 	gr_input_file_get_custom_values(i);
 };
 
-void gr_input_file_get_custom_values(Input *i){
+void gr_input_file_get_custom_values(InputData *i){
 	char tag[15];
 	int value;
-	if(access("settings.txt", F_OK|R_OK) == 0){
+	if(access("../settings.txt", F_OK|R_OK) == 0){
 		FILE *fp = fopen("settings.txt", "r");
 		while(fscanf(fp, "%s %d", tag, &value) != EOF){
 			if(strcmp(tag, "up") == 0) i->up = value;

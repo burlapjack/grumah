@@ -5,4 +5,5 @@ grumah
 *.swp
 bin/
 obj/
+*.txt
 *.o

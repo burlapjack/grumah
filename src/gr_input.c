@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <ncurses.h>
 #include <string.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include "../include/gr_input.h"
 
 extern void gr_input_init(InputData *i){
@@ -20,14 +20,20 @@ extern void gr_input_init(InputData *i){
 	gr_input_file_get_custom_values(i); /* retrieve customized controls from settings.txt */
 };
 
-extern void gr_input_file_get_custom_values(InputData *i){
-	char tag[20];
+static void gr_input_file_get_custom_values(InputData *i){
+	char tag[10];
 	int value;
 	FILE *fp;
-	if((fp = fopen("../settings.txt", "r")) != NULL){
-		fscanf(fp, "%c %d", tag, &value);
-		printw("%d", value);
+	fp = fopen("../settings.txt", "r");
+	if(fp != NULL){
+		fscanf(fp, "%s %d", tag, &value);
+		if(strcmp("up", tag) == 0){
+			i->up = value;
+		}
 		fclose(fp);
+	}
+	else{
+		printf("unable to open file\n");
 	}
 }
 

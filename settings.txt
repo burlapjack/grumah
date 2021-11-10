@@ -1,0 +1,8 @@
+up k
+down j
+left l
+right h
+upleft y
+upright u
+downleft n
+downright m

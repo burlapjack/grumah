@@ -15,7 +15,7 @@ typedef struct{
 	int inventory;
 }InputData;
 
-void gr_input_init(InputData *i);
-void gr_input_file_get_custom_values(InputData *i);
+extern void gr_input_init(InputData *i);
+static void gr_input_file_get_custom_values(InputData *i);
 
 #endif /* GR_INPUT_H */

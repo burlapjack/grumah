@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include "../include/gr_input.h"
 
-void gr_input_init(InputData *i){
+extern void gr_input_init(InputData *i){
 	/* set default values */
 	i->up          = 'k';
 	i->down        = 'j';
@@ -20,7 +20,7 @@ void gr_input_init(InputData *i){
 	gr_input_file_get_custom_values(i); /* retrieve customized controls from settings.txt */
 };
 
-void gr_input_file_get_custom_values(InputData *i){
+extern void gr_input_file_get_custom_values(InputData *i){
 	char tag[20];
 	int value;
 	FILE *fp;

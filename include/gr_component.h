@@ -32,6 +32,7 @@ typedef struct{
 
 typedef struct {
 	int id;
+	int requested;
 }ComponentInput;
 
 typedef struct{

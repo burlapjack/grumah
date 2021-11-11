@@ -101,6 +101,7 @@ extern void gr_component_clear_all_hit_points(Component *c){
 extern void gr_component_clear_all_input(Component *c){
 	for(int i = 0; i < (c->size_input); i++){
 		c->input[i].id = 0;
+		c->input[i].requested = 0;
 	}
 }
 
@@ -201,6 +202,8 @@ extern void gr_component_list_double_input(Component *c){
 	c->input= temp;
 	for(int i = c->size_input; i < (c->size_input * 2 ); ++i ){
 		c->input[i].id = 0;
+		c->input[i].requested = 0;
+
 	}
 	c->size_input = c->size_input * 2;
 

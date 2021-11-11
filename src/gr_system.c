@@ -10,9 +10,10 @@
 #include <ncurses.h>
 #include "../include/gr_map.h"
 #include "../include/gr_component.h"
+#include "../include/gr_input.h"
 
 /*------------------------------ Draw the map walls and rooms ------------------------------------*/
-void gr_system_draw_map(WINDOW *w, MapData *m, Component *c){
+extern void gr_system_draw_map(WINDOW *w, MapData *m, Component *c){
 	/*-- Will need to be edited later to accomodate colors --*/
 //	for(int i = 0; i < m->map_height; i++){
 //		for(int j = 0; j < m->map_width; j++){
@@ -34,8 +35,8 @@ void gr_system_draw_map(WINDOW *w, MapData *m, Component *c){
 }
 
 /*------------------------------ Draw components by layer ----------------------------------------*/
-void gr_system_draw_layer(WINDOW *w,Component *c, int draw_layer, int x_offset, int y_offset){
-	for(size_t i = 0; i < (c->size_draw); i++){
+extern void gr_system_draw_layer(WINDOW *w,Component *c, int draw_layer, int x_offset, int y_offset){
+	for(int i = 0; i < (c->size_draw); i++){
 		if (c->draw[i].layer == draw_layer){
 			mvwprintw(w,c->draw[i].y + y_offset, c->draw[i].x + x_offset,"%c",c->draw[i].symbol);
 			/*for(size_t j = 0; j < c->size_position; j++){
@@ -48,5 +49,14 @@ void gr_system_draw_layer(WINDOW *w,Component *c, int draw_layer, int x_offset, 
 	}
 }
 
-
+extern void gr_system_input(Component *c, MapData *m, InputData *in, int key_pressed){
+	for(int i = 0; i < c->size_input; i++){
+		if(key_pressed == in->up || key_pressed == in->down || key_pressed == in->left || key_pressed == in->right ||
+		key_pressed == in->up_right || key_pressed == in->up_left || key_pressed == in->down_right || key_pressed == in->down_left){   /* detect movement. */
+			for(int j = 0; j < c->size_draw; j++){
+					
+			}
+		}
+	}	
+}
 

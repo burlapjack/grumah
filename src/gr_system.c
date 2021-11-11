@@ -54,7 +54,9 @@ extern void gr_system_input(Component *c, MapData *m, InputData *in, int key_pre
 		if(key_pressed == in->up || key_pressed == in->down || key_pressed == in->left || key_pressed == in->right ||
 		key_pressed == in->up_right || key_pressed == in->up_left || key_pressed == in->down_right || key_pressed == in->down_left){   /* detect movement. */
 			for(int j = 0; j < c->size_draw; j++){
-					
+				if(c->draw[j].id == c->input[i].id){
+					c->input[i].requested == key_pressed;	
+				}					
 			}
 		}
 	}	

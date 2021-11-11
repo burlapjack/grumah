@@ -32,7 +32,6 @@ typedef struct{
 
 typedef struct {
 	int id;
-	int key_pressed;
 }ComponentInput;
 
 typedef struct{

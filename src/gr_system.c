@@ -11,31 +11,6 @@
 #include "../include/gr_map.h"
 #include "../include/gr_component.h"
 
-
-void gr_system_input(WINDOW *win, MapData *m, Component *c){
-	int ch = wgetch(win);
-	switch(ch)
-	{
-		case KEY_UP:
-		case 'k':
-			break;
-		case KEY_DOWN:
-		case 'j':
-			break;
-		case KEY_LEFT:
-		case 'h':
-			break;
-		case KEY_RIGHT:
-		case 'l':
-			break;
-		default:
-			break;
-
-	}
-	wgetch(win);
-
-}
-
 /*------------------------------ Draw the map walls and rooms ------------------------------------*/
 void gr_system_draw_map(WINDOW *w, MapData *m, Component *c){
 	/*-- Will need to be edited later to accomodate colors --*/

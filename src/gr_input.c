@@ -1,8 +1,9 @@
-#include <stdio.h>
+#include <stdlib.h>
 #include <ncurses.h>
 #include <string.h>
 //#include <unistd.h>
 #include "../include/gr_input.h"
+
 
 extern void gr_input_init(InputData *i){
 	/* set default values */
@@ -18,7 +19,11 @@ extern void gr_input_init(InputData *i){
 	i->select      = KEY_ENTER;
 	i->back        = KEY_BACKSPACE;
 	gr_input_file_get_custom_values(i); /* retrieve customized controls from settings.txt */
-};
+}
+
+extern void gr_input_free(InputData *in){
+	free(in);
+}
 
 static void gr_input_file_get_custom_values(InputData *i){
 	char tag[10];
@@ -26,7 +31,7 @@ static void gr_input_file_get_custom_values(InputData *i){
 	FILE *fp;
 	fp = fopen("../settings.txt", "r");
 	if(fp != NULL){
-		fscanf(fp, "%s %d", tag, &value);
+		fscanf(fp, "%s%d", tag, &value);
 		if(strcmp("up", tag) == 0){
 			i->up = value;
 		}

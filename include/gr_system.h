@@ -8,8 +8,6 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-void gr_system_input(WINDOW *win);
-
 void gr_system_menu(WINDOW *w, Component *c, int *menu_visible, int input);
 
 void gr_system_draw_map(WINDOW *w, MapData *m, Component *c);

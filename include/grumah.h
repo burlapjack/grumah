@@ -18,6 +18,6 @@
 #include "gr_map.h"
 #include "gr_path.h"
 #include "gr_entity.h"
-#include "gr_input.h"
+#include "gr_settings.h"
 
 #endif /* GRUMAH_H */

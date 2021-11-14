@@ -10,7 +10,7 @@
 #include <ncurses.h>
 #include "../include/gr_map.h"
 #include "../include/gr_component.h"
-#include "../include/gr_input.h"
+#include "../include/gr_settings.h"
 
 /*------------------------------ Draw the map walls and rooms ------------------------------------*/
 extern void gr_system_draw_map(WINDOW *w, MapData *m, Component *c){
@@ -49,13 +49,13 @@ extern void gr_system_draw_layer(WINDOW *w,Component *c, int draw_layer, int x_o
 	}
 }
 
-extern void gr_system_input(Component *c, MapData *m, InputData *in, int key_pressed){
+extern void gr_system_input(Component *c, MapData *m, SettingsData *s, int key_pressed){
 	for(int i = 0; i < c->size_input; i++){
-		if(key_pressed == in->up || key_pressed == in->down || key_pressed == in->left || key_pressed == in->right ||
-		key_pressed == in->up_right || key_pressed == in->up_left || key_pressed == in->down_right || key_pressed == in->down_left){   /* detect movement. */
+		if(key_pressed == s->up || key_pressed == s->down || key_pressed == s->left || key_pressed == s->right ||
+		key_pressed == s->up_right || key_pressed == s->up_left || key_pressed == s->down_right || key_pressed == s->down_left){   /* detect movement. */
 			for(int j = 0; j < c->size_draw; j++){
 				if(c->draw[j].id == c->input[i].id){
-					c->input[i].requested == key_pressed;	
+					c->input[i].requested == key_pressed;
 				}					
 			}
 		}

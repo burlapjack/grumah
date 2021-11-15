@@ -28,11 +28,9 @@ extern void gr_settings_free(SettingsData *s){
 }
 
 extern char* gr_settings_read_string(FILE *file, char const *desired_tag){
-	char tag[128];
-	char val[128];
-
-
-	while(fscanf(file, "%127[^=]=%127[^\n]%*c", tag, val) == 2){
+	char tag[64];
+	char val[64];
+	while(fscanf(file, "%63[^=]=%63[^\n]%*c", tag, val) == 2){
 		if(0 == strcmp(tag, desired_tag)){
 			return strdup(val);
 		}
@@ -42,7 +40,6 @@ extern char* gr_settings_read_string(FILE *file, char const *desired_tag){
 
 extern int gr_settings_read_int(FILE *file, char const *desired_tag, int *ret){
 	char *temp = gr_settings_read_string(file, desired_tag);
-
 	char *stop;
 	*ret = strtol(temp, &stop, 10);
 	int ret_val = stop == NULL || *stop != '\0';

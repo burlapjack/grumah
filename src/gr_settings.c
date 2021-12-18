@@ -5,7 +5,9 @@
 #include "../include/gr_settings.h"
 
 
-extern void gr_settings_init(SettingsData *s){
+extern void 
+gr_settings_init(SettingsData *s)
+{
 	/* set default values */
 	s->up          = 'k';
 	s->down        = 'j';

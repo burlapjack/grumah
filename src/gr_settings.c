@@ -5,7 +5,7 @@
 #include "../include/gr_settings.h"
 
 
-extern void 
+extern void
 gr_settings_init(SettingsData *s)
 {
 	/* set default values */
@@ -31,7 +31,7 @@ gr_settings_free(SettingsData *s)
 	free(s);
 }
 
-extern char* 
+extern char*
 gr_settings_read_string(FILE *file, char const *desired_tag)
 {
 	char tag[64];
